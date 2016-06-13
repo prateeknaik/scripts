@@ -37,13 +37,13 @@ casper.test.begin("Enable the extension when the name is removed from 'Disable E
 
     //Clearing Disable field if any text exists
     casper.then(function () {
-        this.click({type: "xpath", path: ".//*[@id='settings-body']/div[5]/label/input"});
+        this.click({type: "xpath", path: ".//*[@id='settings-body']/div[6]/label/input"});
         for (var l = 1; l <= 30; l++) {
-            this.click(x(".//*[@id='settings-body']/div[5]/label/input"), {keepFocus: true});
+            this.click(x(".//*[@id='settings-body']/div[6]/label/input"), {keepFocus: true});
             this.page.sendEvent("keypress", casper.page.event.key.Delete);
         }
         for (var i = 1; i <= 30; i++) {
-            this.click(x(".//*[@id='settings-body']/div[5]/label/input"), {keepFocus: true});
+            this.click(x(".//*[@id='settings-body']/div[6]/label/input"), {keepFocus: true});
             this.page.sendEvent("keypress", casper.page.event.key.Backspace);
         }
         this.click("#command-prompt > textarea:nth-child(1)");
@@ -53,9 +53,9 @@ casper.test.begin("Enable the extension when the name is removed from 'Disable E
     //Disable 'rcloud.enviewer' and 'rcloud.viewer'
     casper.then(function () {
         this.wait(3000);
-        this.click({type: "xpath", path: ".//*[@id='settings-body']/div[5]/label/input"});
+        this.click({type: "xpath", path: ".//*[@id='settings-body']/div[6]/label/input"});
         console.log('Clicking on disable field');
-        this.sendKeys(x(".//*[@id='settings-body']/div[5]/label/input"), disable_text, {keepFocus: true});
+        this.sendKeys(x(".//*[@id='settings-body']/div[6]/label/input"), disable_text, {keepFocus: true});
         this.click("#command-prompt > textarea:nth-child(1)");
 
     });
@@ -75,11 +75,11 @@ casper.test.begin("Enable the extension when the name is removed from 'Disable E
     //Again clearing the Disable field, so that for next scripts it wont cause any problem
     casper.then(function () {
         for (var k = 1; k <= 30; k++) {
-            this.click(x(".//*[@id='settings-body']/div[5]/label/input"), {keepFocus: true});
+            this.click(x(".//*[@id='settings-body']/div[6]/label/input"), {keepFocus: true});
             this.page.sendEvent("keypress", casper.page.event.key.Delete);
         }
         for (var a = 1; a <= 30; a++) {
-            this.click(x(".//*[@id='settings-body']/div[5]/label/input"), {keepFocus: true});
+            this.click(x(".//*[@id='settings-body']/div[6]/label/input"), {keepFocus: true});
             this.page.sendEvent("keypress", casper.page.event.key.Backspace);
         }
         this.click("#command-prompt > textarea:nth-child(1)");

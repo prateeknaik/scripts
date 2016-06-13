@@ -1,6 +1,6 @@
 //Begin Tests
 
-casper.test.begin(" Alphabets, Numbers and Special characters as notebook prefix", function suite(test) {
+casper.test.begin(" Alphabets, Numbers and Special characters as notebook prefix",4, function suite(test) {
 
     var x = require('casper').selectXPath;
     var github_username = casper.cli.options.username;
@@ -54,7 +54,7 @@ casper.test.begin(" Alphabets, Numbers and Special characters as notebook prefix
 
     casper.then(function () {
         this.wait(2000);
-        this.sendKeys(x(".//*[@id='settings-body']/div[6]/label/input"), notebook_prefix, {keepFocus: true});
+        this.sendKeys(x(".//*[@id='settings-body']/div[7]/label/input"), notebook_prefix, {keepFocus: true});
         this.page.sendEvent("keypress", casper.page.event.key.Enter);
         this.click("#command-prompt > textarea:nth-child(1)");
         this.wait(3000);
@@ -64,19 +64,19 @@ casper.test.begin(" Alphabets, Numbers and Special characters as notebook prefix
 
     casper.then(function () {
         var i = this.fetchText(x(".//*[@id='notebook-title']"));
-        title = i.substring(0,9);
+        title = i.substring(0,8);
         this.echo('Notebook prefix name is: ' + title);
         this.test.assertEquals(title,notebook_prefix, "The prefix name provided will be reflected in notebook title")
     });
 
     casper.then(function () {
         for (var j = 1; j <= 20; j++) {
-            this.click(x(".//*[@id='settings-body']/div[6]/label/input"), {keepFocus: true});
+            this.click(x(".//*[@id='settings-body']/div[7]/label/input"), {keepFocus: true});
             this.page.sendEvent("keypress", casper.page.event.key.Delete);
             // this.page.sendEvent("keypress", casper.page.event.key.Enter);
             }
         for (var u= 1; u <= 30; u++) {
-            this.click(x(".//*[@id='settings-body']/div[6]/label/input"), {keepFocus: true});
+            this.click(x(".//*[@id='settings-body']/div[7]/label/input"), {keepFocus: true});
             this.page.sendEvent("keypress", casper.page.event.key.Backspace);
         }
         this.click("#command-prompt > textarea:nth-child(1)");

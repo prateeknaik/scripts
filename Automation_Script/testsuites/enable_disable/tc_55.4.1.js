@@ -1,6 +1,6 @@
 //Begin Tests
 
-casper.test.begin(" Notebook rename:Alphabets", function suite(test) {
+casper.test.begin(" Notebook rename:Alphabets", 4,function suite(test) {
 
     var x = require('casper').selectXPath;
     var github_username = casper.cli.options.username;
@@ -41,12 +41,12 @@ casper.test.begin(" Notebook rename:Alphabets", function suite(test) {
 
     casper.then(function () {
         for (var k = 1; k <= 10; k++) {
-            this.click(x(".//*[@id='settings-body']/div[6]/label/input"), {keepFocus: true});
+            this.click(x(".//*[@id='settings-body']/div[7]/label/input"), {keepFocus: true});
             this.page.sendEvent("keypress", casper.page.event.key.Delete);
         }
 
         for (var a = 1; a <= 30; a++) {
-            this.click(x(".//*[@id='settings-body']/div[6]/label/input"), {keepFocus: true});
+            this.click(x(".//*[@id='settings-body']/div[7]/label/input"), {keepFocus: true});
             this.page.sendEvent("keypress", casper.page.event.key.Backspace);
         }
         this.click("#command-prompt > textarea:nth-child(1)");
@@ -54,7 +54,7 @@ casper.test.begin(" Notebook rename:Alphabets", function suite(test) {
 
     casper.then(function () {
         this.wait(2000);
-        this.sendKeys(x(".//*[@id='settings-body']/div[6]/label/input"), notebook_prefix, {keepFocus: true});
+        this.sendKeys(x(".//*[@id='settings-body']/div[7]/label/input"), notebook_prefix, {keepFocus: true});
         this.page.sendEvent("keypress", casper.page.event.key.Enter);
         this.click("#command-prompt > textarea:nth-child(1)");
         this.wait(3000);
@@ -71,12 +71,12 @@ casper.test.begin(" Notebook rename:Alphabets", function suite(test) {
 
     casper.then(function () {
         for (var j = 1; j <= 20; j++) {
-            this.click(x(".//*[@id='settings-body']/div[6]/label/input"), {keepFocus: true});
+            this.click(x(".//*[@id='settings-body']/div[7]/label/input"), {keepFocus: true});
             this.page.sendEvent("keypress", casper.page.event.key.Delete);
             // this.page.sendEvent("keypress", casper.page.event.key.Enter);
             }
         for (var u= 1; u <= 30; u++) {
-            this.click(x(".//*[@id='settings-body']/div[6]/label/input"), {keepFocus: true});
+            this.click(x(".//*[@id='settings-body']/div[7]/label/input"), {keepFocus: true});
             this.page.sendEvent("keypress", casper.page.event.key.Backspace);
         }
         this.click("#command-prompt > textarea:nth-child(1)");

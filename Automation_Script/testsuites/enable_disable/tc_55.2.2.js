@@ -34,8 +34,19 @@ casper.test.begin("Enable multiple extension from 'Eable Extensions' field", 7, 
         }
     });
 
-    //Clearing Disable field if any text exists
+     //Clearing Disable field if any text exists
     casper.then(function () {
+        this.click({type: "xpath", path: ".//*[@id='settings-body']/div[6]/label/input"});
+        for (var l = 1; l <= 30; l++) {
+            this.click(x(".//*[@id='settings-body']/div[6]/label/input"), {keepFocus: true});
+            this.page.sendEvent("keypress", casper.page.event.key.Delete);
+        }
+        for (var i = 1; i <= 30; i++) {
+            this.click(x(".//*[@id='settings-body']/div[6]/label/input"), {keepFocus: true});
+            this.page.sendEvent("keypress", casper.page.event.key.Backspace);
+        }
+        this.click("#command-prompt > textarea:nth-child(1)");
+
         this.click({type: "xpath", path: ".//*[@id='settings-body']/div[5]/label/input"});
         for (var l = 1; l <= 30; l++) {
             this.click(x(".//*[@id='settings-body']/div[5]/label/input"), {keepFocus: true});
@@ -43,30 +54,19 @@ casper.test.begin("Enable multiple extension from 'Eable Extensions' field", 7, 
         }
         for (var i = 1; i <= 30; i++) {
             this.click(x(".//*[@id='settings-body']/div[5]/label/input"), {keepFocus: true});
-            this.page.sendEvent("keypress", casper.page.event.key.Backspace);
-        }
-        this.click("#command-prompt > textarea:nth-child(1)");
-
-        this.click({type: "xpath", path: ".//*[@id='settings-body']/div[4]/label/input"});
-        for (var l = 1; l <= 30; l++) {
-            this.click(x(".//*[@id='settings-body']/div[4]/label/input"), {keepFocus: true});
-            this.page.sendEvent("keypress", casper.page.event.key.Delete);
-        }
-        for (var i = 1; i <= 30; i++) {
-            this.click(x(".//*[@id='settings-body']/div[4]/label/input"), {keepFocus: true});
             this.page.sendEvent("keypress", casper.page.event.key.Backspace);
         }
         this.click("#command-prompt > textarea:nth-child(1)");
         //console.log("deleting the text from the field, if prsent");
     })
 
-    //Disable  'rcloud.viewer'
+    //Disable  'rcloud.viewer, rcloud.enviewer'
     casper.then(function () {
         console.log('By default all rcloud.viewer is enabled, hence disabling it')
         this.wait(3000);
-        this.click({type: "xpath", path: ".//*[@id='settings-body']/div[5]/label/input"});
+        this.click({type: "xpath", path: ".//*[@id='settings-body']/div[6]/label/input"});
         console.log('Clicking on disable field');
-        this.sendKeys(x(".//*[@id='settings-body']/div[5]/label/input"), disable_text, {keepFocus: true});
+        this.sendKeys(x(".//*[@id='settings-body']/div[6]/label/input"), disable_text, {keepFocus: true});
         this.click("#command-prompt > textarea:nth-child(1)");
 
     });
@@ -85,19 +85,19 @@ casper.test.begin("Enable multiple extension from 'Eable Extensions' field", 7, 
     });
 
     casper.then(function () {
-        this.click(x(".//*[@id='settings-body']/div[5]/label/input"), {keepFocus: true});
+        this.click(x(".//*[@id='settings-body']/div[6]/label/input"), {keepFocus: true});
         for (var k = 1; k <= 30; k++) {
-            this.click(x(".//*[@id='settings-body']/div[5]/label/input"), {keepFocus: true});
+            this.click(x(".//*[@id='settings-body']/div[6]/label/input"), {keepFocus: true});
             this.page.sendEvent("keypress", casper.page.event.key.Delete);
         }
         for (var a = 1; a <= 30; a++) {
-            this.click(x(".//*[@id='settings-body']/div[5]/label/input"), {keepFocus: true});
+            this.click(x(".//*[@id='settings-body']/div[6]/label/input"), {keepFocus: true});
             this.page.sendEvent("keypress", casper.page.event.key.Backspace);
         }
         this.click("#command-prompt > textarea:nth-child(1)");
         console.log('Clicking on enable field');
-        this.click(x(".//*[@id='settings-body']/div[4]/label/input"));
-        this.sendKeys(x(".//*[@id='settings-body']/div[4]/label/input"), disable_text, {keepFocus: true});
+        this.click(x(".//*[@id='settings-body']/div[5]/label/input"));
+        this.sendKeys(x(".//*[@id='settings-body']/div[5]/label/input"), disable_text, {keepFocus: true});
         this.click("#command-prompt > textarea:nth-child(1)");
     });
 
@@ -110,18 +110,18 @@ casper.test.begin("Enable multiple extension from 'Eable Extensions' field", 7, 
     //checking for dataframe and workspace divs
     casper.then(function () {
         this.test.assertVisible(".icon-table", "Dataframe div is Enabled");
-        this.test.assertVisible(".icon-sun", "Workspace div is disabled");
+        this.test.assertVisible(".icon-sun", "Workspace div is Enabled");
     });
 
     //Again clearing the Disable/Enable field, so that for next scripts it wont cause any problem
     casper.then(function () {
-        this.click(x(".//*[@id='settings-body']/div[5]/label/input"));
+        this.click(x(".//*[@id='settings-body']/div[6]/label/input"));
         for (var m = 1; m <= 30; m++) {
-            this.click(x(".//*[@id='settings-body']/div[4]/label/input"), {keepFocus: true});
+            this.click(x(".//*[@id='settings-body']/div[6]/label/input"), {keepFocus: true});
             this.page.sendEvent("keypress", casper.page.event.key.Delete);
         }
         for (var w = 1; w <= 30; w++) {
-            this.click(x(".//*[@id='settings-body']/div[4]/label/input"), {keepFocus: true});
+            this.click(x(".//*[@id='settings-body']/div[6]/label/input"), {keepFocus: true});
             this.page.sendEvent("keypress", casper.page.event.key.Backspace);
         }
         this.click("#command-prompt > textarea:nth-child(1)");

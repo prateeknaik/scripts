@@ -1,4 +1,6 @@
-casper.test.begin(" Creating notebook folder with the help of '/' from the notwbook's div ", function suite(test) {
+//Begin Tests
+
+casper.test.begin(" Creating notebook folder with the help of '/' ",4, function suite(test) {
 
     var x = require('casper').selectXPath;
     var github_username = casper.cli.options.username;
@@ -6,8 +8,7 @@ casper.test.begin(" Creating notebook folder with the help of '/' from the notwb
     var rcloud_url = casper.cli.options.url;
     var functions = require(fs.absolute('basicfunctions'));
     var before_title, after_title;
-    var notebook_prefix = '   /Notebook';
-
+    
     casper.start(rcloud_url, function () {
         functions.inject_jquery(casper);
     });
@@ -27,10 +28,11 @@ casper.test.begin(" Creating notebook folder with the help of '/' from the notwb
 
     functions.create_notebook(casper);
 
-    casper.then(function () {
+    casper.then(function (){
         before_title = this.fetchText(x(".//*[@id='notebook-title']"));
+        this.echo(before_title);
         var z = casper.evaluate(function triggerKeyDownEvent() {
-            jQuery("#notebook-title").text(notebook_prefix);
+            jQuery("#notebook-title").text("PREFIX/Notebook");
             var e = jQuery.Event("keydown");
             e.which = 13;
             e.keyCode = 13;
@@ -38,17 +40,30 @@ casper.test.begin(" Creating notebook folder with the help of '/' from the notwb
             return true;
         });
         this.wait(5000);
-    })
+        var i = this.fetchText(x(".//*[@id='notebook-title']"));
+        this.echo('After creating folder notebook name is:' + i);
+    });
 
     casper.then(function(){
         this.click('.jqtree-selected > div:nth-child(1) > span:nth-child(1)');
         var after = this.fetchText('.jqtree-selected > div:nth-child(1) > span:nth-child(1)');
-        this.test.assertEquals(after,before_title,"The folder name will not be altered with the white sapce characters");
+        this.echo(after)
+        var folder_name=after.substring(0,6);
+        this.echo('Folder is created with name: ' + folder_name);
+        this.test.assertEquals(folder_name,"PREFIX", "New folder is created using '/'")
     });
 
-    //functions.delete_notebooksIstarred(casper);
-
-    casper.wait(4000);
+    //Making notebook as it was earlier
+    casper.then(function (){
+        var z = casper.evaluate(function triggerKeyDownEvent() {
+            jQuery("#notebook-title").text("Notebook");
+            var e = jQuery.Event("keydown");
+            e.which = 13;
+            e.keyCode = 13;
+            jQuery("#notebook-title").trigger(e);
+            return true;
+        });
+    });
 
     casper.run(function () {
         test.done();
