@@ -2,11 +2,9 @@
  Author: Arko
  Description:    This is a casperjs automated test script for showing that on clicking the "Run All" option present on top left corner of the main.html
  page, all the cells should be executed
-
- */
+*/
 
 //Begin Tests
-
 casper.test.begin(" Run all the cells using 'Run All' option", 9, function suite(test) {
 
     var x = require('casper').selectXPath;
@@ -15,9 +13,10 @@ casper.test.begin(" Run all the cells using 'Run All' option", 9, function suite
     var rcloud_url = casper.cli.options.url;
     var functions = require(fs.absolute('basicfunctions'));
     var viewhtmlurl = "http://127.0.0.1:8080/view.html?notebook=3b632a2214f623347810"//view.html link for a notebook containing some codes
-   
+    var notebookid = '3b632a2214f623347810';
+    
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
 
     casper.wait(10000);
@@ -35,10 +34,13 @@ casper.test.begin(" Run all the cells using 'Run All' option", 9, function suite
     });
     
     //open the view.html link for a notebook
-    casper.viewport(1366, 768).thenOpen(viewhtmlurl, function () {
-        this.wait(7000);
-        this.echo("The view.html link for the notebook is : " + this.getCurrentUrl());
-        this.test.assertExists({type: 'css', path: '#edit-notebook > i:nth-child(1)' }, 'the element Edit icon exists. Hence page has got loaded properly in uneditable form');
+    //open the view.html link for a notebook
+    casper.viewport(1366, 768).then(function () {
+        this.thenOpen('http://127.0.0.1:8080/view.html?notebook=' + notebookid);
+        this.wait(8000)
+        this.waitForSelector(".r-result-div > pre:nth-child(1) > code:nth-child(1)", function (){
+            this.test.assertExists('#edit-notebook > i:nth-child(1)', 'the element Edit icon exists. Hence page has got loaded properly');
+        });
     });
 
     //clicking on the Edit icon and verifying if the main.html page opens

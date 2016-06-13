@@ -6,7 +6,7 @@
 
 //Begin Tests
 
-casper.test.begin("Fork Notebook and check if contents are editable", 16, function suite(test) {
+casper.test.begin("Fork Notebook and check if contents are editable", 15, function suite(test) {
 
     var x = require('casper').selectXPath;
     var github_username = casper.cli.options.username;
@@ -18,7 +18,7 @@ casper.test.begin("Fork Notebook and check if contents are editable", 16, functi
     var expectedresult = "100\n"
 
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
 
     casper.wait(10000);
@@ -58,23 +58,14 @@ casper.test.begin("Fork Notebook and check if contents are editable", 16, functi
 
     //checking if notebook title is editable
     casper.viewport(1366, 768).then(function () {
-        var current_name = functions.notebookname(casper);
-        var z = casper.evaluate(function triggerKeyDownEvent() {
-            jQuery("#notebook-title").text("S3456bg1");
-            var e = jQuery.Event("keydown");
-            e.which = 13;
-            e.keyCode = 13;
-            jQuery("#notebook-title").trigger(e);
-            return true;
-        });
-        this.wait(5000);
-        var new_name = functions.notebookname(casper);
-        this.test.assertNotEquals(new_name, current_name, "Notebook title is uneditable");
-
-        //checking if command prompt is visible . This is a validation to check
-        //if contents of notebook are in editable form
-        this.test.assertNotVisible({type:'xpath', path:".//*[@id='command-prompt']/div[2]/div"}, 'no option to create new cell.Hence notebook in uneditable form');
-
+        if (this.test.assertExists(x(".//*[@id='readonly-notebook']")))
+        {
+            this.echo("Notebook title is uneditable");
+        }
+        else
+        {
+            this.echo("Notebook title is editable")
+        }
     });
 
     //fork the notebook

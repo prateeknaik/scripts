@@ -3,11 +3,10 @@
  Description:    This is a casperjs automated test script for showing that after opening the shared notebook in main.html 
  page by clicking on Edit Notebook icon, if the notebook is opened in Github , it opens under the alien user's 
  repository. The case is same if the notebook is opened in Github from  the view.html page
- */
+*/
 
 //Begin Tests
-
-casper.test.begin("Open Notebook In Github without Forking", 9, function suite(test) {
+casper.test.begin("Open Notebook In Github without Forking", 12, function suite(test) {
 
     var x = require('casper').selectXPath;
     var github_username = casper.cli.options.username;
@@ -15,9 +14,10 @@ casper.test.begin("Open Notebook In Github without Forking", 9, function suite(t
     var rcloud_url = casper.cli.options.url;
     var functions = require(fs.absolute('basicfunctions'));
     var notebook_id = "7f90ae7dbe9fb01898f1";//contains the notebook id of a different user to be searched
+    var input_code = "AT&T Labs"
 	
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
 
     casper.wait(10000);
@@ -30,10 +30,9 @@ casper.test.begin("Open Notebook In Github without Forking", 9, function suite(t
         this.wait(9000);
         console.log("validating that the Main page has got loaded properly by detecting if some of its elements are visible. Here we are checking for Shareable Link and Logout options");
         functions.validation(casper);
-
     });
     
-    /*functions.create_notebook(casper);
+    functions.create_notebook(casper);
     
     casper.then(function(){
 		URL = this.getCurrentUrl();
@@ -45,10 +44,14 @@ casper.test.begin("Open Notebook In Github without Forking", 9, function suite(t
     
     functions.addcontentstocell(casper, input_code);
     
-    casper.wait(2000);*/
+    casper.wait(2000);
 
-    casper.viewport(1366, 768).thenOpen('http://127.0.0.1:8080/view.html?notebook=' + notebook_id, function () {
-        this.wait(9000);
+    casper.viewport(1366, 768).then(function () {
+        this.thenOpen('http://127.0.0.1:8080/view.html?notebook=' + notebook_id);
+        this.wait(8000)
+        this.waitForSelector(".r-result-div > pre:nth-child(1) > code:nth-child(1)", function (){
+            this.test.assertExists('#edit-notebook > i:nth-child(1)', 'the element Edit icon exists. Hence page has got loaded properly');
+        });
         this.echo(this.getCurrentUrl());
         this.wait(4000);
     });

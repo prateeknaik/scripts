@@ -7,7 +7,7 @@
 
 //Begin Tests
 
-casper.test.begin(" Notebook Name is editable in main.html after selecting Edit option in view.html", 8, function suite(test) {
+casper.test.begin(" Notebook Name is editable in main.html after selecting Edit option in view.html", 9, function suite(test) {
 
     var x = require('casper').selectXPath;
     var github_username = casper.cli.options.username;
@@ -17,9 +17,10 @@ casper.test.begin(" Notebook Name is editable in main.html after selecting Edit 
     var viewhtmlurl = "http://127.0.0.1:8080/view.html?notebook=d9698057aa287c7b145b"//view.html link for a notebook containing some codes
     var notebookid;//to get the notebook id
     var initial_title;//store initial title of notebook
+    var input = '"Welcome to AT&T"'
 
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
 
     casper.wait(10000);
@@ -34,14 +35,27 @@ casper.test.begin(" Notebook Name is editable in main.html after selecting Edit 
         console.log("validating that the Main page has got loaded properly by detecting if some of its elements are visible. Here we are checking for Shareable Link and Logout options");
         functions.validation(casper);
         this.wait(4000);
-
     });
 
+    //getting Notebook ID
+    casper.viewport(1024, 768).then(function () {
+        this.click("#new-notebook > span:nth-child(1) > i:nth-child(1)");
+        this.wait(5000);
+        var temp1 = this.getCurrentUrl();
+        notebookid = temp1.substring(41);
+        this.echo("The Notebook Id: " + notebookid);
+    });
+
+    functions.addnewcell(casper);
+    functions.addcontentstocell(casper, input);
+
     //open the view.html link for a notebook
-    casper.viewport(1366, 768).thenOpen(viewhtmlurl, function () {
-        this.wait(7000);
-        this.echo("The view.html link for the notebook is : " + this.getCurrentUrl());
-        this.test.assertExists({type: 'css', path: '#edit-notebook > i:nth-child(1)' }, 'the element Edit icon exists. Hence page has got loaded properly in uneditable form');
+    casper.viewport(1366, 768).then(function () {
+        this.thenOpen('http://127.0.0.1:8080/view.html?notebook=' + notebookid);
+        this.wait(8000)
+        this.waitForSelector(".r-result-div > pre:nth-child(1) > code:nth-child(1)", function (){
+            this.test.assertExists('#edit-notebook > i:nth-child(1)', 'the element Edit icon exists. Hence page has got loaded properly');
+        });
     });
 
     //clicking on the Edit icon and verifying if the main.html page opens
@@ -53,10 +67,7 @@ casper.test.begin(" Notebook Name is editable in main.html after selecting Edit 
     });
 
     casper.viewport(1024, 768).then(function () {
-        this.test.assertUrlMatch(/edit.html*/, 'main.html for the notebook has been loaded');
-        console.log("validating that the Main page has got loaded properly by detecting if some of its elements are visible. Here we are checking for Shareable Link and Logout options");
         functions.validation(casper);
-        this.wait(5000);
     });
 
     //getting the notebook title and modifying it

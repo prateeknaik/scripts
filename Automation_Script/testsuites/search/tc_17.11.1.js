@@ -18,7 +18,7 @@ casper.test.begin(" Notebook ID for Search", 5, function suite(test) {
     var title;//get notebook title
     
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
     casper.wait(10000);
 
@@ -57,15 +57,8 @@ casper.test.begin(" Notebook ID for Search", 5, function suite(test) {
     functions.addnewcell(casper);
 
     //Add contents to this cell and then execute it using run option
-    casper.viewport(1366, 768).then(function () {
-        this.sendKeys('div.ace-chrome:nth-child(1) > textarea:nth-child(1)', item);
-        this.wait(3000);
-        this.click({type: 'xpath', path: '/html/body/div[3]/div/div[2]/div/div[1]/div/div[2]/div[2]/span[1]/i'});//css for executing the contents
-        this.echo("executed contents of First cell");
-        this.wait(6000);
-    });
+    functions.addcontentstocell(casper, "'ABCD'");
 
-    
     casper.then(function(){
 		if (this.visible('#search-form > a:nth-child(3)')) {
                 console.log('Search div is already opened');

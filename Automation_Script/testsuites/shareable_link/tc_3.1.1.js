@@ -5,7 +5,7 @@
  */
 
 //Begin Tests
-casper.test.begin("Loading view.html using Shareable Link", 4, function suite(test) {
+casper.test.begin("Loading view.html using Shareable Link", 6, function suite(test) {
 
     var x = require('casper').selectXPath;
     var github_username = casper.cli.options.username;
@@ -36,6 +36,8 @@ casper.test.begin("Loading view.html using Shareable Link", 4, function suite(te
 
     //getting Notebook ID
     casper.viewport(1024, 768).then(function () {
+        this.click("#new-notebook > span:nth-child(1) > i:nth-child(1)");
+        this.wait(5000);
         var temp1 = this.getCurrentUrl();
         notebookid = temp1.substring(41);
         this.echo("The Notebook Id: " + notebookid);
@@ -48,7 +50,6 @@ casper.test.begin("Loading view.html using Shareable Link", 4, function suite(te
         this.then(function () {
             this.thenOpen('http://127.0.0.1:8080/view.html?notebook=' + notebookid);
             this.wait(8000)
-            // this.wait(8000).echo("The view.html link for the notebook is : " + this.getCurrentUrl());
             this.waitForSelector(".r-result-div > pre:nth-child(1) > code:nth-child(1)", function (){
                 this.test.assertExists('#edit-notebook > i:nth-child(1)', 'the element Edit icon exists. Hence page has got loaded properly');
             });
