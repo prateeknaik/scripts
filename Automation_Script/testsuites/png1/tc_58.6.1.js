@@ -15,7 +15,7 @@ casper.test.begin("Accessing Notebook(Which is assigned to Group) as a member ",
     var new_user_password = 'musigma12';
 
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
     casper.wait(10000);
 

@@ -16,7 +16,7 @@ casper.test.begin("Importing External private notebook", 11, function suite(test
     var expectedresult = "150"
 
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
     casper.wait(10000);
 

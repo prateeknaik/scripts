@@ -12,15 +12,12 @@ casper.test.begin("Check whether user is able to upload any file to the private 
     var rcloud_url = casper.cli.options.url;
     var functions = require(fs.absolute('basicfunctions'));
     var notebook_name, status, url, notebookid;
-    // var status
-    // var url
     var input_code = "a<-100+50\n a";
     var expectedresult = "150"
-    // var notebookid;
     var fileName = '/home/prateek/FileUpload/PHONE.csv'; // File path directory     
 
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
     casper.wait(10000);
 

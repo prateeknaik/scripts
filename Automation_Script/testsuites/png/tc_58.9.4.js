@@ -14,10 +14,10 @@ casper.test.begin("Deleting the uploaded asset file from the Private notebook", 
     var notebook_name, status, url, notebookid;
     var input_code = "a<-100+50\n a";
     var expectedresult = "150"
-    var fileName = '/home/fresh/FileUpload/PHONE.csv'; // File path directory     
+    var fileName = '/home/prateek/FileUpload/PHONE.csv'; // File path directory     
 
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
     casper.wait(10000);
 

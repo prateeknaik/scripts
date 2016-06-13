@@ -12,11 +12,11 @@ casper.test.begin("Deleting the uploaded asset file from notebook which is assig
     var rcloud_url = casper.cli.options.url;
     var functions = require(fs.absolute('basicfunctions'));
     var notebook_name, status, url, notebookid;
-    var fileName = '/home/fresh/FileUpload/PHONE.csv'; // File path directory
+    var fileName = '/home/prateek/FileUpload/PHONE.csv'; // File path directory
     var before, after;
 
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
     casper.wait(10000);
 

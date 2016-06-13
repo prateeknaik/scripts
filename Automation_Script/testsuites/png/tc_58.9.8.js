@@ -12,12 +12,13 @@ casper.test.begin("Editing/Modifying the uploaded asset file notebook which is a
     var rcloud_url = casper.cli.options.url;
     var functions = require(fs.absolute('basicfunctions'));
     var notebook_name, status, url, notebookid;
-    var fileName = '/home/fresh/FileUpload/PHONE.csv'; // File path directory
+    var fileName = '/home/prateek/FileUpload/PHONE.csv'; // File path directory
     var before, after, beforeName, afterName;
 
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
+    
     casper.wait(10000);
 
     casper.viewport(1024, 768).then(function () {

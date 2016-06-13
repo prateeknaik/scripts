@@ -17,7 +17,7 @@ casper.test.begin("Making new notebook private", 4, function suite(test) {
     var status
 
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
     casper.wait(10000);
 

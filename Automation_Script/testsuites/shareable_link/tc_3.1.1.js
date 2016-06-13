@@ -2,12 +2,9 @@
  Author: Ganesh Moorthy
  Description:    This is a casperjs automated test script for showing that on clicking the Shareable Link present on top left
  corner of the Main page,the view.html page for the currently loaded notebook should open
-
-
  */
 
 //Begin Tests
-
 casper.test.begin("Loading view.html using Shareable Link", 4, function suite(test) {
 
     var x = require('casper').selectXPath;
@@ -16,9 +13,10 @@ casper.test.begin("Loading view.html using Shareable Link", 4, function suite(te
     var rcloud_url = casper.cli.options.url;
     var functions = require(fs.absolute('basicfunctions'));
     var notebookid;//to get the notebook id
+    var input = '"Welcome to RCloud"';
 
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
 
     casper.wait(10000);
@@ -43,20 +41,19 @@ casper.test.begin("Loading view.html using Shareable Link", 4, function suite(te
         this.echo("The Notebook Id: " + notebookid);
     });
 
-    
+    functions.addnewcell(casper);
+    functions.addcontentstocell(casper, input);
 
     casper.viewport(1366, 768).then(function () {
-        this.wait(5000);
-        this.waitForSelector({type: 'css', path: 'html body div.navbar div div.nav-collapse ul.nav li span a#share-link.btn'}, function () {
-            console.log("Shareable link found. Clicking on it");
-            casper.viewport(1366, 768).thenOpen('http://127.0.0.1:8080/view.html?notebook=' + notebookid, function () {
-                this.wait(7000);
-                this.echo("The view.html link for the notebook is : " + this.getCurrentUrl());
-                this.test.assertExists({type: 'css', path: '#edit-notebook > i:nth-child(1)' },
-                    'the element Edit icon exists. Hence page has got loaded properly'
-                );
+        this.then(function () {
+            this.thenOpen('http://127.0.0.1:8080/view.html?notebook=' + notebookid);
+            this.wait(8000)
+            // this.wait(8000).echo("The view.html link for the notebook is : " + this.getCurrentUrl());
+            this.waitForSelector(".r-result-div > pre:nth-child(1) > code:nth-child(1)", function (){
+                this.test.assertExists('#edit-notebook > i:nth-child(1)', 'the element Edit icon exists. Hence page has got loaded properly');
             });
-        });
+            
+         });
     });
 
     casper.run(function () {

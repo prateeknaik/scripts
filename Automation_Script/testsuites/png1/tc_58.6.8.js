@@ -15,7 +15,7 @@ casper.test.begin(" Assigning notebook to other Group as a member of that group 
     var new_user_password = 'musigma12';
 
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
     casper.wait(10000);
 

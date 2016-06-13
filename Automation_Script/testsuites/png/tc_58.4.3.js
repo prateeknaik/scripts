@@ -17,15 +17,12 @@ casper.test.begin("Importing External private notebook", 5, function suite(test)
     var github_password = casper.cli.options.password;
     var rcloud_url = casper.cli.options.url;
     var functions = require(fs.absolute('basicfunctions'));
-    var notebook_name
-    var status
-    var url
+    var notebook_name, status, url, notebookid;
     var input_code = "a<-100+50\n a";
-    var expectedresult = "150"
-    var notebookid
+    var expectedresult = "150";
 
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
     casper.wait(10000);
 
