@@ -1,6 +1,6 @@
 //Begin Tests
 
-casper.test.begin("Disable an extension from setting div", function suite(test) {
+casper.test.begin("Disable an extension from setting div",6, function suite(test) {
 
     var x = require('casper').selectXPath;
     var github_username = casper.cli.options.username;
@@ -40,9 +40,9 @@ casper.test.begin("Disable an extension from setting div", function suite(test) 
             console.log('Worksapce div Visible');
             //Disabling any one of the extension
             this.then(function () {
-                this.mouse.click({type: "xpath", path: ".//*[@id='settings-body']/div[5]/label/input"});
+                this.mouse.click({type: "xpath", path: ".//*[@id='settings-body']/div[6]/label/input"});
                 console.log('Clicking on disable field');
-                this.sendKeys({type: "xpath", path: ".//*[@id='settings-body']/div[5]/label/input"}, "rcloud.enviewer");
+                this.sendKeys({type: "xpath", path: ".//*[@id='settings-body']/div[6]/label/input"}, "rcloud.enviewer");
             });
 
             functions.create_notebook(casper);

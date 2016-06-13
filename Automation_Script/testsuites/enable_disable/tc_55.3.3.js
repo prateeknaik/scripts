@@ -37,25 +37,25 @@ casper.test.begin("Retain the disabled extension name", 5, function suite(test) 
 
     //Clearing Disable field if any text exists
     casper.then(function () {
-        this.click({type: "xpath", path: ".//*[@id='settings-body']/div[5]/label/input"});
+        this.click({type: "xpath", path: ".//*[@id='settings-body']/div[6]/label/input"});
         for (var l = 1; l <= 30; l++) {
-            this.click(x(".//*[@id='settings-body']/div[5]/label/input"), {keepFocus: true});
+            this.click(x(".//*[@id='settings-body']/div[6]/label/input"), {keepFocus: true});
             this.page.sendEvent("keypress", casper.page.event.key.Delete);
         }
         for (var i = 1; i <= 30; i++) {
-            this.click(x(".//*[@id='settings-body']/div[5]/label/input"), {keepFocus: true});
+            this.click(x(".//*[@id='settings-body']/div[6]/label/input"), {keepFocus: true});
             this.page.sendEvent("keypress", casper.page.event.key.Backspace);
         }
         this.click("#command-prompt > textarea:nth-child(1)");
         console.log("deleting the text from the field, if prsent");
     })
 
-    //Disable 'rcloud.enviewer' and 'rcloud.viewer'
+    //Disable 'rcloud.viewer'
     casper.then(function () {
         this.wait(3000);
-        this.click({type: "xpath", path: ".//*[@id='settings-body']/div[5]/label/input"});
+        this.click({type: "xpath", path: ".//*[@id='settings-body']/div[6]/label/input"});
         console.log('Clicking on disable field');
-        this.sendKeys(x(".//*[@id='settings-body']/div[5]/label/input"), disable_text, {keepFocus: true});
+        this.sendKeys(x(".//*[@id='settings-body']/div[6]/label/input"), disable_text, {keepFocus: true});
         this.click("#command-prompt > textarea:nth-child(1)");
 
     });
@@ -74,7 +74,7 @@ casper.test.begin("Retain the disabled extension name", 5, function suite(test) 
 
     //Checking whether the text remains in the Diable field or not
     casper.then(function () {
-        var q = this.fetchText(x(".//*[@id='settings-body']/div[5]/label/input"));
+        var q = this.fetchText(x(".//*[@id='settings-body']/div[6]/label/input"));
         this.echo('Text entered in disable extension filed is: ' + q);
         this.test.assertEquals(disable_text,q,"Text entered in the disable field are getting retained")
 
@@ -83,11 +83,11 @@ casper.test.begin("Retain the disabled extension name", 5, function suite(test) 
     //Again clearing the Disable field, so that for next scripts it wont cause any problem
     casper.then(function () {
         for (var k = 1; k <= 30; k++) {
-            this.click(x(".//*[@id='settings-body']/div[5]/label/input"), {keepFocus: true});
+            this.click(x(".//*[@id='settings-body']/div[6]/label/input"), {keepFocus: true});
             this.page.sendEvent("keypress", casper.page.event.key.Delete);
         }
         for (var a = 1; a <= 30; a++) {
-            this.click(x(".//*[@id='settings-body']/div[5]/label/input"), {keepFocus: true});
+            this.click(x(".//*[@id='settings-body']/div[6]/label/input"), {keepFocus: true});
             this.page.sendEvent("keypress", casper.page.event.key.Backspace);
         }
         this.click("#command-prompt > textarea:nth-child(1)");

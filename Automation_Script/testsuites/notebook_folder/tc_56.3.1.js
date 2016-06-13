@@ -1,11 +1,11 @@
-casper.test.begin("Fork option visibility ", function suite(test) {
+casper.test.begin("Fork option visibility ",4, function suite(test) {
 
     var x = require('casper').selectXPath;
     var github_username = casper.cli.options.username;
     var github_password = casper.cli.options.password;
     var rcloud_url = casper.cli.options.url;
     var functions = require(fs.absolute('basicfunctions'));
-    var before_title, after_title;
+    var counter=0;
     
 
     casper.start(rcloud_url, function () {
@@ -28,6 +28,7 @@ casper.test.begin("Fork option visibility ", function suite(test) {
     functions.create_notebook(casper);
 
     casper.then(function () {
+        this.wait(3000)
         var z = casper.evaluate(function triggerKeyDownEvent() {
             jQuery("#notebook-title").text("##1/Notebook");
             var e = jQuery.Event("keydown");
@@ -36,16 +37,31 @@ casper.test.begin("Fork option visibility ", function suite(test) {
             jQuery("#notebook-title").trigger(e);
             return true;
         });
+        this.wait(4000);
     });
 
-    casper.then(function () {
+    
+    casper.then(function(){
+        for (var i=0;i<5;i++){
+            var t=this.fetchText('ul.jqtree_common:nth-child(1) > li:nth-child(1) > ul:nth-child(2) > li:nth-child(1) > ul:nth-child(2) > li:nth-child('+i+') > div:nth-child(1) > span:nth-child(2)')
+            if(t=='##1'){
+                counter=i;
+                break;
+            }
+        }               
+    });
+
+
+
+    casper.wait(2000).then(function () {
+        this.echo(counter);
         if (this.test.assertVisible({
                 type: 'css',
-                path: 'ul.jqtree_common:nth-child(1) > li:nth-child(1) > ul:nth-child(2) > li:nth-child(1) > ul:nth-child(2) > li:nth-child(1) > div:nth-child(1)'
+                path: '.jqtree-selected > div:nth-child(1)'
             })) {
             console.log('selected notbook found');
-            this.mouse.move('ul.jqtree_common:nth-child(1) > li:nth-child(1) > ul:nth-child(2) > li:nth-child(1) > ul:nth-child(2) > li:nth-child(1) > div:nth-child(1)');
-            this.waitUntilVisible(('ul.jqtree_common:nth-child(1) > li:nth-child(1) > ul:nth-child(2) > li:nth-child(1) > ul:nth-child(2) > li:nth-child(1) > div:nth-child(1) > span:nth-child(3) > span:nth-child(1) > span:nth-child(1) > span:nth-child(1) > i:nth-child(1)'), function () {
+            this.mouse.move('ul.jqtree_common:nth-child(1) > li:nth-child(1) > ul:nth-child(2) > li:nth-child(1) > ul:nth-child(2) > li:nth-child('+counter+') > div:nth-child(1) > span:nth-child(2)');
+            this.waitUntilVisible(('ul.jqtree_common:nth-child(1) > li:nth-child(1) > ul:nth-child(2) > li:nth-child(1) > ul:nth-child(2) > li:nth-child('+counter+') > div:nth-child(1) > span:nth-child(3) > span:nth-child(1) > span:nth-child(1) > span:nth-child(1) > i:nth-child(1)'), function () {
                 this.wait(2000);
                 console.log("Folder forking icon is visible");
                 this.wait(3000);

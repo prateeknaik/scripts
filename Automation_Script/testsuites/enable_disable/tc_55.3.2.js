@@ -36,13 +36,13 @@ casper.test.begin("Disable multiple extension from setting div", 5, function sui
     
     //Clearing Disable field if any text exists
     casper.then(function () {
-        this.click({type: "xpath", path: ".//*[@id='settings-body']/div[5]/label/input"});
+        this.click({type: "xpath", path: ".//*[@id='settings-body']/div[6]/label/input"});
         for (var l = 1; l <= 30; l++) {
-            this.click(x(".//*[@id='settings-body']/div[5]/label/input"), {keepFocus: true});
+            this.click(x(".//*[@id='settings-body']/div[6]/label/input"), {keepFocus: true});
             this.page.sendEvent("keypress", casper.page.event.key.Delete);
         }
         for (var i = 1; i <= 30; i++) {
-            this.click(x(".//*[@id='settings-body']/div[5]/label/input"), {keepFocus: true});
+            this.click(x(".//*[@id='settings-body']/div[6]/label/input"), {keepFocus: true});
             this.page.sendEvent("keypress", casper.page.event.key.Backspace);
         }
         this.click("#command-prompt > textarea:nth-child(1)");
@@ -52,9 +52,9 @@ casper.test.begin("Disable multiple extension from setting div", 5, function sui
     //Disable 'rcloud.enviewer' and 'rcloud.viewer'
     casper.then(function () {
         this.wait(3000);
-        this.click({type: "xpath", path: ".//*[@id='settings-body']/div[5]/label/input"});
+        this.click({type: "xpath", path: ".//*[@id='settings-body']/div[6]/label/input"});
         console.log('Clicking on disable field');
-        this.sendKeys(x(".//*[@id='settings-body']/div[5]/label/input"), "rcloud.enviewer,rcloud.viewer", {keepFocus: true});
+        this.sendKeys(x(".//*[@id='settings-body']/div[6]/label/input"), "rcloud.enviewer,rcloud.viewer", {keepFocus: true});
         this.click("#command-prompt > textarea:nth-child(1)");
 
     });

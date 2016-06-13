@@ -1,6 +1,4 @@
-//Begin Tests
-
-casper.test.begin(" Creating notebook folder with the help of '/' ", function suite(test) {
+casper.test.begin("Checking for whitespace as folder name ", function suite(test) {
 
     var x = require('casper').selectXPath;
     var github_username = casper.cli.options.username;
@@ -8,7 +6,7 @@ casper.test.begin(" Creating notebook folder with the help of '/' ", function su
     var rcloud_url = casper.cli.options.url;
     var functions = require(fs.absolute('basicfunctions'));
     var before_title, after_title;
-    var notebook_prefix = '{501*PN}';
+    var notebook_prefix = '   /Notebook';
 
     casper.start(rcloud_url, function () {
         functions.inject_jquery(casper);
@@ -29,11 +27,10 @@ casper.test.begin(" Creating notebook folder with the help of '/' ", function su
 
     functions.create_notebook(casper);
 
-    casper.then(function (){
+    casper.then(function () {
         before_title = this.fetchText(x(".//*[@id='notebook-title']"));
-        this.echo(before_title);
         var z = casper.evaluate(function triggerKeyDownEvent() {
-            jQuery("#notebook-title").text("PREFIX/Notebook");
+            jQuery("#notebook-title").text(notebook_prefix);
             var e = jQuery.Event("keydown");
             e.which = 13;
             e.keyCode = 13;
@@ -41,27 +38,17 @@ casper.test.begin(" Creating notebook folder with the help of '/' ", function su
             return true;
         });
         this.wait(5000);
-        var i = this.fetchText(x(".//*[@id='notebook-title']"));
-        this.echo('After creating folder notebook name is:' + i);
-    });
+    })
 
     casper.then(function(){
         this.click('.jqtree-selected > div:nth-child(1) > span:nth-child(1)');
         var after = this.fetchText('.jqtree-selected > div:nth-child(1) > span:nth-child(1)');
-        this.echo("Fetching Notebook name from the Noebooks's div : " + after + ". / present so, notebook folder is created");
+        this.test.assertEquals(after,before_title,"The folder name will not be altered with the white sapce characters");
     });
 
-    //Making notebook as it was earlier
-    casper.then(function (){
-        var z = casper.evaluate(function triggerKeyDownEvent() {
-            jQuery("#notebook-title").text("Notebook");
-            var e = jQuery.Event("keydown");
-            e.which = 13;
-            e.keyCode = 13;
-            jQuery("#notebook-title").trigger(e);
-            return true;
-        });
-    });
+    //functions.delete_notebooksIstarred(casper);
+
+    casper.wait(4000);
 
     casper.run(function () {
         test.done();

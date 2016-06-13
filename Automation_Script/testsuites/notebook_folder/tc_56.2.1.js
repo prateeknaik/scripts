@@ -1,11 +1,11 @@
-casper.test.begin(" Creating notebook folder with the help of '/' from the notwbook's div ", function suite(test) {
+casper.test.begin(" Renaming folder from the notebook's div ", 4,function suite(test) {
 
     var x = require('casper').selectXPath;
     var github_username = casper.cli.options.username;
     var github_password = casper.cli.options.password;
     var rcloud_url = casper.cli.options.url;
     var functions = require(fs.absolute('basicfunctions'));
-    var before_title, after_title;
+    var folder_old,folder_new;
     var notebook_prefix = '{501*PN}';
 
     casper.start(rcloud_url, function () {
@@ -28,7 +28,7 @@ casper.test.begin(" Creating notebook folder with the help of '/' from the notwb
     functions.create_notebook(casper);
 
     casper.then(function () {
-        before_title = this.fetchText(x(".//*[@id='notebook-title']"));
+        
         var z = casper.evaluate(function triggerKeyDownEvent() {
             jQuery(".jqtree-selected > div:nth-child(1) > span:nth-child(1)").text("PREFIX/Notebook");
             var e = jQuery.Event("keydown");
@@ -43,11 +43,37 @@ casper.test.begin(" Creating notebook folder with the help of '/' from the notwb
     casper.then(function(){
         this.click('.jqtree-selected > div:nth-child(1) > span:nth-child(1)');
         var after = this.fetchText('.jqtree-selected > div:nth-child(1) > span:nth-child(1)');
-        this.echo("Fetching Notebook name from the Noebooks's div : " + after + ". / present so, notebook folder is created from the notebook div");
+        this.echo(after)
+        var folder_old=after.substring(0,6);
+        this.echo('Folder is created with name: ' + folder_old);
+        
+    });
+
+    casper.then(function () {
+        
+        var z = casper.evaluate(function triggerKeyDownEvent() {
+            jQuery(".jqtree-selected > div:nth-child(1) > span:nth-child(1)").text("PREFIX_new/Notebook");
+            var e = jQuery.Event("keydown");
+            e.which = 13;
+            e.keyCode = 13;
+            jQuery(".jqtree-selected > div:nth-child(1) > span:nth-child(1)").trigger(e);
+            return true;
+        });
+        this.wait(5000);
+    })
+
+    casper.then(function(){
+        this.click('.jqtree-selected > div:nth-child(1) > span:nth-child(1)');
+        var after = this.fetchText('.jqtree-selected > div:nth-child(1) > span:nth-child(1)');
+        this.echo(after)
+        folder_new=after.substring(0,10);
+        this.echo('Folder is renamed with name: ' + folder_new);
+        this.test.assertNotEquals(folder_old,folder_new, "New folder is renamed from notebooks div")
+        
     });
 
     functions.delete_notebooksIstarred(casper);
-
+    
     casper.wait(4000);
 
     casper.run(function () {
