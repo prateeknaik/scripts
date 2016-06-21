@@ -5,7 +5,7 @@
 
 //Begin
 
-casper.test.begin("Invoke locator function above the cell with plot", 6, function suite(test) {
+casper.test.begin("Invoke locator function above the cell with plot", 8, function suite(test) {
     var x = require('casper').selectcss;
     var github_username = casper.cli.options.username;
     var github_password = casper.cli.options.password;
@@ -15,8 +15,9 @@ casper.test.begin("Invoke locator function above the cell with plot", 6, functio
     
 
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
+
     casper.wait(10000);
 
     casper.viewport(1024, 768).then(function () {
@@ -33,28 +34,55 @@ casper.test.begin("Invoke locator function above the cell with plot", 6, functio
     //Create a new Notebook.
     functions.create_notebook(casper);
 
-    //add a new cell 
-    functions.addnewcell(casper);
-    functions.addcontentstocell(casper,input_code)
-       
-    casper.then(function(){
-        this.click({
-            type:'xpath',
-            path:'//*[@id="part1.R"]/div[1]/span[1]/i'
-        });
-        this.wait(4000)
+    //add a new cell and execute its contents
+    casper.wait(2000).then(function(){
+        functions.addnewcell(casper);        
     });
-    casper.then(function(){
-        this.sendKeys({
-            type: 'xpath',
-            path: '//*[@id="part1.R"]/div[3]/div[1]/div[2]/div/div[2]'
-        },'locator(2)');
-        this.click({
-            type: 'xpath',
-            path: '//*[@id="part1.R"]/div[2]/div[2]/span[1]/i'
-        });//xpath for executing the contents
-        this.echo("executed contents of first cell");
-        this.wait(5000)
+
+
+    //add contents to new cell
+    casper.wait(2000).then(function(){
+        if (this.visible({
+                    type: 'xpath',
+                    path: ".//*[@id='part1.R']/div[3]/div[1]/div[2]/div/div[2]/div"
+                })) {  
+                this.test.pass('The cell is present');
+                console.log('Adding contents to the cell')
+                this.sendKeys({
+                    type: 'xpath',
+                    path: ".//*[@id='part1.R']/div[3]/div[1]/div[2]/div/div[2]/div"
+                }, 'locator(2)');
+            }
+            else {
+                this.test.fail('Cell is not present to pass the code content');
+            }
+    });
+
+    casper.wait(2000).then(function(){
+        functions.addnewcell(casper);        
+    });
+
+    //add contents to new cell
+    casper.wait(2000).then(function(){
+        if (this.visible({
+                    type: 'xpath',
+                    path: ".//*[@id='part2.R']/div[3]/div[1]/div[2]/div/div[2]/div"
+                })) {  
+                this.test.pass('The cell is present');
+                console.log('Adding contents to the cell')
+                this.sendKeys({
+                    type: 'xpath',
+                    path: ".//*[@id='part2.R']/div[3]/div[1]/div[2]/div/div[2]/div"
+                }, 'plot(1:10)');
+            }
+            else {
+                this.test.fail('Cell is not present to pass the code content');
+            }
+    });
+
+    
+    casper.wait(1000).then(function(){
+        functions.runall(casper);
     });
 
     casper.viewport(1024, 768).then(function () {
@@ -67,7 +95,7 @@ casper.test.begin("Invoke locator function above the cell with plot", 6, functio
         this.wait(5000);
         this.waitForSelector({type: 'css', path: 'html body div.navbar div div.nav-collapse ul.nav li span a#share-link.btn'}, function () {
             console.log("Shareable link found. Clicking on it");
-            casper.viewport(1366, 768).thenOpen('http://127.0.0.1:9090/view.html?notebook=' + notebookid, function () {
+            casper.viewport(1366, 768).thenOpen('http://127.0.0.1:8080/view.html?notebook=' + notebookid, function () {
                 this.wait(7000);
                 this.echo("The view.html link for the notebook is : " + this.getCurrentUrl());
             });

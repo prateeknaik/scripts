@@ -56,7 +56,7 @@ casper.test.begin(" Total number of comments", 7, function suite(test) {
             {
                 cm_cnt = cm_cnt + 1;
                 this.wait(2000);
-            } while (this.visible(x('/html/body/div[3]/div/div[3]/div/div/div/div[5]/div[2]/div/div/div/div/div[' + cm_cnt + ']/div[2]/div')));
+            } while (this.visible('div.comment-container:nth-child('+cm_cnt+') > div:nth-child(2) > div:nth-child(1) > div:nth-child(1)'));
             cm_cnt = cm_cnt - 1;
             this.echo("number of comments results:" + cm_cnt);
             

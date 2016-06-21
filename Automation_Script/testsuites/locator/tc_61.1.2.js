@@ -14,8 +14,9 @@ casper.test.begin("Invoke locator function without plot", 6, function suite(test
     
 
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
+
     casper.wait(10000);
 
     casper.viewport(1024, 768).then(function () {
@@ -33,16 +34,21 @@ casper.test.begin("Invoke locator function without plot", 6, function suite(test
     functions.create_notebook(casper);
 
     //add a new cell and execute its contents
-    functions.addnewcell(casper);
-    functions.addcontentstocell(casper,input_code);
+    casper.wait(2000).then(function(){
+        functions.addnewcell(casper);
+    });
 
+    casper.wait(2000).then(function(){
+        functions.addcontentstocell(casper,input_code);
+    });
+    
     //check for locator() feature to be invoked 
     casper.then(function() {
         this.test.assertVisible('.icon-exclamation', 'Locator feature didn\'t get invoked' ); 
         this.wait(2000)
     });
 
-    //Delete the cell created for this test case
+    //Delete the notebook created for this test case
     casper.then(function(){
         this.mouse.move('.jqtree-selected > div:nth-child(1) > span:nth-child(1)');
         this.wait(2000)

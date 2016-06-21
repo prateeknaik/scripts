@@ -123,7 +123,7 @@ exports.addnewcell = function (casper) {
         .then(function () {
             this.test.assertTruthy(this.click({
                 type: 'xpath',
-                path: '/html/body/div[3]/div/div[2]/div/div[3]/div[1]/div/span/i'
+                path: ".//*[@id='prompt-area']/div[1]/div/span/i"
             }), 'created new cell');
             this.wait(7000);
         });
