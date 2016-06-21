@@ -15,8 +15,9 @@ casper.test.begin("Return fewer than requested points", 6, function suite(test) 
     // var page=x.create();
 
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
+
     casper.wait(10000);
 
     casper.viewport(1024, 768).then(function () {
@@ -34,24 +35,55 @@ casper.test.begin("Return fewer than requested points", 6, function suite(test) 
     functions.create_notebook(casper);
 
     //add a new cell and execute its contents
-    functions.addnewcell(casper);
-    functions.addcontentstocell(casper,input_code);
+    casper.wait(2000).then(function(){
+        functions.addnewcell(casper);
+    });
+
+    casper.wait(2000).then(function(){
+        functions.addcontentstocell(casper,input_code);
+    });
 
     
-    casper.then(function(){
-        this.wait(2000)
-        this.mouse.click({type: 'css',path:'.live-plot'}, {keepFocus: true})
-        this.page.sendEvent("keypress", casper.page.event.key.Escape);
-    })
-
-    // casper.then(function(){
-    //     this.evaluate(function(){
-    //         var esc = $.Event("keydown", { keyCode: 27 });
-    //         $("casper").trigger(esc);​
-    //     });
+    // casper.wait(2000).then(function(){
+    //     this.mouse.click({type: 'css',path:'.live-plot'}, {keepFocus: true})
+    //     this.wait(1000).then(function(){
+    //         this.page.sendEvent("keypress", casper.page.event.key.Ecsape);
+    //     })
+        
     // });
     
-    casper.then(function(){
+    // casper.wait(2000).then(function(){
+    //     this.evaluate(function(){
+    //         var esc = $.Event("keydown",{ keyCode: '27' });
+    //         $("body").trigger(esc);​
+    //     });
+    // });
+
+    casper.wait(2000).then(function(){
+
+        this.mouse.click({ 
+            type:'css',
+            path:'.live-plot'
+        });
+
+        this.wait(3000);
+
+        this.then(function(){
+
+            var z = casper.evaluate(function triggerKeyDownEvent() {
+            var e = jQuery.Event("keydown");
+            e.which = 27;
+            e.keyCode = 27;
+            jQuery(".live-plot").trigger(e);
+            return true;
+        });
+        });
+        
+    });
+    
+        
+
+    casper.wait(1000).then(function(){
         this.test.assertVisible({
             type:'css',
             path:'.icon-circle'
@@ -66,9 +98,8 @@ casper.test.begin("Return fewer than requested points", 6, function suite(test) 
         this.click('.jqtree-selected > div:nth-child(1) > span:nth-child(2) > span:nth-child(3) > span:nth-child(1) > span:nth-child(5) > i:nth-child(1)')
     });
 
-
     casper.run(function () {
-        test.done();
+         test.done();
     });
 });
     

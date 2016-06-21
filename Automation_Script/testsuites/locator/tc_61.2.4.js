@@ -11,12 +11,14 @@ casper.test.begin("Invoke locator function within the cell with plot", 6, functi
     var github_password = casper.cli.options.password;
     var rcloud_url = casper.cli.options.url;
     var functions = require(fs.absolute('basicfunctions'));
+    var notebookid;
     var input_code = "plot(1:10) \n locator(2)";
     
 
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
+
     casper.wait(10000);
 
     casper.viewport(1024, 768).then(function () {
@@ -34,21 +36,25 @@ casper.test.begin("Invoke locator function within the cell with plot", 6, functi
     functions.create_notebook(casper);
 
     //add a new cell and execute its contents
-    functions.addnewcell(casper);
-    functions.addcontentstocell(casper,input_code);
+    casper.wait(2000).then(function(){
+        functions.addnewcell(casper);
+    });
 
+    casper.wait(2000).then(function(){
+        functions.addcontentstocell(casper,input_code);
+    });
 
-    casper.viewport(1024, 768).then(function () {
+    casper.then(function () {
         var notebook_url = this.getCurrentUrl();
         notebookid = notebook_url.substring(41);
         this.echo("The Notebook Id: " + notebookid);
     });
 
-    casper.viewport(1366, 768).then(function () {
+    casper.then(function () {
         this.wait(5000);
         this.waitForSelector({type: 'css', path: 'html body div.navbar div div.nav-collapse ul.nav li span a#share-link.btn'}, function () {
             console.log("Shareable link found. Clicking on it");
-            casper.viewport(1366, 768).thenOpen('http://127.0.0.1:9090/view.html?notebook=' + notebookid, function () {
+            casper.viewport(1366, 768).thenOpen('http://127.0.0.1:8080/view.html?notebook=' + notebookid, function () {
                 this.wait(7000);
                 this.echo("The view.html link for the notebook is : " + this.getCurrentUrl());
             });
@@ -56,13 +62,10 @@ casper.test.begin("Invoke locator function within the cell with plot", 6, functi
     });
 
     //check for locator feature by checking the crosshair cursor
-    casper.then(function() {
-        var str = this.getElementsAttribute('.live-plot', 'style'); 
+    casper.wait(2000).then(function() {
+        var str = this.getElementsAttribute('.live-plot-container', 'style'); 
         this.test.assertEquals(str,['cursor: crosshair;'], 'Locator function got invoked successfully')
-    });
-
-    
-
+    });  
 
     casper.run(function () {
         test.done();

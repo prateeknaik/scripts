@@ -7,7 +7,7 @@
 //Test begins
 
 
-casper.test.begin("Graphs/Plots  will be visible in mini.html page when used with context output similar to edit.html page", 5, function suite(test) {
+casper.test.begin("Graphs/Plots will be visible in mini.html page when used with context output similar to edit.html page", 6, function suite(test) {
 
     var x = require('casper').selectXPath;//required if we detect an element using xpath
     var github_username = casper.cli.options.username;//user input github username
@@ -36,51 +36,28 @@ casper.test.begin("Graphs/Plots  will be visible in mini.html page when used wit
     //Loading a notebook which consists Context output code
     casper.then(function () {
         this.thenOpen("http://127.0.0.1:8080/edit.html?notebook=" + notebook_id);
-        this.wait(5000);
+        this.wait(8000);
         console.log("Opening Context output notebook");
     });
 
     functions.fork(casper);
 
-    casper.then(function () {
+    casper.wait(4000).then(function () {
         URL = this.getCurrentUrl();
         NB_ID = URL.substring(41);
         console.log("After forking the Notebook ID is :" + NB_ID);
-        this.thenOpen(URL);
-        this.wait(5000);
-        functions.validation(casper);
+        this.thenOpen(URL);        
     });
 
-    casper.then(function () {
-        this.click(x(".//*[@id='view-mode']/b"));
-        console.log("Opening Shareable link drop down to choose mini");
-        this.wait(4000);
-    });
-
-    casper.then(function () {
-        this.click(x(".//*[@id='view-type']/li[3]/a"));
-        console.log("selecting mini option from the drop down");
-        this.wait(1000);
-    });
-
-    casper.viewport(1366, 768).then(function () {
+    casper.wait(5000).then(function () {
         console.log("Opening notebook in Mini.html found. Clicking on it");
-        //this.click('.icon-share')
         this.thenOpen("http://127.0.0.1:8080/mini.html?notebook=" + NB_ID);
-        this.wait(10000);
         var t = this.getTitle();
         this.echo("Shared page title is :" + t);
-        //this.echo(this.fetchText(".live-plot"));
     });
 
-    casper.then(function (){
-        var j = this.getElementInfo(".live-plot");
-        this.wait(2000);
-        this.echo(j);
-    });
-
-    casper.then(function () {
-        this.mouse.move("#zbjwxlk4poy94jbpz049ftxk4-1");
+    casper.wait(5000).then(function () {
+        this.mouse.move(".live-plot-scroller");
         this.wait(5000);
         this.waitForSelector('.icon-save', function () {
             this.test.assertExists('.icon-save', 'Image save option is exists hence plot has been generated');

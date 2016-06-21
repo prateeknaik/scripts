@@ -4,7 +4,7 @@
  * Normal R Code output will be visible in mini.html page when used with context output similar to edit.html page
  */
 //Test begins
-casper.test.begin("Normal R Code output will be visible in mini.html page when used with context output similar to edit.html page", 5, function suite(test) {
+casper.test.begin("Normal R Code output will be visible in mini.html page when used with context output similar to edit.html page", 6, function suite(test) {
 
     var x = require('casper').selectXPath;//required if we detect an element using xpath
     var github_username = casper.cli.options.username;//user input github username
@@ -46,21 +46,8 @@ casper.test.begin("Normal R Code output will be visible in mini.html page when u
         this.thenOpen(URL);
     });
 
-    casper.wait(8000).then(function () {
-        this.click(x(".//*[@id='view-mode']/b"));
-        console.log("Opening drop down to choose mini");
-        this.wait(8000);
-    });
-
-    casper.then(function () {
-        this.click(x(".//*[@id='view-type']/li[3]/a"));
-        console.log("selecting mini option from the drop down");
-        this.wait(1000);
-    });
-
     casper.viewport(1366, 768).then(function () {
         console.log("Opening notebook in Mini.html found. Clicking on it");
-        this.click('.icon-share')
         this.thenOpen("http://127.0.0.1:8080/mini.html?notebook="+NB_ID);
         this.wait(10000);
         var t = this.getTitle();
@@ -68,9 +55,10 @@ casper.test.begin("Normal R Code output will be visible in mini.html page when u
     });
 
     casper.then(function (){
-        var y = this.fetchText(x(".//*[@id='test']/code[2]"));
+        var y = this.fetchText('#test > code:nth-child(3)');
         var u = y.substring(4);
-        this.echo("In Mini.html R code has produced output and the output is :" + u);
+        this.test.assertMatch(u,/Normal R code output in Mini --->/, "R code has produced output in Mini.html" )
+        this.echo("The output is :" + u);
     });
 
      casper.run(function () {

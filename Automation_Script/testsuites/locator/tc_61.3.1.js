@@ -15,8 +15,9 @@ casper.test.begin("Return fewer requested points", 6, function suite(test) {
     
 
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
+
     casper.wait(10000);
 
     casper.viewport(1024, 768).then(function () {
@@ -34,11 +35,16 @@ casper.test.begin("Return fewer requested points", 6, function suite(test) {
     functions.create_notebook(casper);
 
     //add a new cell and execute its contents
-    functions.addnewcell(casper);
-    functions.addcontentstocell(casper,input_code);
+    casper.wait(2000).then(function(){
+        functions.addnewcell(casper);
+    });
+
+    casper.wait(2000).then(function(){
+        functions.addcontentstocell(casper,input_code);
+    });
 
     //click on the plot
-    casper.then(function(){
+    casper.wait(2000).then(function(){
         this.mouse.click({ 
             type:'css',
             path:'.live-plot'
@@ -49,7 +55,7 @@ casper.test.begin("Return fewer requested points", 6, function suite(test) {
     casper.then(function(){
         this.test.assertVisible({
             type:'xpath',
-            path:'//*[@id="part1.R"]/div[3]/div[2]/pre'
+            path:".//*[@id='part1.R']/div[3]/div[2]/pre/code" 
         },'Requested number of cordinates returned through locator() feature');
         this.wait(3000)
     });

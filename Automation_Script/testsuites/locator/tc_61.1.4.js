@@ -15,8 +15,9 @@ casper.test.begin("Invoke locator function with plot", 6, function suite(test) {
     
 
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
+
     casper.wait(10000);
 
     casper.viewport(1024, 768).then(function () {
@@ -34,12 +35,17 @@ casper.test.begin("Invoke locator function with plot", 6, function suite(test) {
     functions.create_notebook(casper);
 
     //add a new cell and execute its contents
-    functions.addnewcell(casper);
-    functions.addcontentstocell(casper,input_code);
+    casper.wait(2000).then(function(){
+        functions.addnewcell(casper);
+    });
+
+    casper.wait(2000).then(function(){
+        functions.addcontentstocell(casper,input_code);
+    });
 
     //check for locator feature by checking the crosshair cursor
-    casper.then(function() {
-        var str = this.getElementsAttribute('.live-plot', 'style'); 
+    casper.wait(1000).then(function() {
+        var str = this.getElementsAttribute('.live-plot-container', 'style'); 
         this.test.assertEquals(str,['cursor: crosshair;'], 'Locator function got invoked successfully')
     });
 
