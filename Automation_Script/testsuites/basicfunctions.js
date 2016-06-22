@@ -121,14 +121,7 @@ exports.search1 = function (casper, search_Content) {
 exports.addnewcell = function (casper) {
     return casper
         .then(function () {
-<<<<<<< HEAD
             this.test.assertTruthy(this.click("span.cell-control > i:nth-child(1)",'created new cell'), "New cell created");
-=======
-            this.test.assertTruthy(this.click({
-                type: 'xpath',
-                path: ".//*[@id='prompt-area']/div[1]/div/span/i"
-            }), 'created new cell');
->>>>>>> 86f7b3d6a053753023abd72ec02c633dd1436d27
             this.wait(7000);
         });
 };
