@@ -2,13 +2,11 @@
  Author: Ganesh Moorthy
  Description:    This is a casperjs automated test script for showing that on clicking the Shareable Link present on top left
  corner of the Main page,the view.html page for the currently loaded notebook should open
-
-
- */
+*/
 
 //Begin Tests
 
-casper.test.begin("Loading view.html using Shareable Link", 4, function suite(test) {
+casper.test.begin("Scroll var present in search div", 4, function suite(test) {
 
     var x = require('casper').selectXPath;
     var github_username = casper.cli.options.username;
@@ -56,7 +54,7 @@ casper.test.begin("Loading view.html using Shareable Link", 4, function suite(te
             });
 	
 	casper.then(function(){
-		this.test.assertVisible({ type: 'xpath' , path: '//*[@id="search-results-scroller"]' },'Scroller exists');
+		this.test.assertVisible(x(".//*[@id='search-results-scroller']"),'Scroller exists');
 		
     });
     

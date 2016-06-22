@@ -13,7 +13,7 @@ casper.test.begin(" Deleting multiple cells from multiple notebooks", 11, functi
     var github_password = casper.cli.options.password;
     var rcloud_url = casper.cli.options.url;
     var functions = require(fs.absolute('basicfunctions'));
-    var item1 = "'GOKAK'";// item to be searched
+    var item = "'Luke Skywalker'";// item to be searched
     var title;//get notebook title
     var URL1;// to store 1st notebook URL
     var URL2;// to store 2nd notebook URL
@@ -44,27 +44,18 @@ casper.test.begin(" Deleting multiple cells from multiple notebooks", 11, functi
 
     //Added a new cells
     functions.addnewcell(casper);
-    functions.addnewcell(casper);
 
     //Add contents to this cell and then execute it using run option
-    casper.then(function () {
-        this.sendKeys({
-            type: 'xpath',
-            path: "/html/body/div[3]/div/div[2]/div/div[1]/div[2]/div[3]/div[1]/div[2]/div/div[2]/div"
-        }, item1);//Adding contents to the second cell
-        this.wait(2000);
-        this.click({
-            type: 'xpath',
-            path: "/html/body/div[3]/div/div[2]/div/div[1]/div[1]/div[3]/div[1]/div[2]/div/div[2]/div"
-        });//Clicking on 1st cell
-        this.sendKeys({
-            type: 'xpath',
-            path: "/html/body/div[3]/div/div[2]/div/div[1]/div[1]/div[3]/div[1]/div[2]/div/div[2]/div"
-        }, item1);//Adding contents to the first cell
-        this.wait(2000);
-        this.click({type: 'xpath', path: '//*[@id="run-notebook"]'});//Clicking on Run-all button
-        this.wait(2000);
-        this.echo('executed contents of the 1st notebook');
+    functions.addcontentstocell(casper, item);
+
+    casper.then(function (){
+        this.click('div.cell-control-bar:nth-child(1) > span:nth-child(1) > i:nth-child(1)');
+        console.log('creating one more cell');
+        this.wait(4000)
+        this.waitForSelector(x(".//*[@id='part2.R']/div[3]/div[1]/div[2]/div/div[2]/div"), function (){
+            this.sendKeys(x(".//*[@id='part2.R']/div[3]/div[1]/div[2]/div/div[2]/div"), "item");    
+        });
+        this.click("#save-notebook");
     });
 
     //Creating 2nd notebook
@@ -77,27 +68,18 @@ casper.test.begin(" Deleting multiple cells from multiple notebooks", 11, functi
 
     //Added a new cells
     functions.addnewcell(casper);
-    functions.addnewcell(casper);
 
     //Add contents to this cell and then execute it using run option
-    casper.then(function () {
-        this.sendKeys({
-            type: 'xpath',
-            path: "/html/body/div[3]/div/div[2]/div/div[1]/div[2]/div[3]/div[1]/div[2]/div/div[2]/div"
-        }, item1);//Adding contents to the second cell
-        this.wait(2000);
-        this.click({
-            type: 'xpath',
-            path: "/html/body/div[3]/div/div[2]/div/div[1]/div[1]/div[3]/div[1]/div[2]/div/div[2]/div"
-        });//Clicking on 1st cell
-        this.sendKeys({
-            type: 'xpath',
-            path: "/html/body/div[3]/div/div[2]/div/div[1]/div[1]/div[3]/div[1]/div[2]/div/div[2]/div"
-        }, item1);//Adding contents to the first cell
-        this.wait(2000);
-        this.click({type: 'xpath', path: '//*[@id="run-notebook"]'});//Clicking on Run-all button
-        this.wait(2000);
-        this.echo('executed contents of the 2nd notebook');
+    functions.addcontentstocell(casper, item);
+
+    casper.then(function (){
+        this.click('div.cell-control-bar:nth-child(1) > span:nth-child(1) > i:nth-child(1)');
+        console.log('creating one more cell');
+        this.wait(4000)
+        this.waitForSelector(x(".//*[@id='part2.R']/div[3]/div[1]/div[2]/div/div[2]/div"), function (){
+            this.sendKeys(x(".//*[@id='part2.R']/div[3]/div[1]/div[2]/div/div[2]/div"), "item");    
+        });
+        this.click("#save-notebook");
     });
 
     //checking if Search div is open
@@ -115,7 +97,7 @@ casper.test.begin(" Deleting multiple cells from multiple notebooks", 11, functi
 
     //entering item to be searched
     casper.then(function () {
-        this.sendKeys('#input-text-search', item1);
+        this.sendKeys('#input-text-search', item);
         this.wait(6000);
         this.click('#search-form > div:nth-child(1) > div:nth-child(2) > button:nth-child(1)');
     });
@@ -130,7 +112,7 @@ casper.test.begin(" Deleting multiple cells from multiple notebooks", 11, functi
             counter = counter + 1;
             this.wait(2000);
         }
-        while (this.visible(x('/html/body/div[3]/div/div[1]/div[1]/div/div/div[2]/div[2]/div/div/div[2]/div/div/table[' + counter + ']/tbody/tr[1]/td/a')));
+        while (this.visible(x(".//*[@id="+counter+"]/table/tbody/tr[2]/td/table/tbody/tr/td")));
 
         counter = counter - 1;
         this.echo("number of search results:" + counter);
@@ -156,9 +138,8 @@ casper.test.begin(" Deleting multiple cells from multiple notebooks", 11, functi
 
     //Deleting cells of the 1st notebook
     casper.then(function () {
-        var z = casper.evaluate(function () {
-            $('.icon-trash').click();
-        });
+        this.click(x(".//*[@id='selection-bar']/div/div/input"));
+        this.click(x(".//*[@id='selection-bar-delete']"))
         console.log('deleting cells of the 1st notebook');
     });
 
@@ -170,13 +151,10 @@ casper.test.begin(" Deleting multiple cells from multiple notebooks", 11, functi
         console.log('Opening 2nd notebook');
     });
     
-    casper.wait(8000);
-
     //Deleting cells of the 2nd notebook
-    casper.then(function () {
-        var z = casper.evaluate(function () {
-            $('.icon-trash').click();            
-        });
+    casper.wait(6000).then(function () {
+        this.click(x(".//*[@id='selection-bar']/div/div/input"));
+        this.click(x(".//*[@id='selection-bar-delete']"))
 		console.log('deleting cells of the 2nd notebook');
     });
 
@@ -184,7 +162,7 @@ casper.test.begin(" Deleting multiple cells from multiple notebooks", 11, functi
     
     //checking if Search div is open
     casper.then(function () {
-        this.sendKeys('#input-text-search', item1);
+        this.sendKeys('#input-text-search', item);
         this.wait(6000);
         this.click('#search-form > div:nth-child(1) > div:nth-child(2) > button:nth-child(1)');
     });
@@ -199,7 +177,7 @@ casper.test.begin(" Deleting multiple cells from multiple notebooks", 11, functi
             counter = counter + 1;
             this.wait(2000);
         }
-        while (this.visible(x('/html/body/div[3]/div/div[1]/div[1]/div/div/div[2]/div[2]/div/div/div[2]/div/div/table[' + counter + ']/tbody/tr[1]/td/a')));
+        while (this.visible(x(".//*[@id="+counter+"]/table/tbody/tr[2]/td/table/tbody/tr/td")));
 
         counter = counter - 1;
         this.echo("number of search results:" + counter);

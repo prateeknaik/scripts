@@ -2,12 +2,9 @@
  Author: Arko
  Description:    This is a casperjs automated test script for showning that For the "Search" option, the text entered in the text box for
  'full-text search' will consist of Unicode characters as Search Text like äåæçèéê etc. only
-
-
- */
+*/
 
 //Begin Tests
-
 casper.test.begin(" Unicode characters as Search Text ", 6, function suite(test) {
 
     var x = require('casper').selectXPath;
@@ -32,7 +29,6 @@ casper.test.begin(" Unicode characters as Search Text ", 6, function suite(test)
         this.wait(9000);
         console.log("validating that the Main page has got loaded properly by detecting if some of its elements are visible. Here we are checking for Shareable Link and Logout options");
         functions.validation(casper);
-
     });
 
     //Create a new Notebook.
@@ -81,7 +77,7 @@ casper.test.begin(" Unicode characters as Search Text ", 6, function suite(test)
             {
                 counter = counter + 1;
                 this.wait(2000);
-            } while (this.visible(x('/html/body/div[3]/div/div/div[2]/div/div/div[2]/div[2]/div/div/div[2]/div/div/table[' + counter + ']/tbody/tr/td/a')));
+            } while (this.visible(x(".//*[@id='search-results']/table/tbody/tr["+counter+"]/td")));
             counter = counter - 1;
             this.echo("number of search results:" + counter);
             this.test.assertEquals(counter, 0, "Confirmed that no search results are displayed");

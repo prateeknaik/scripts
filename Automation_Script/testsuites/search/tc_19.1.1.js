@@ -69,8 +69,7 @@ casper.test.begin("  Notebook Description as Search Text", 8, function suite(tes
             counter = counter + 1;
             this.wait(2000);
             } 
-            while (this.visible(x('/html/body/div[3]/div/div[1]/div[1]/div/div/div[2]/div[2]/div/div/div[2]/div/div/table[' + counter + ']/tbody/tr[1]/td/a')));
-                                         
+            while (this.visible(x(".//*[@id="+counter+"]/table/tbody/tr[2]/td/table/tbody/tr/td")));
             counter = counter - 1;
             this.echo("number of search results:" + counter);
             

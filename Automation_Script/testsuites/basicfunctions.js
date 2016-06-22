@@ -121,10 +121,14 @@ exports.search1 = function (casper, search_Content) {
 exports.addnewcell = function (casper) {
     return casper
         .then(function () {
+<<<<<<< HEAD
+            this.test.assertTruthy(this.click("span.cell-control > i:nth-child(1)",'created new cell'), "New cell created");
+=======
             this.test.assertTruthy(this.click({
                 type: 'xpath',
                 path: ".//*[@id='prompt-area']/div[1]/div/span/i"
             }), 'created new cell');
+>>>>>>> 86f7b3d6a053753023abd72ec02c633dd1436d27
             this.wait(7000);
         });
 };
@@ -138,7 +142,7 @@ exports.addcontentstocell = function (casper, input_code) {
                 console.log('Adding contents to the cell')
                 this.sendKeys("div.edit-code > div:nth-child(3) > div:nth-child(1)", input_code);
 
-                this.click("div.cell-control-bar:nth-child(2) > span:nth-child(2) > i:nth-child(1)", "Executing cell contents");//xpath for executing the contents
+                this.click("div.cell-control-bar:nth-child(2) > span:nth-child(2) > i:nth-child(1)", "Executing cell contents");
                 this.wait(6000);
             }
             else {
@@ -435,58 +439,3 @@ exports.create_group = function (casper, GroupName) {
             });
         });
 };
-
-// //Search elements
-// exports.search = function (casper, item, combo) {
-//     return casper
-//         .then(function () {
-//             var x = require('casper').selectXPath;
-//             if (this.visible('#search-form')) {
-//                 console.log('Search div is already opened');
-//             }
-//             else {
-//                 var z = casper.evaluate(function () {
-//                     $(' .icon-search').click();
-//                 });
-//                 this.echo("Opened Search div");
-//             }
-//             //entering item to be searched
-//             casper.then(function () {
-//                 this.sendKeys('#input-text-search', item);
-//                 this.wait(6000);
-//                 this.click('#search-form > div:nth-child(1) > div:nth-child(2) > button:nth-child(1)');
-//             });
-//             var counter = 0;
-//             casper.wait(5000);
-//             //counting number of Search results
-//             casper.then(function () {
-//                 do
-//                 {
-//                     counter = counter + 1;
-//                     this.wait(2000);
-//                 } while (this.visible(x('/html/body/div[3]/div/div[1]/div[1]/div/div/div[2]/div[2]/div/div/div[2]/div/div/table[' + counter + ']/tbody/tr[1]/td/a')));
-
-//                 counter = counter - 1;
-//                 this.echo("number of search results:" + counter);
-//             });
-//             //verify that the searched item is found in the local user's div
-//             casper.viewport(1366, 768).then(function () {
-//                 //this.echo("Combo= "+combo);
-//                 var flag = 0;//to check if searched item has been found
-//                 for (var i = 1; i <= counter; i++) {
-//                     this.wait(5000);
-//                     var result = this.fetchText(x('/html/body/div[3]/div/div/div[2]/div/div/div[2]/div[2]/div/div/div[2]/div/div/table[' + i + ']/tbody/tr/td/a'));
-//                     this.echo(result);
-//                     if (result == combo) {
-//                         var temp = this.fetchText(x('/html/body/div[3]/div/div/div[2]/div/div/div[2]/div[2]/div/div/div[2]/div/div/table[' + i + ']/tbody/tr[2]/td/div/table/tbody/tr[2]/td/table/tbody/tr/td[2]/code'));
-//                         if (temp == item) {
-//                             flag = 1;
-//                             break;
-//                         }
-//                     }//outer if closes
-//                 }//for closes
-//                 this.test.assertEquals(flag, 1, "Searched item has been found");
-//             });//function closes
-//         });
-// };
-

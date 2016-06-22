@@ -63,7 +63,7 @@ casper.test.begin(" Search after deleting a cell from a notebook", 6, function s
                     counter = counter + 1;
                     this.wait(2000);
                 } 
-                while (this.visible(x('/html/body/div[3]/div/div[1]/div[1]/div/div/div[2]/div[2]/div/div/div[2]/div/div/table[' + counter + ']/tbody/tr[1]/td/a')));
+                while (this.visible(x(".//*[@id="+counter+"]/table/tbody/tr[2]/td/table/tbody/tr/td")));
                                          
                 counter = counter - 1;
                 this.echo("number of search results:" + counter);
@@ -76,56 +76,55 @@ casper.test.begin(" Search after deleting a cell from a notebook", 6, function s
 				{
 					this.test.fail("searched item not found");
 				}
-		});
+	});
 		
-		casper.then(function(){
-			this.click({type: 'xpath', path: '/html/body/div[3]/div/div[2]/div/div[1]/div[1]/div[2]/div[2]/span[5]/i'});
-			this.wait(3000);
-			});
+	casper.then(function () {
+        this.click(x(".//*[@id='selection-bar']/div/div/input"));
+        this.click(x(".//*[@id='selection-bar-delete']"))
+    });
 		
-		casper.reload();
-		casper.wait(3000);
-		
-		casper.then(function(){
-		if (this.visible('#input-text-search')) {
-                console.log('Search div is already opened');
-            }
-        else {
-                var z = casper.evaluate(function () {
-                    $(' .icon-search').click();
-                });
-                this.echo("Opened Search div");
-            }
-		});
-            //entering item to be searched
-            casper.then(function () {
-                this.sendKeys('#input-text-search', item);
-                this.wait(6000);
-                this.click('#search-form > div:nth-child(1) > div:nth-child(2) > button:nth-child(1)');
+	casper.reload();
+
+	casper.wait(5000).then(function(){
+		if (this.visible('#input-text-search')) 
+        {
+            console.log('Search div is already opened');
+        }else 
+        {
+            var z = casper.evaluate(function () {
+                $(' .icon-search').click();
             });
-            
-            casper.wait(5000);
-            
-            //counting number of Search results
-            casper.then(function () {
-                var counter = 0;
-                do
-                {
-                    counter = counter + 1;
-                    this.wait(2000);
-                } 
-                while (this.visible(x('/html/body/div[3]/div/div[1]/div[1]/div/div/div[2]/div[2]/div/div/div[2]/div/div/table[' + counter + ']/tbody/tr[1]/td/a')));
-                                         
-                counter = counter - 1;
-                this.echo("number of search results:" + counter);
-            
-            if (counter = 0)
+            this.echo("Opened Search div");
+        }
+	});
+    //entering item to be searched
+    casper.then(function () {
+        this.sendKeys('#input-text-search', item);
+        this.wait(6000);
+        this.click('#search-form > div:nth-child(1) > div:nth-child(2) > button:nth-child(1)');
+    });
+        
+    casper.wait(5000);
+        
+    //counting number of Search results
+    casper.then(function () {
+        var counter = 0;
+        do
+        {
+            counter = counter + 1;
+            this.wait(2000);
+        } 
+        while (this.visible(x(".//*[@id="+counter+"]/table/tbody/tr[2]/td/table/tbody/tr/td")));
+                                 
+        counter = counter - 1;
+        this.echo("number of search results:" + counter);
+        if (counter = 0)
             {
-				this.test.pass("The searched item has been deleted ");
-			}
-			
-		});
-		casper.run(function () {
+            	this.test.pass("The searched item has been deleted ");
+            }
+	});
+
+	casper.run(function () {
         test.done();
     });
 });

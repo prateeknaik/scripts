@@ -2,12 +2,9 @@
  Author: Arko
  Description:    This is a casperjs automated test script for showning that For the "Search" option, the text entered in the text box for
  'full-text search' will consist of Function names within double quotes for Search like "rnorm(23)", "print(hi)" etc. only
-
-
- */
+*/
 
 //Begin Tests
-
 casper.test.begin(" Function names within double quotes for Search ", 6, function suite(test) {
 
     var x = require('casper').selectXPath;
@@ -20,7 +17,7 @@ casper.test.begin(" Function names within double quotes for Search ", 6, functio
     var combo;//store notebook author + title	
 
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
     casper.wait(10000);
 
@@ -70,7 +67,7 @@ casper.test.begin(" Function names within double quotes for Search ", 6, functio
             counter = counter + 1;
             this.wait(2000);
             } 
-            while (this.visible(x('/html/body/div[3]/div/div[1]/div[1]/div/div/div[2]/div[2]/div/div/div[2]/div/div/table[' + counter + ']/tbody/tr[1]/td/a')));
+            while (this.visible(x(".//*[@id="+counter+"]/table/tbody/tr[2]/td/table/tbody/tr/td")));
                                          
             counter = counter - 1;
             this.echo("number of search results:" + counter);

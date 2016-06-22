@@ -2,11 +2,9 @@
  Author: Arko
  Description:    This is a casperjs automated test script for showing that,When a text not present in any of
  * the notebooks is entered for Text Search, an error message: "no results found" is displayed
-
- */
+*/
 
 //Begin Tests
-
 casper.test.begin("Text not present in any notebook as Search Text", 4, function suite(test) {
 
     var x = require('casper').selectXPath;

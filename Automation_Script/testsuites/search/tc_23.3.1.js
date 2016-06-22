@@ -2,11 +2,9 @@
  Author: Prateek
  Description:    This is a casperjs automated test script for showing that For the "Search" option, Notebook Description
  is displayed for each result notebook
-
- */
+*/
 
 //Begin Tests
-
 casper.test.begin(" Notebook Description is displayed for each result notebook ", 6, function suite(test) {
 
     var x = require('casper').selectXPath;
@@ -31,7 +29,6 @@ casper.test.begin(" Notebook Description is displayed for each result notebook "
         this.wait(9000);
         console.log("validating that the Main page has got loaded properly by detecting if some of its elements are visible. Here we are checking for Shareable Link and Logout options");
         functions.validation(casper);
-
     });
 
     //Create a new Notebook.
@@ -81,7 +78,7 @@ casper.test.begin(" Notebook Description is displayed for each result notebook "
                     counter = counter + 1;
                     this.wait(2000);
                 } 
-                while (this.visible(x('/html/body/div[3]/div/div[1]/div[1]/div/div/div[2]/div[2]/div/div/div[2]/div/div/table[' + counter + ']/tbody/tr[1]/td/a')));
+                while (this.visible(x(".//*[@id="+counter+"]/table/tbody/tr[2]/td/table/tbody/tr/td")));
                                          
                 counter = counter - 1;
                 this.echo("number of search results:" + counter);
@@ -94,7 +91,7 @@ casper.test.begin(" Notebook Description is displayed for each result notebook "
             var flag = 0;//to check if searched item has been found
             for (var i = 1; i <= counter; i++) {
                 this.wait(5000);
-                var result = this.fetchText(x('/html/body/div[3]/div/div[1]/div[1]/div/div/div[2]/div[2]/div/div/div[2]/div/div/table[' + i + ' ]/tbody/tr[1]/td/a'));
+                var result = this.fetchText(x(".//*[@id="+i+"]/table/tbody/tr[2]/td/table/tbody/tr/td/code"));
                 //this.echo(result);
                 if (result == combo) {
                     var temp = result.split("/");

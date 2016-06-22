@@ -1,24 +1,21 @@
 /* 
- Author: Arko
+ Author: Prateek
  Description:    This is a casperjs automated test script for showing that For the "Search" option, the text entered in the text box for 'full-text search'
  will consist of notebook id of the notebook to be searched for, like id: <notebook-ID>
-
- */
-
+*/
 //Begin Tests
-
-casper.test.begin(" Notebook ID for Search", 5, function suite(test) {
+casper.test.begin(" Notebook ID for Search", 7, function suite(test) {
 
     var x = require('casper').selectXPath;
     var github_username = casper.cli.options.username;
     var github_password = casper.cli.options.password;
     var rcloud_url = casper.cli.options.url;
     var functions = require(fs.absolute('basicfunctions'));
-    var item;//item to be searched
+    var item ;//item to be searched
     var title;//get notebook title
     
     casper.start(rcloud_url, function () {
-        functions.inject_jquery(casper);
+        casper.page.injectJs('jquery-1.10.2.js');
     });
     casper.wait(10000);
 
@@ -30,7 +27,6 @@ casper.test.begin(" Notebook ID for Search", 5, function suite(test) {
         this.wait(9000);
         console.log("validating that the Main page has got loaded properly by detecting if some of its elements are visible. Here we are checking for Shareable Link and Logout options");
         functions.validation(casper);
-
     });
 
     //Create a new Notebook.
@@ -40,8 +36,7 @@ casper.test.begin(" Notebook ID for Search", 5, function suite(test) {
     casper.then(function () {
         title = functions.notebookname(casper);
         this.echo("Notebook title : " + title);
-        this.wait(2000);
-        
+        this.wait(2000);        
     });
 
     //getting Notebook ID
@@ -57,10 +52,10 @@ casper.test.begin(" Notebook ID for Search", 5, function suite(test) {
     functions.addnewcell(casper);
 
     //Add contents to this cell and then execute it using run option
-    functions.addcontentstocell(casper, "'ABCD'");
-
+    functions.addcontentstocell(casper, "'NOTEBOOK ID TO BE SEARCHED'");
+    
     casper.then(function(){
-		if (this.visible('#search-form > a:nth-child(3)')) {
+        if (this.visible('#search-form > a:nth-child(3)')) {
                 console.log('Search div is already opened');
             }
         else {
@@ -69,38 +64,27 @@ casper.test.begin(" Notebook ID for Search", 5, function suite(test) {
                 });
                 this.echo("Opened Search div");
             }
-		});
-            //entering item to be searched
-            casper.then(function () {
-                this.sendKeys('#input-text-search', item);
-                this.wait(6000);
-                this.click('#search-form > div:nth-child(1) > div:nth-child(2) > button:nth-child(1)');
-            });
-            
-            casper.wait(5000);
-            
-            //counting number of Search results
-            casper.then(function () {
-                var counter = 0;
-                do
-                {
-                    counter = counter + 1;
-                    this.wait(2000);
-                } while (this.visible(x('/html/body/div[3]/div/div[1]/div[1]/div/div/div[2]/div[2]/div/div/div[2]/div/div/table[' + counter + ']/tbody/tr[1]/td/a')));
-                                         
-                counter = counter - 1;
-                this.echo("number of search results:" + counter);
-            
-            if (counter >0)
-            {
-				this.test.pass("search feature is working for incomplete texts");
-			}
-			else
-				{
-					this.test.fail("search feature is not working for incomplete texts");
-				}
-		});
-
+    });
+        //entering item to be searched
+    casper.then(function () {
+        this.sendKeys('#input-text-search', item);
+        this.wait(6000);
+        this.click('#search-form > div:nth-child(1) > div:nth-child(2) > button:nth-child(1)');
+    });
+        
+    casper.wait(5000);
+    
+    casper.then(function () {
+       if (this.test.assertExists(x(".//*[@id='open_0']")))
+        {
+            this.test.pass("Successfully searched with the notebook ID");
+        }
+        else
+        {
+            this.test.fail("Failed to search with notebook ID");
+        }
+    });
+        
     casper.run(function () {
         test.done();
     });

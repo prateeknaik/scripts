@@ -1,12 +1,10 @@
 /* 
- Author: Arko
- Description:    This is a casperjs automated test script for showing that For the "Search" option,
+ Author: Prateek
+ Description:This is a casperjs automated test script for showing that For the "Search" option,
  Number of Results Found should match Number of Results Displayed
-
- */
+*/
 
 //Begin Tests
-
 casper.test.begin(" Number of Results Found should match Number of Results Displayed ", 5, function suite(test) {
 
     var x = require('casper').selectXPath;
@@ -31,7 +29,6 @@ casper.test.begin(" Number of Results Found should match Number of Results Displ
         this.wait(9000);
         console.log("validating that the Main page has got loaded properly by detecting if some of its elements are visible. Here we are checking for Shareable Link and Logout options");
         functions.validation(casper);
-
     });
 
     //Create a new Notebook.
@@ -49,13 +46,7 @@ casper.test.begin(" Number of Results Found should match Number of Results Displ
     functions.addnewcell(casper);
 
     //Add contents to this cell and then execute it using run option
-    casper.viewport(1366, 768).then(function () {
-        this.sendKeys({ type : 'xpath' , path :'/html/body/div[3]/div/div[2]/div/div[1]/div/div[3]/div[1]/div[2]/div/div[2]/div'}, item);
-        this.wait(3000);
-        this.click({type: 'css', path: 'div.cell-control-bar:nth-child(2) > span:nth-child(2) > i:nth-child(1)'});//css for executing the contents
-        this.echo("executed contents of First cell");
-        this.wait(6000);
-    });
+    functions.addcontentstocell(casper, item);
 
     //verify if number of search results displayed is equal to count of search results
     var counter = 0;
@@ -88,7 +79,7 @@ casper.test.begin(" Number of Results Found should match Number of Results Displ
             counter = counter + 1;
             this.wait(2000);
             } 
-            while (this.visible(x('/html/body/div[3]/div/div[1]/div[1]/div/div/div[2]/div[2]/div/div/div[2]/div/div/table[' + counter + ']/tbody/tr[1]/td/a')));
+            while (this.visible(x(".//*[@id="+counter+"]/table/tbody/tr[2]/td/table/tbody/tr/td")));
                                          
             counter = counter - 1;
             this.echo("number of search results:" + counter);

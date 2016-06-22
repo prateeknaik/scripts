@@ -14,10 +14,8 @@ casper.test.begin(" Comments From a Notebook as Search Text like Comment1", 7, f
     var rcloud_url = casper.cli.options.url;
     var comment = 'bottle';
     var item = '2+4';
-    var title;
-    var combo;
+    var title,combo,flag;
     var functions = require(fs.absolute('basicfunctions'));
-    var flag;
 
     casper.start(rcloud_url, function () {
         casper.page.injectJs('jquery-1.10.2.js');
@@ -32,7 +30,6 @@ casper.test.begin(" Comments From a Notebook as Search Text like Comment1", 7, f
         this.wait(9000);
         console.log("validating that the Main page has got loaded properly by detecting if some of its elements are visible. Here we are checking for Shareable Link and Logout options");
         functions.validation(casper);
-
     });
     
     //Create a new Notebook.
@@ -106,7 +103,7 @@ casper.test.begin(" Comments From a Notebook as Search Text like Comment1", 7, f
             counter = counter + 1;
             this.wait(2000);
             } 
-            while (this.visible(x('/html/body/div[3]/div/div[1]/div[1]/div/div/div[2]/div[2]/div/div/div[2]/div/div/table[' + counter + ']/tbody/tr[1]/td/a')));
+            while (this.visible(x(".//*[@id="+counter+"]/table/tbody/tr[2]/td/table/tbody/tr/td")));
                                          
             counter = counter - 1;
             this.echo("number of search results:" + counter);

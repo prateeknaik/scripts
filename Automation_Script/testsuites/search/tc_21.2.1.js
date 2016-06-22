@@ -2,10 +2,9 @@
  Author: Prateek
  Description:    This is a casperjs automated test script for showning that,When a cell from multiple notebooks
  *  is modified from Rcloud, the respective content should be modified from search Results
- */
+*/
 
 //Begin Tests
-
 casper.test.begin("Edit a cell from multiple notebooks", 11, function suite(test) {
 
     var x = require('casper').selectXPath;
@@ -21,8 +20,9 @@ casper.test.begin("Edit a cell from multiple notebooks", 11, function suite(test
     var temp;
 
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
+    
     casper.wait(10000);
 
     casper.viewport(1024, 768).then(function () {
@@ -213,7 +213,7 @@ casper.test.begin("Edit a cell from multiple notebooks", 11, function suite(test
             counter = counter + 1;
             this.wait(2000);
         }
-        while (this.visible(x('/html/body/div[3]/div/div[1]/div[1]/div/div/div[2]/div[2]/div/div/div[2]/div/div/table[' + counter + ']/tbody/tr[1]/td/a')));
+       while (this.visible(x(".//*[@id="+counter+"]/table/tbody/tr[2]/td/table/tbody/tr/td")));
 
         counter = counter - 1;
         this.echo("number of search results:" + counter);
@@ -228,9 +228,8 @@ casper.test.begin("Edit a cell from multiple notebooks", 11, function suite(test
 
     //Deleting cells from 2nd notebook just to make searched list to minimize
     casper.then(function () {
-        var z = casper.evaluate(function () {
-            $('.icon-trash').click();
-        });
+        this.click(x(".//*[@id='selection-bar']/div/div/input"));
+        this.click(x(".//*[@id='selection-bar-delete']"))
     });
 
     casper.wait(3000);
@@ -240,11 +239,9 @@ casper.test.begin("Edit a cell from multiple notebooks", 11, function suite(test
         this.thenOpen(URL1);
     });
 
-    casper.wait(8000);
-    casper.then(function () {
-        var z = casper.evaluate(function () {
-            $('.icon-trash').click();
-        });
+    casper.wait(8000).then(function () {
+        this.click(x(".//*[@id='selection-bar']/div/div/input"));
+        this.click(x(".//*[@id='selection-bar-delete']"))
     });
 
     casper.run(function () {

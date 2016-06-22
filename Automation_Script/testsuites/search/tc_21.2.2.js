@@ -131,7 +131,7 @@ casper.test.begin(" Modifying multiple cells of multiple notebooks", 11, functio
             counter = counter + 1;
             this.wait(2000);
         }
-        while (this.visible(x('/html/body/div[3]/div/div[1]/div[1]/div/div/div[2]/div[2]/div/div/div[2]/div/div/table[' + counter + ']/tbody/tr[1]/td/a')));
+        while (this.visible(x(".//*[@id="+counter+"]/table/tbody/tr[2]/td/table/tbody/tr/td")));
 
         counter = counter - 1;
         this.echo("number of search results:" + counter);
@@ -246,7 +246,7 @@ casper.test.begin(" Modifying multiple cells of multiple notebooks", 11, functio
             counter = counter + 1;
             this.wait(2000);
         }
-        while (this.visible(x('/html/body/div[3]/div/div[1]/div[1]/div/div/div[2]/div[2]/div/div/div[2]/div/div/table[' + counter + ']/tbody/tr[1]/td/a')));
+        while (this.visible(x(".//*[@id="+counter+"]/table/tbody/tr[2]/td/table/tbody/tr/td")));
 
         counter = counter - 1;
         this.echo("number of search results:" + counter);
@@ -261,9 +261,8 @@ casper.test.begin(" Modifying multiple cells of multiple notebooks", 11, functio
 
     //Deleting cells from 2nd notebook just to make searched list to minimize
     casper.then(function () {
-        var z = casper.evaluate(function () {
-            $('.icon-trash').click();
-        });
+        this.click(x(".//*[@id='selection-bar']/div/div/input"));
+        this.click(x(".//*[@id='selection-bar-delete']"))
     });
 
     casper.wait(3000);
@@ -273,11 +272,9 @@ casper.test.begin(" Modifying multiple cells of multiple notebooks", 11, functio
         this.thenOpen(URL1);        
     });
 
-    casper.wait(8000);
-    casper.then(function () {
-        var z = casper.evaluate(function () {
-            $('.icon-trash').click();
-        });
+    casper.wait(8000).then(function () {
+        this.click(x(".//*[@id='selection-bar']/div/div/input"));
+        this.click(x(".//*[@id='selection-bar-delete']"))
     });
 
     casper.run(function () {

@@ -11,7 +11,7 @@ casper.test.begin(" Text with lexical error as Text Search ", 6, function suite(
     var github_password = casper.cli.options.password;
     var rcloud_url = casper.cli.options.url;
     var functions = require(fs.absolute('basicfunctions'));
-    var item = '5786%^%&*(*';//item to be searched
+    var item = "'5786%^%&*(*'";//item to be searched
     var title;//get notebook title
     var combo;//store notebook author + title
 
@@ -83,7 +83,7 @@ casper.test.begin(" Text with lexical error as Text Search ", 6, function suite(
     casper.wait(5000);
 
     casper.then(function () {
-        this.test.assertSelectorHasText({type: 'xpath', path: '//*[@id="search-results-scroller"]'}, 'error',"search item doesnot parse special charaters");
+        this.test.assertSelectorHasText("#session-info-panel", 'error',"search item doesnot parse special charaters, hence error occured in session-info-panel");
     });
 
     casper.run(function () {

@@ -2,10 +2,9 @@
  Author: Prateek
  Description: This is a casperjs automated test script for showing that,The text box for search results
  *  should display the full-text searched in the text box for "Search For" 
+*/
 
- */
 //Begin Tests
-
 casper.test.begin("Display Text under 'Search For' text box", 6, function suite(test) {
 
     var x = require('casper').selectXPath;
@@ -15,7 +14,6 @@ casper.test.begin("Display Text under 'Search For' text box", 6, function suite(
     var functions = require(fs.absolute('basicfunctions'));
     var item = '"MC-BC"';//item to be searched
     var title;//get notebook title
-
 
     casper.start(rcloud_url, function () {
         casper.page.injectJs('jquery-1.10.2.js');
@@ -84,9 +82,8 @@ casper.test.begin("Display Text under 'Search For' text box", 6, function suite(
     });
 
     casper.then(function () {
-        var z = casper.evaluate(function () {
-            $('.icon-trash').click();
-        });
+        this.click(x(".//*[@id='selection-bar']/div/div/input"));
+        this.click(x(".//*[@id='selection-bar-delete']"))
         console.log('Deleting a cell from 1st notebook');
     });
 

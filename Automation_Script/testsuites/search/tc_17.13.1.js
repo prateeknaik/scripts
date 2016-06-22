@@ -6,20 +6,20 @@
 
 //Begin Tests
 
-casper.test.begin("Searching with Date and time", 7, function suite(test) {
+casper.test.begin("Searching with Date and time", 6, function suite(test) {
 
     var x = require('casper').selectXPath;
     var github_username = casper.cli.options.username;
     var github_password = casper.cli.options.password;
     var rcloud_url = casper.cli.options.url;
     var functions = require(fs.absolute('basicfunctions'));
-    var notebook_id = "b337e639fafdb983a064";
-    var title;
-    var item = '2015-08-28';//item to be searched
+    var title, item;
+    var input = '"2016-06-17T12:02:57Z"';
 
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
+
     casper.wait(10000);
 
     casper.viewport(1024, 768).then(function () {
@@ -31,21 +31,13 @@ casper.test.begin("Searching with Date and time", 7, function suite(test) {
         console.log("validating that the Main page has got loaded properly by detecting if some of its elements are visible. Here we are checking for Shareable Link and Logout options");
         functions.validation(casper);
     });
+
+    //Create a new Notebook.
+    functions.create_notebook(casper);
     
-    //open notebook or load a notebook
-    casper.viewport(1366, 768).thenOpen('http://127.0.0.1:8080/main.html?notebook=' + notebook_id, function () {
-        this.wait(10000);
-        this.then(function () {
-            title = functions.notebookname(casper);
-            this.echo("Notebook title : " + title);
-            this.wait(3000);
-            var author = this.fetchText({type: 'xpath', path: '//*[@id="notebook-author"]'});
-            this.echo("Notebook author: " + author);
-            this.test.assertNotEquals(author, github_username, "Confirmed that notebook belongs to different user");
-        });
-    });
-    
-    functions.fork(casper);
+    functions.addnewcell(casper);
+
+    functions.addcontentstocell(casper, input);
     
     casper.then(function(){
 		if (this.visible('#search-form > a:nth-child(3)')) {
@@ -57,37 +49,59 @@ casper.test.begin("Searching with Date and time", 7, function suite(test) {
                 });
                 this.echo("Opened Search div");
             }
-		});
-            //entering item to be searched
-            casper.then(function () {
-                this.sendKeys('#input-text-search', item);
-                this.wait(6000);
-                this.click('#search-form > div:nth-child(1) > div:nth-child(2) > button:nth-child(1)');
-            });
-            
-            casper.wait(5000);
-            
-            //counting number of Search results
-            casper.then(function () {
-                var counter = 0;
-                do
-                {
-                    counter = counter + 1;
-                    this.wait(2000);
-                } while (this.visible(x('/html/body/div[3]/div/div[1]/div[1]/div/div/div[2]/div[2]/div/div/div[2]/div/div/table[' + counter + ']/tbody/tr[1]/td/a')));
-                                         
-                counter = counter - 1;
-                this.echo("number of search results:" + counter);
-            
-            if (counter >0)
-            {
-				this.test.pass("search feature is working fine with date and time stamp ");
-			}
-			else
-				{
-					this.test.fail("search feature is not working fine with date and time stamp");
-				}
-		});
+	});
+    
+    //To fetch the date we are searching with content first   
+	casper.then(function () {
+        this.sendKeys('#input-text-search', input);
+        this.wait(6000);
+        this.click('#search-form > div:nth-child(1) > div:nth-child(2) > button:nth-child(1)');
+        
+    });
+
+    casper.then(function (){
+        item = this.fetchText(x(".//*[@id='search-results']/table/tbody/tr[1]/td/span/i"));
+        // this.echo(item);
+        this.reload();
+    });
+    
+
+    //entering item to be searched
+    casper.wait(5000).then(function () {
+        this.sendKeys('#input-text-search', input);
+        this.wait(6000);
+        this.click('#search-form > div:nth-child(1) > div:nth-child(2) > button:nth-child(1)');
+    });
+    
+    casper.wait(5000);
+    
+    //counting number of Search results
+    casper.then(function () {
+        var counter = 0;
+        do
+        {
+            counter = counter + 1;
+            this.wait(2000);
+        } while (this.visible(x(".//*[@id='search-results']/table/tbody/tr["+counter+"]/td")));
+                                 
+        counter = counter - 1;
+        this.echo("number of search results:" + counter);
+    
+    if (counter >0)
+    {
+        this.test.pass("search feature is working fine with date and time stamp ");
+    }
+    else
+        {
+            this.test.fail("search feature is not working fine with date and time stamp");
+        }
+    });
+
+    //Deleting cell
+    casper.then(function (){
+        this.click(x(".//*[@id='selection-bar']/div/div/input"));
+        this.click(x(".//*[@id='selection-bar-delete']"))
+    })
 
     casper.run(function () {
         test.done();
