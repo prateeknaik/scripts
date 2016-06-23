@@ -5,7 +5,7 @@
 */
 
 //Begin Tests
-casper.test.begin(" Notebook Description is displayed for each result notebook ", 6, function suite(test) {
+casper.test.begin(" Notebook Description is displayed for each result notebook ", 5, function suite(test) {
 
     var x = require('casper').selectXPath;
     var github_username = casper.cli.options.username;
@@ -78,7 +78,7 @@ casper.test.begin(" Notebook Description is displayed for each result notebook "
                     counter = counter + 1;
                     this.wait(2000);
                 } 
-                while (this.visible(x(".//*[@id="+counter+"]/table/tbody/tr[2]/td/table/tbody/tr/td")));
+                while (this.visible(x(".//*[@id='search-results']/table["+counter+"]/tbody/tr/td")));
                                          
                 counter = counter - 1;
                 this.echo("number of search results:" + counter);
@@ -91,7 +91,7 @@ casper.test.begin(" Notebook Description is displayed for each result notebook "
             var flag = 0;//to check if searched item has been found
             for (var i = 1; i <= counter; i++) {
                 this.wait(5000);
-                var result = this.fetchText(x(".//*[@id="+i+"]/table/tbody/tr[2]/td/table/tbody/tr/td/code"));
+                var result = this.fetchText(x(".//*[@id='search-results']/table["+i+"]/tbody/tr/td/code"));
                 //this.echo(result);
                 if (result == combo) {
                     var temp = result.split("/");

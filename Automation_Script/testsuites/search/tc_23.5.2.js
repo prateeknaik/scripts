@@ -12,13 +12,8 @@ casper.test.begin("Display time on which the notebook was last modified", 8, fun
     var github_password = casper.cli.options.password;
     var rcloud_url = casper.cli.options.url;
     var functions = require(fs.absolute('basicfunctions'));
-    var item = "'ARSENALvsCHELSEA'";//item to be searched
-    var title;//get notebook title
-    var date;//to fetch the text of date
-    var modidate;//to fetch the text of modified date
-    var res;//to store the date
-    var res1;//to store the modified date
-
+    var item = '"DARTH-VADER"';//item to be searched
+    var title,date,modidate,res,res1;
 
     casper.start(rcloud_url, function () {
         casper.page.injectJs('jquery-1.10.2.js');
@@ -44,20 +39,16 @@ casper.test.begin("Display time on which the notebook was last modified", 8, fun
     casper.wait(5000);
 
     casper.then(function () {
-        date = this.fetchText({
-            type: 'xpath',
-            path: "/html/body/div[3]/div/div[1]/div[1]/div/div/div[2]/div[2]/div/div/div[2]/div/div/table/tbody/tr[1]/td/span"
-        });
-        //this.echo(date);
+        date = this.fetchText(x(".//*[@id='search-results']/table/tbody/tr[1]/td/span/i"));
+        this.echo("Before " + date);
         res = date.substring(23, 31);
         this.echo('Time on which notebook is modified:' + res);
     });
 
     //deleting the cell
     casper.then(function () {
-        var z = casper.evaluate(function () {
-            $('.icon-trash').click();
-        });
+        this.click(x(".//*[@id='selection-bar']/div/div/input"));
+        this.click(x(".//*[@id='selection-bar-delete']"))
     });
 
     casper.then(function () {
@@ -80,24 +71,20 @@ casper.test.begin("Display time on which the notebook was last modified", 8, fun
     casper.wait(5000);
 
     casper.then(function () {
-        modidate = this.fetchText({
-            type: 'xpath',
-            path: "/html/body/div[3]/div/div[1]/div[1]/div/div/div[2]/div[2]/div/div/div[2]/div/div/table/tbody/tr[1]/td/span"
-        });
-        //this.echo(date);
+        modidate = this.fetchText(x(".//*[@id='search-results']/table/tbody/tr[1]/td/span/i"));
+        this.echo("after" + date);
         res1 = modidate.substring(23, 31);
         this.echo('Time on which notebook is modified:' + res1);
     });
 
-    casper.then(function () {
-        var z = casper.evaluate(function () {
-            $('.icon-trash').click();
-        });
-    });
-
     //Comaparing the date and modified cell dates
     casper.then(function(){
-        this.test.assertNotEquals( res, res1, 'notebook was last modified at:' + modidate);
+        this.test.assertNotEquals( date, modidate, 'notebook was last modified at:' + modidate);
+    });
+
+    casper.then(function () {
+        this.click(x(".//*[@id='selection-bar']/div/div/input"));
+        this.click(x(".//*[@id='selection-bar-delete']"))
     });
 
     casper.wait(3000);

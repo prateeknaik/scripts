@@ -13,15 +13,15 @@ casper.test.begin(" Delete a cell from multiple notebooks", 11, function suite(t
     var github_password = casper.cli.options.password;
     var rcloud_url = casper.cli.options.url;
     var functions = require(fs.absolute('basicfunctions'));
-    var item1 = "'LOUDA'";// item to be searched
-    var item2 = "'PANTI'";
+    var item1 = "'BATION'";// item to be searched
+    var item2 = "'INCU'";
     var title;//get notebook title
     var URL1;// to store 1st notebook URL
     var URL2;// to store 2nd notebook URL
     var temp;
 
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
     casper.wait(10000);
 
@@ -43,22 +43,20 @@ casper.test.begin(" Delete a cell from multiple notebooks", 11, function suite(t
         this.echo(URL1 = this.getCurrentUrl());
     });
 
-    //Added a new cells
-    functions.addnewcell(casper);
+    //Added a new cell and execute the contents
     functions.addnewcell(casper);
 
     //Add contents to this cell and then execute it using run option
-    casper.then(function () {
-        this.sendKeys({
-            type: 'xpath',
-            path: "/html/body/div[3]/div/div[2]/div/div[1]/div[2]/div[3]/div[1]/div[2]/div/div[2]/div"
-        }, item1);//Adding contents to the second cell
-        this.wait(2000);
+    functions.addcontentstocell(casper, item1);
 
-
-        this.click({type: 'xpath', path: '//*[@id="run-notebook"]'});//Clicking on Run-all button
+    //Creating one more cell and adding contents to it
+    casper.then(function (){
+        this.click('div.cell-control-bar:nth-child(1) > span:nth-child(1) > i:nth-child(1)');
         this.wait(2000);
-        this.echo('executed contents of the 1st notebook');
+        this.waitForSelector(x(".//*[@id='part1.R']/div[3]/div[1]/div[2]/div/div[2]/div"), function(){
+            this.sendKeys(x(".//*[@id='part1.R']/div[3]/div[1]/div[2]/div/div[2]/div"), item1);
+        });
+        functions.runall(casper);
     });
 
     //Creating 2nd notebook
@@ -69,21 +67,20 @@ casper.test.begin(" Delete a cell from multiple notebooks", 11, function suite(t
         this.echo(URL2 = this.getCurrentUrl());
     });
 
-    //Added a new cells
-    functions.addnewcell(casper);
+    //Added a new cell and execute the contents
     functions.addnewcell(casper);
 
     //Add contents to this cell and then execute it using run option
-    casper.then(function () {
-        this.sendKeys({
-            type: 'xpath',
-            path: "/html/body/div[3]/div/div[2]/div/div[1]/div[2]/div[3]/div[1]/div[2]/div/div[2]/div"
-        }, item1);//Adding contents to the second cell
-        this.wait(2000);
+    functions.addcontentstocell(casper, item1);
 
-        this.click({type: 'xpath', path: '//*[@id="run-notebook"]'});//Clicking on Run-all button
+    //Creating one more cell and adding contents to it
+    casper.then(function (){
+        this.click('div.cell-control-bar:nth-child(1) > span:nth-child(1) > i:nth-child(1)');
         this.wait(2000);
-        this.echo('executed contents of the 2nd notebook');
+        this.waitForSelector(x(".//*[@id='part1.R']/div[3]/div[1]/div[2]/div/div[2]/div"), function(){
+            this.sendKeys(x(".//*[@id='part1.R']/div[3]/div[1]/div[2]/div/div[2]/div"), item1);
+        });
+        functions.runall(casper);
     });
 
     functions.search1(casper, item1);
@@ -98,7 +95,7 @@ casper.test.begin(" Delete a cell from multiple notebooks", 11, function suite(t
             counter = counter + 1;
             this.wait(2000);
         }
-        while (this.visible(x(".//*[@id="+counter+"]/table/tbody/tr[2]/td/table/tbody/tr/td")));
+        while (this.visible(x(".//*[@id='search-results']/table["+counter+"]/tbody/tr/td")));
 
         counter = counter - 1;
         this.echo("number of search results:" + counter);
@@ -165,7 +162,7 @@ casper.test.begin(" Delete a cell from multiple notebooks", 11, function suite(t
             counter = counter + 1;
             this.wait(2000);
         }
-        while (this.visible(x(".//*[@id="+counter+"]/table/tbody/tr[2]/td/table/tbody/tr/td")));
+        while (this.visible(x(".//*[@id='search-results']/table["+counter+"]/tbody/tr/td")));
 
         counter = counter - 1;
         this.echo("number of search results:" + counter);

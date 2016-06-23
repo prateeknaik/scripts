@@ -5,7 +5,7 @@
 */
 
 //Begin Tests
-casper.test.begin(" Number of Results Found should match Number of Results Displayed ", 5, function suite(test) {
+casper.test.begin(" Number of Results Found should match Number of Results Displayed ", 6, function suite(test) {
 
     var x = require('casper').selectXPath;
     var github_username = casper.cli.options.username;
@@ -17,9 +17,9 @@ casper.test.begin(" Number of Results Found should match Number of Results Displ
     var combo;//store notebook author + title
 
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
-        });
-        casper.wait(10000);
+        functions.inject_jquery(casper);
+    });
+    casper.wait(10000);
 
     casper.viewport(1024, 768).then(function () {
         functions.login(casper, github_username, github_password, rcloud_url);
@@ -79,7 +79,7 @@ casper.test.begin(" Number of Results Found should match Number of Results Displ
             counter = counter + 1;
             this.wait(2000);
             } 
-            while (this.visible(x(".//*[@id="+counter+"]/table/tbody/tr[2]/td/table/tbody/tr/td")));
+            while (this.visible(x(".//*[@id='search-results']/table["+counter+"]/tbody/tr/td")));
                                          
             counter = counter - 1;
             this.echo("number of search results:" + counter);

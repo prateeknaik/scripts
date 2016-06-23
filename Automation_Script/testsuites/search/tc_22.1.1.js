@@ -12,7 +12,7 @@ casper.test.begin(" Search after deleting a cell from a notebook", 6, function s
     var combo;//store author+notebook title		
 
     casper.start(rcloud_url, function () {
-    casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
     casper.wait(10000);
 
@@ -24,7 +24,7 @@ casper.test.begin(" Search after deleting a cell from a notebook", 6, function s
         this.wait(9000);
         console.log("validating that the Main page has got loaded properly by detecting if some of its elements are visible. Here we are checking for Shareable Link and Logout options");
         functions.validation(casper);
-		});
+	});
 	
 	//Create a new Notebook.
     functions.create_notebook(casper);
@@ -63,7 +63,7 @@ casper.test.begin(" Search after deleting a cell from a notebook", 6, function s
                     counter = counter + 1;
                     this.wait(2000);
                 } 
-                while (this.visible(x(".//*[@id="+counter+"]/table/tbody/tr[2]/td/table/tbody/tr/td")));
+                while (this.visible(x(".//*[@id='search-results']/table["+counter+"]/tbody/tr/td")));
                                          
                 counter = counter - 1;
                 this.echo("number of search results:" + counter);
@@ -114,7 +114,7 @@ casper.test.begin(" Search after deleting a cell from a notebook", 6, function s
             counter = counter + 1;
             this.wait(2000);
         } 
-        while (this.visible(x(".//*[@id="+counter+"]/table/tbody/tr[2]/td/table/tbody/tr/td")));
+        while (this.visible(x(".//*[@id='search-results']/table["+counter+"]/tbody/tr/td")));
                                  
         counter = counter - 1;
         this.echo("number of search results:" + counter);

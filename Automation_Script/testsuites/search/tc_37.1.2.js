@@ -53,23 +53,16 @@ casper.test.begin("in search div pagination current page is disabled", 4, functi
         });
     });
 
-    casper.then(function () {
-        this.wait(3000);
-        casper.then(function () {
-            this.wait(5000);
-            temp = this.getElementInfo({
-                type: 'xpath',
-                path: '/html/body/div[3]/div/div[1]/div[1]/div/div/div[2]/div[2]/div/div/div[3]/div/ul/li[2]'
-            }).tag;
-            var q = temp.search('disabled');
+    casper.wait(5000).then(function () {
+        temp = this.getElementInfo("li.disabled:nth-child(2)").tag;
+        var q = temp.search('disabled');
 
-            if (q > 0) {
-                this.test.pass('Current page number is disabled to click');
-            }
-            else {
-                this.test.fail('current page number is not disabled');
-            }
-        });
+        if (q > 0) {
+            this.test.pass('Current page number is disabled to click');
+        }
+        else {
+            this.test.fail('current page number is not disabled');
+        }
     });
 
     casper.run(function () {

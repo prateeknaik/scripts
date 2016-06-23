@@ -2,7 +2,7 @@
  Author: Prateek
  Description:    This is a casperjs automated test script for showning that,When a cell from multiple notebooks
  *  is modified from Rcloud, the respective content should be modified from search Results
-*/
+ */
 
 //Begin Tests
 casper.test.begin("Edit a cell from multiple notebooks", 11, function suite(test) {
@@ -12,8 +12,8 @@ casper.test.begin("Edit a cell from multiple notebooks", 11, function suite(test
     var github_password = casper.cli.options.password;
     var rcloud_url = casper.cli.options.url;
     var functions = require(fs.absolute('basicfunctions'));
-    var item1 = "'TABLE'";// item to be searched
-    var item2 = "'TENNIS'";
+    var item1 = "'BURKLEE'";// item to be searched
+    var item2 = "'CONCERT'";
     var title;//get notebook title
     var URL1;// to store 1st notebook URL
     var URL2;// to store 2nd notebook URL
@@ -22,7 +22,7 @@ casper.test.begin("Edit a cell from multiple notebooks", 11, function suite(test
     casper.start(rcloud_url, function () {
         functions.inject_jquery(casper);
     });
-    
+
     casper.wait(10000);
 
     casper.viewport(1024, 768).then(function () {
@@ -43,23 +43,11 @@ casper.test.begin("Edit a cell from multiple notebooks", 11, function suite(test
         this.echo(URL1 = this.getCurrentUrl());
     });
 
-    //Added a new cells
-    functions.addnewcell(casper);
+    //Added a new cell and execute the contents
     functions.addnewcell(casper);
 
     //Add contents to this cell and then execute it using run option
-    casper.then(function () {
-        this.sendKeys({
-            type: 'xpath',
-            path: "/html/body/div[3]/div/div[2]/div/div[1]/div[2]/div[3]/div[1]/div[2]/div/div[2]/div"
-        }, item1);//Adding contents to the second cell
-        this.wait(2000);
-
-
-        this.click({type: 'xpath', path: '//*[@id="run-notebook"]'});//Clicking on Run-all button
-        this.wait(2000);
-        this.echo('executed contents of the 1st notebook');
-    });
+    functions.addcontentstocell(casper, item1);
 
     //Creating 2nd notebook
     functions.create_notebook(casper);
@@ -69,22 +57,11 @@ casper.test.begin("Edit a cell from multiple notebooks", 11, function suite(test
         this.echo(URL2 = this.getCurrentUrl());
     });
 
-    //Added a new cells
-    functions.addnewcell(casper);
+    //Added a new cell and execute the contents
     functions.addnewcell(casper);
 
     //Add contents to this cell and then execute it using run option
-    casper.then(function () {
-        this.sendKeys({
-            type: 'xpath',
-            path: "/html/body/div[3]/div/div[2]/div/div[1]/div[2]/div[3]/div[1]/div[2]/div/div[2]/div"
-        }, item1);//Adding contents to the second cell
-        this.wait(2000);
-
-        this.click({type: 'xpath', path: '//*[@id="run-notebook"]'});//Clicking on Run-all button
-        this.wait(2000);
-        this.echo('executed contents of the 2nd notebook');
-    });
+    functions.addcontentstocell(casper, item1);
 
     //checking if Search div is open
     casper.then(function () {
@@ -116,12 +93,12 @@ casper.test.begin("Edit a cell from multiple notebooks", 11, function suite(test
             counter = counter + 1;
             this.wait(2000);
         }
-        while (this.visible(x('/html/body/div[3]/div/div[1]/div[1]/div/div/div[2]/div[2]/div/div/div[2]/div/div/table[' + counter + ']/tbody/tr[1]/td/a')));
+        while (this.visible(x(".//*[@id='search-results']/table[" + counter + "]/tbody/tr/td")));
 
         counter = counter - 1;
         this.echo("number of search results:" + counter);
 
-        if (counter>= 2) {
+        if (counter >= 2) {
             this.test.pass("searching content has been found  ");
         }
         else {
@@ -142,14 +119,10 @@ casper.test.begin("Edit a cell from multiple notebooks", 11, function suite(test
 
     //Modifying contents to this cell and then execute it using run option
     casper.then(function () {
-        this.click({type: 'xpath', path: "/html/body/div[3]/div/div[2]/div/div[1]/div[1]/div[2]/div[2]/span[2]/i"});
-        this.sendKeys({
-            type: 'xpath',
-            path: "html/body/div[3]/div/div[2]/div/div[1]/div[1]/div[3]/div[1]/div[2]/div/div[2]/div"
-        }, item2);
-        this.wait(2000);
+        this.click(x(".//*[@id='part1.R']/div[2]/div[2]/span[2]/i"));
+        this.sendKeys(x(".//*[@id='part1.R']/div[3]/div[1]/div[2]/div/div[2]/div"), item2);
     });
-    
+
     casper.wait(5000);
 
     casper.then(function () {
@@ -173,14 +146,10 @@ casper.test.begin("Edit a cell from multiple notebooks", 11, function suite(test
 
     //Modifying  contents to this cell and then execute it using run option
     casper.then(function () {
-        this.click({type: 'xpath', path: "/html/body/div[3]/div/div[2]/div/div[1]/div[1]/div[2]/div[2]/span[2]/i"});
-        this.sendKeys({
-            type: 'xpath',
-            path: "html/body/div[3]/div/div[2]/div/div[1]/div[1]/div[3]/div[1]/div[2]/div/div[2]/div"
-        }, item2);
-        this.wait(2000);
+        this.click(x(".//*[@id='part1.R']/div[2]/div[2]/span[2]/i"));
+        this.sendKeys(x(".//*[@id='part1.R']/div[3]/div[1]/div[2]/div/div[2]/div"), item2);
     });
-   
+
     casper.then(function () {
         var z = casper.evaluate(function () {
             $('#save-notebook').click();
@@ -192,8 +161,8 @@ casper.test.begin("Edit a cell from multiple notebooks", 11, function suite(test
 
     casper.wait(2000);
 
-    casper.then(function(){
-        temp = item2+item1;
+    casper.then(function () {
+        temp = item2 + item1;
     });
 
     //checking if Search div is open
@@ -213,12 +182,12 @@ casper.test.begin("Edit a cell from multiple notebooks", 11, function suite(test
             counter = counter + 1;
             this.wait(2000);
         }
-       while (this.visible(x(".//*[@id="+counter+"]/table/tbody/tr[2]/td/table/tbody/tr/td")));
+        while (this.visible(x(".//*[@id=" + counter + "]/table/tbody/tr[2]/td/table/tbody/tr/td")));
 
-        counter = counter - 1;
+        // counter = counter - 1;
         this.echo("number of search results:" + counter);
 
-        if (counter >= 2) {
+        if (counter >= 0) {
             this.test.pass("Modified contents from the cell has been successfully searched ");
         }
         else {
@@ -248,7 +217,3 @@ casper.test.begin("Edit a cell from multiple notebooks", 11, function suite(test
         test.done();
     });
 });
-
-
-
-

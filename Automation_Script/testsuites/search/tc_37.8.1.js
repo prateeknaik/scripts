@@ -3,9 +3,7 @@
  Description:    This is a casperjs automated test script for showing that,When a keyword, that is present in Assets div of the notebooks 
  * is searched the search results should contain all the links to the notebooks that contain the keyword in comment section 
 */
-
 //Begin Tests
-
 casper.test.begin("Searching keywords present in Assets div",  function suite(test) {
 
     var x = require('casper').selectXPath;
@@ -13,7 +11,8 @@ casper.test.begin("Searching keywords present in Assets div",  function suite(te
     var github_password = casper.cli.options.password;
     var rcloud_url = casper.cli.options.url;
     var functions = require(fs.absolute('basicfunctions'));
-    var item = "Twisted_Transistors"; // keyword to be searched
+    var item = "KALUVA"; // keyword to be searched
+    
     casper.start(rcloud_url, function () {
         casper.page.injectJs('jquery-1.10.2.js');
     });
@@ -30,18 +29,13 @@ casper.test.begin("Searching keywords present in Assets div",  function suite(te
         console.log("validating that the Main page has got loaded properly by detecting if some of its elements are visible. Here we are checking for Shareable Link and Logout options");
         functions.validation(casper);
         this.wait(4000);
-
     });
+
     functions.create_notebook(casper);
 
     functions.addnewcell(casper);
 
     functions.addcontentstocell(casper, "a<-23;b<-35;a+b");
-
-    casper.then(function(){
-		this.click({type:'xpath', path:".//*[@id='run-notebook']"});
-		console.log("Clicking on Run-all button");
-	});
     
     casper.then(function () {
         var url = this.getCurrentUrl();
@@ -65,6 +59,7 @@ casper.test.begin("Searching keywords present in Assets div",  function suite(te
         this.click({type:'xpath', path:".//*[@id='scratchpad-editor']/div[1]/div/textarea"});
         this.sendKeys({type:'xpath', path:".//*[@id='scratchpad-editor']/div[1]/div/textarea"},item);
         console.log("Entering text in asset.R");
+        this.click(x(".//*[@id='save-notebook']"));//Saving notebook
     });
 
     //searching for the keyword
@@ -92,7 +87,7 @@ casper.test.begin("Searching keywords present in Assets div",  function suite(te
 	//Now verifying the searched 'assest' item found in search results or not
     casper.wait(3000).then(function(){
         this.wait(3000);
-        if(this.test.assertSelectorHasText({ type:'xpath', path: '/html/body/div[3]/div/div[1]/div[1]/div/div/div[2]/div[2]/div'}, item, "verifyingfor the searcheed content from asset div"))
+        if(this.test.assertSelectorHasText(x(".//*[@id='0']/table/tbody/tr[2]/td/table/tbody/tr/td/code"), item, "verifyingfor the searcheed content from asset div"))
         {
 			this.test.pass("Asset's content is searched successfully");
 		}else

@@ -89,7 +89,7 @@ casper.test.begin(" Edit a multiple cells from a single notebook", 7, function s
                 counter = counter + 1;
                 this.wait(2000);
             }
-            while (this.visible(x(".//*[@id="+counter+"]/table/tbody/tr[2]/td/table/tbody/tr/td")));
+            while (this.visible(x(".//*[@id='search-results']/table["+counter+"]/tbody/tr/td")));
 
             counter = counter - 1;
             this.echo("number of search results:" + counter);
@@ -170,7 +170,7 @@ casper.test.begin(" Edit a multiple cells from a single notebook", 7, function s
                 counter = counter + 1;
                 this.wait(2000);
             }
-            while (this.visible(x(".//*[@id="+counter+"]/table/tbody/tr[2]/td/table/tbody/tr/td")));
+            while (this.visible(x(".//*[@id='search-results']/table["+counter+"]/tbody/tr/td")));
 
             counter = counter - 1;
             this.echo("number of search results:" + counter);
@@ -184,6 +184,7 @@ casper.test.begin(" Edit a multiple cells from a single notebook", 7, function s
         });
     });
 
+    //Deleting cells
     casper.then(function () {
         this.click(x(".//*[@id='selection-bar']/div/div/input"));
         this.click(x(".//*[@id='selection-bar-delete']"))

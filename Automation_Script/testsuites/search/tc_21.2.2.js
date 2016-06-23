@@ -13,8 +13,8 @@ casper.test.begin(" Modifying multiple cells of multiple notebooks", 11, functio
     var github_password = casper.cli.options.password;
     var rcloud_url = casper.cli.options.url;
     var functions = require(fs.absolute('basicfunctions'));
-    var item1 = "'COCONUT'";// item to be searched
-    var item2 = "'WATER'";
+    var item1 = "'KRUNAL'";// item to be searched
+    var item2 = "'GUBAAL'";
     var title;//get notebook title
     var URL1;// to store 1st notebook URL
     var URL2;// to store 2nd notebook URL
@@ -43,29 +43,20 @@ casper.test.begin(" Modifying multiple cells of multiple notebooks", 11, functio
         this.echo(URL1 = this.getCurrentUrl());
     });
 
-    //Added a new cells
-    functions.addnewcell(casper);
+    //Added a new cell and execute the contents
     functions.addnewcell(casper);
 
     //Add contents to this cell and then execute it using run option
-    casper.then(function () {
-        this.sendKeys({
-            type: 'xpath',
-            path: "/html/body/div[3]/div/div[2]/div/div[1]/div[2]/div[3]/div[1]/div[2]/div/div[2]/div"
-        }, item1);//Adding contents to the second cell
+    functions.addcontentstocell(casper, item1);
+
+    //Creating one more cell and adding contents to it
+    casper.then(function (){
+        this.click('div.cell-control-bar:nth-child(1) > span:nth-child(1) > i:nth-child(1)');
         this.wait(2000);
-        this.click({
-            type: 'xpath',
-            path: "/html/body/div[3]/div/div[2]/div/div[1]/div[1]/div[3]/div[1]/div[2]/div/div[2]/div"
-        });//Clicking on 1st cell
-        this.sendKeys({
-            type: 'xpath',
-            path: "/html/body/div[3]/div/div[2]/div/div[1]/div[1]/div[3]/div[1]/div[2]/div/div[2]/div"
-        }, item1);//Adding contents to the first cell
-        this.wait(2000);
-        this.click({type: 'xpath', path: '//*[@id="run-notebook"]'});//Clicking on Run-all button
-        this.wait(2000);
-        this.echo('executed contents of the 1st notebook');
+        this.waitForSelector(x(".//*[@id='part1.R']/div[3]/div[1]/div[2]/div/div[2]/div"), function(){
+            this.sendKeys(x(".//*[@id='part1.R']/div[3]/div[1]/div[2]/div/div[2]/div"), item1);
+        });
+        functions.runall(casper);
     });
 
     //Creating 2nd notebook
@@ -76,29 +67,20 @@ casper.test.begin(" Modifying multiple cells of multiple notebooks", 11, functio
         this.echo(URL2 = this.getCurrentUrl());
     });
 
-    //Added a new cells
-    functions.addnewcell(casper);
+    //Added a new cell and execute the contents
     functions.addnewcell(casper);
 
     //Add contents to this cell and then execute it using run option
-    casper.then(function () {
-        this.sendKeys({
-            type: 'xpath',
-            path: "/html/body/div[3]/div/div[2]/div/div[1]/div[2]/div[3]/div[1]/div[2]/div/div[2]/div"
-        }, item1);//Adding contents to the second cell
+    functions.addcontentstocell(casper, item1);
+
+    //Creating one more cell and adding contents to it
+    casper.then(function (){
+        this.click('div.cell-control-bar:nth-child(1) > span:nth-child(1) > i:nth-child(1)');
         this.wait(2000);
-        this.click({
-            type: 'xpath',
-            path: "/html/body/div[3]/div/div[2]/div/div[1]/div[1]/div[3]/div[1]/div[2]/div/div[2]/div"
-        });//Clicking on 1st cell
-        this.sendKeys({
-            type: 'xpath',
-            path: "/html/body/div[3]/div/div[2]/div/div[1]/div[1]/div[3]/div[1]/div[2]/div/div[2]/div"
-        }, item1);//Adding contents to the first cell
-        this.wait(2000);
-        this.click({type: 'xpath', path: '//*[@id="run-notebook"]'});//Clicking on Run-all button
-        this.wait(2000);
-        this.echo('executed contents of the 2nd notebook');
+        this.waitForSelector(x(".//*[@id='part1.R']/div[3]/div[1]/div[2]/div/div[2]/div"), function(){
+            this.sendKeys(x(".//*[@id='part1.R']/div[3]/div[1]/div[2]/div/div[2]/div"), item1);
+        });
+        functions.runall(casper);
     });
 
     //checking if Search div is open
@@ -131,12 +113,12 @@ casper.test.begin(" Modifying multiple cells of multiple notebooks", 11, functio
             counter = counter + 1;
             this.wait(2000);
         }
-        while (this.visible(x(".//*[@id="+counter+"]/table/tbody/tr[2]/td/table/tbody/tr/td")));
+        while (this.visible(x(".//*[@id='search-results']/table[" + counter + "]/tbody/tr/td")));
 
         counter = counter - 1;
         this.echo("number of search results:" + counter);
 
-        if (counter>= 2) {
+        if (counter >= 2) {
             this.test.pass("searching content has been found  ");
         }
         else {
@@ -155,22 +137,16 @@ casper.test.begin(" Modifying multiple cells of multiple notebooks", 11, functio
 
     casper.wait(8000);
 
-    //Modifying contents to this cell and then execute it using run option
+    //Modifying  contents to this cell and then execute it using run option
     casper.then(function () {
-        this.click({type: 'xpath', path: "/html/body/div[3]/div/div[2]/div/div[1]/div[1]/div[2]/div[2]/span[2]/i"});
-        this.sendKeys({
-            type: 'xpath',
-            path: "html/body/div[3]/div/div[2]/div/div[1]/div[1]/div[3]/div[1]/div[2]/div/div[2]/div"
-        }, item2);
-        this.wait(2000);
+        this.click(x(".//*[@id='part1.R']/div[2]/div[2]/span[2]/i"));
+        this.sendKeys(x(".//*[@id='part1.R']/div[3]/div[1]/div[2]/div/div[2]/div"), item2);
     });
+
+    //Modifying  contents to this cell and then execute it using run option
     casper.then(function () {
-        this.click({type: 'xpath', path: "/html/body/div[3]/div/div[2]/div/div[1]/div[2]/div[2]/div[2]/span[2]/i"});
-        this.sendKeys({
-            type: 'xpath',
-            path: "/html/body/div[3]/div/div[2]/div/div[1]/div[2]/div[3]/div[1]/div[2]/div/div[2]/div"
-        }, item2);
-        this.wait(2000);
+        this.click(x(".//*[@id='part2.R']/div[2]/div[2]/span[2]/i"));
+        this.sendKeys(x(".//*[@id='part2.R']/div[3]/div[1]/div[2]/div/div[2]/div"), item2);
     });
 
     casper.wait(5000);
@@ -179,8 +155,6 @@ casper.test.begin(" Modifying multiple cells of multiple notebooks", 11, functio
         var z = casper.evaluate(function () {
             $('#save-notebook').click();
         });
-
-        this.echo("executed the modified contents of First and second cell");
         this.wait(6000);
     });
 
@@ -196,20 +170,14 @@ casper.test.begin(" Modifying multiple cells of multiple notebooks", 11, functio
 
     //Modifying  contents to this cell and then execute it using run option
     casper.then(function () {
-        this.click({type: 'xpath', path: "/html/body/div[3]/div/div[2]/div/div[1]/div[1]/div[2]/div[2]/span[2]/i"});
-        this.sendKeys({
-            type: 'xpath',
-            path: "html/body/div[3]/div/div[2]/div/div[1]/div[1]/div[3]/div[1]/div[2]/div/div[2]/div"
-        }, item2);
-        this.wait(2000);
+        this.click(x(".//*[@id='part1.R']/div[2]/div[2]/span[2]/i"));
+        this.sendKeys(x(".//*[@id='part1.R']/div[3]/div[1]/div[2]/div/div[2]/div"), item2);
     });
+
+    //Modifying  contents to this cell and then execute it using run option
     casper.then(function () {
-        this.click({type: 'xpath', path: "/html/body/div[3]/div/div[2]/div/div[1]/div[2]/div[2]/div[2]/span[2]/i"});
-        this.sendKeys({
-            type: 'xpath',
-            path: "/html/body/div[3]/div/div[2]/div/div[1]/div[2]/div[3]/div[1]/div[2]/div/div[2]/div"
-        }, item2);
-        this.wait(2000);
+        this.click(x(".//*[@id='part2.R']/div[2]/div[2]/span[2]/i"));
+        this.sendKeys(x(".//*[@id='part2.R']/div[3]/div[1]/div[2]/div/div[2]/div"), item2);
     });
 
     casper.wait(5000);
@@ -218,15 +186,13 @@ casper.test.begin(" Modifying multiple cells of multiple notebooks", 11, functio
         var z = casper.evaluate(function () {
             $('#save-notebook').click();
         });
-
-        this.echo("executed the modified contents of First and second cell");
         this.wait(6000);
     });
 
     casper.wait(2000);
 
-    casper.then(function(){
-        temp = item2+item1;
+    casper.then(function () {
+        temp = item2 + item1;
     });
 
     //checking if Search div is open
@@ -246,12 +212,12 @@ casper.test.begin(" Modifying multiple cells of multiple notebooks", 11, functio
             counter = counter + 1;
             this.wait(2000);
         }
-        while (this.visible(x(".//*[@id="+counter+"]/table/tbody/tr[2]/td/table/tbody/tr/td")));
+        while (this.visible(x(".//*[@id=" + counter + "]/table/tbody/tr[2]/td/table/tbody/tr/td")));
 
-        counter = counter - 1;
+        // counter = counter - 1;
         this.echo("number of search results:" + counter);
 
-        if (counter >= 2) {
+        if (counter >= 0) {
             this.test.pass("Modified contents from the cell has been successfully searched ");
         }
         else {
@@ -266,10 +232,10 @@ casper.test.begin(" Modifying multiple cells of multiple notebooks", 11, functio
     });
 
     casper.wait(3000);
-    
+
     //Deleting cells from 1st notebook just to make searched list to minimize
     casper.then(function () {
-        this.thenOpen(URL1);        
+        this.thenOpen(URL1);
     });
 
     casper.wait(8000).then(function () {
@@ -281,7 +247,3 @@ casper.test.begin(" Modifying multiple cells of multiple notebooks", 11, functio
         test.done();
     });
 });
-
-
-
-
