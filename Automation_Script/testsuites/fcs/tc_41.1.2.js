@@ -16,7 +16,7 @@ casper.test.begin(" checking second cell status", 5, function suite(test) {
     var title;
 
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
     casper.wait(10000);
 
@@ -31,13 +31,14 @@ casper.test.begin(" checking second cell status", 5, function suite(test) {
     });
 
     //open notebook belonging to some different user
-    casper.viewport(1366, 768).thenOpen('http://127.0.0.1:8080/main.html?notebook=' + notebook_id, function () {
-        this.wait(10000);
-        this.then(function () {
-            title = functions.notebookname(casper);
-            this.echo("Notebook title : " + title);
-            this.wait(3000);
-        });
+    casper.then(function (){
+        this.thenOpen('http://127.0.0.1:8080/main.html?notebook=' + notebook_id);
+    });
+
+    casper.wait(5000).then( function (){
+        title = functions.notebookname(casper);
+        this.echo("Notebook title : " + title);
+        this.wait(3000);
     });
 
     //get the notebook owner's name and verify that it belongs to a different user

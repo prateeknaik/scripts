@@ -2,8 +2,7 @@
  Author: Prateek
  Description:  This is a casperjs automated test script for showing that,When we run a cell, the 
  * code block becomes uneditable. The code should be editable when clicked on it
-
- */
+*/
 
 //Test begins
 casper.test.begin(" Making editable cell after clicking on cell div", 6, function suite(test) {
@@ -51,16 +50,14 @@ casper.test.begin(" Making editable cell after clicking on cell div", 6, functio
 		});
 		
 	casper.then(function(){	
-		this.sendKeys({type: 'xpath', path: '/html/body/div[3]/div/div[2]/div/div[1]/div/div[3]/div[1]/div[2]/div/div[2]/div'}, input_code1);
+		this.sendKeys(x(".//*[@id='part1.R']/div[3]/div[1]/div[2]/div/textarea"), input_code1);
 		console.log('adding again contents to the same cell');
-        this.click({type: 'xpath', path: '/html/body/div[3]/div/div[2]/div/div[1]/div/div[2]/div[2]/span[1]/i'});//xpath for executing the contents
-        console.log('second time the contents are added to the same cell');
-		this.wait(10000);
+        functions.runall(casper);
 	});
 	
 	//Verify the input_code1 contets
 	casper.then(function(){
-		test.assertSelectorHasText({type : 'css' , path: '.r-result-div'},'12',"Verifying whether cell is editable or not");
+		test.assertSelectorHasText('.r-result-div','12',"Verifying whether cell is editable or not");
         this.wait(5000);
         console.log("After making cell editable, added contents are present");
     });

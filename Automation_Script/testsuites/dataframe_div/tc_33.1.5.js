@@ -55,18 +55,24 @@ casper.test.begin("Checking whether scroll bar exist for the generated data fram
 			}
 	});
 	
-	//check data frame contents in dataframe div
-	casper.then(function(){
-		this.wait(15000);
+	//check data frame in dataframe div
+	casper.then(function (){
 		var z = casper.evaluate(function () {
-			$('#enviewer-body>table>tr>td>a').click();//clicking dataframe link
+			$("#enviewer-body > table:nth-child(1) > tr:nth-child(2) > td:nth-child(2) > a:nth-child(1)").click();//clicking dataframe link
 			this.echo('clicking on dataframe');
 			});
-		this.wait(8000);
-		this.test.assertSelectorHasText({ type: 'xpath', path: "/html/body/div[3]/div/div[3]/div[1]/div/div/div[3]/div[2]/div/div/div/table"},"x","Dataframe contents are displayed");
+	});
+
+	casper.wait(4000).then(function (){
+		this.waitForSelector(x(".//*[@id='viewer-body']"), function (){
+			this.test.assertSelectorHasText(x(".//*[@id='viewer-body']"),"11","Dataframe contents is displayed");	
+		});
+	});
+
+	casper.then(function (){
 		console.log('Now checking whether scrollbar exist for current data frame or not')
 		this.wait(2000);
-		if(this.test.assertExists('#viewer-scroller'), 'checking whether scrollbar exists or not'){
+		if(this.test.assertExists(x(".//*[@id='viewer-scroller']"),'checking whether scrollbar exists or not')){
 		this.test.pass('scroll bar exists for dataframe');
 		}else{
 		this.test.fail('scroll bar does not exists for current data frame');

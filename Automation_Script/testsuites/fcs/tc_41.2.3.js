@@ -17,8 +17,8 @@ casper.test.begin("Checking whether, Clicking on the Stop button stops the execu
     var functions = require(fs.absolute('basicfunctions'));
 
     casper.start(rcloud_url, function () {
-        functions.inject_jquery(casper);
-    });
+       functions.inject_jquery(casper);
+	});
 
     casper.wait(10000);
 

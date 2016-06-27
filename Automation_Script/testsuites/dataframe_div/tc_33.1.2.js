@@ -1,7 +1,7 @@
 /*
 Auther : Tejas
 Description:    This is a casperjs automated test script for showing that Under the Dataframe div, present in the right-side panel, 
-				if the values of the variables in the code is changed it should be updated  in the Dataframe div
+if the values of the variables in the code is changed it should be updated  in the Dataframe div
 */
 
 //begin test
@@ -14,7 +14,7 @@ casper.test.begin("Display updated variable value in dataframe div", 7, function
     var functions = require(fs.absolute('basicfunctions'));
     var notebookid;//to get the notebook id
 	var input1="x = c(2, 3, 5);n = c('aa', 'bb', 'cc');b = c(TRUE, FALSE, TRUE);df = data.frame(x, n, b);print(df)"; // code1
-	var input2="x = c(2, 3, 5);n = c('aa', 'bb', 'cc');b = c(FALSE, FALSE, TRUE);df = data.frame(y, n, b);print(df)"; // code2
+	var input2="x = c(200, 300, 500);n = c('ARNAB', 'SEN', 'GUPTA');b = c(TRUE, FALSE, TRUE);df = data.frame(x, n, b);print(df)"; // code2
     
     casper.start(rcloud_url, function () {
         functions.inject_jquery(casper);
@@ -57,38 +57,42 @@ casper.test.begin("Display updated variable value in dataframe div", 7, function
 	});
 	
 	//check data frame in dataframe div
-	casper.then(function(){
-		this.wait(15000);
+	casper.then(function (){
 		var z = casper.evaluate(function () {
-			$('#enviewer-body>table>tr>td>a').click();//clicking dataframe link
+			$("#enviewer-body > table:nth-child(1) > tr:nth-child(2) > td:nth-child(2) > a:nth-child(1)").click();//clicking dataframe link
 			this.echo('clicking on dataframe');
 			});
-		this.wait(8000);
-		this.test.assertSelectorHasText({ type: 'xpath', path: "/html/body/div[3]/div/div[3]/div[1]/div/div/div[3]/div[2]/div/div/div/table"},"TRUE","Dataframe contents is displayed");
-		console.log("Initial text is TRUE");
+	});
+
+	casper.wait(4000).then(function (){
+		this.waitForSelector(x(".//*[@id='viewer-body']"), function (){
+			this.test.assertSelectorHasText(x(".//*[@id='viewer-body']"),"TRUE","Dataframe contents is displayed");	
+		});
 	});
 	
 	//Creating one more cell
 	casper.then(function(){
-		this.click({type:'xpath', path:'/html/body/div[3]/div/div[2]/div/div[3]/div[1]/div/span/i'});
+		this.click(x(".//*[@id='prompt-area']/div[1]/div/span/i"));
 		this.echo('created one more cell');
 		this.wait(5000);
-		var z = casper.evaluate(function () {
-			$('.ace_text-input').sendkeys(input2);
-			this.echo('adding contents to another cell');
-			});
-		this.wait(6000);
+		this.waitForSelector(x(".//*[@id='part2.R']/div[3]/div[1]/div[2]/div/div[2]/div"), function (){
+			this.sendKeys(x(".//*[@id='part2.R']/div[3]/div[1]/div[2]/div/div[2]/div"), input2)
+		});
 		functions.runall(casper);
 	});
 	
-	casper.then(function(){
-		this.wait(15000);
+	//check data frame in dataframe div
+	casper.then(function (){
 		var z = casper.evaluate(function () {
-			$('#enviewer-body>table>tr>td>a').click();//clicking dataframe link
+			$("#enviewer-body > table:nth-child(1) > tr:nth-child(2) > td:nth-child(2) > a:nth-child(1)").click();//clicking dataframe link
 			this.echo('clicking on dataframe');
 			});
-		this.wait(8000);
-		this.test.assertSelectorHasText({ type: 'xpath', path: "/html/body/div[3]/div/div[3]/div[1]/div/div/div[3]/div[2]/div/div/div/table"},"FALSE","Dataframe contents is displayed after editing notebook");
+	});
+
+	casper.wait(4000).then(function (){
+		this.waitForSelector(x(".//*[@id='viewer-body']"), function (){
+			this.test.assertSelectorHasText(x(".//*[@id='viewer-body']"),"ARNAB","Dataframe contents is displayed");	
+		});
 	});
 	
 	casper.run(function () {

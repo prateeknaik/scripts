@@ -17,8 +17,8 @@ Description:    This is a casperjs automated test script for showing that, Click
         var functions = require(fs.absolute('basicfunctions'));
 
         casper.start(rcloud_url, function () {
-            casper.page.injectJs('jquery-1.10.2.js');
-        });
+	       functions.inject_jquery(casper);
+	    });
         casper.wait(10000);
 
         casper.viewport(1024, 768).then(function () {

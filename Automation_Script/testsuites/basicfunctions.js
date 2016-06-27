@@ -134,7 +134,7 @@ exports.addcontentstocell = function (casper, input_code) {
                 this.test.pass('The cell is present');
                 console.log('Adding contents to the cell')
                 this.sendKeys("div.edit-code > div:nth-child(3) > div:nth-child(1)", input_code);
-
+                this.wait(2000);
                 this.click("div.cell-control-bar:nth-child(2) > span:nth-child(2) > i:nth-child(1)", "Executing cell contents");
                 this.wait(6000);
             }

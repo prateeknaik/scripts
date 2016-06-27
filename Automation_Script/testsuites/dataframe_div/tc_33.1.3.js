@@ -13,7 +13,7 @@ casper.test.begin("After reloading the page workspace div doesn't contain Datafr
     var rcloud_url = casper.cli.options.url;
     var functions = require(fs.absolute('basicfunctions'));
     var notebookid;//to get the notebook id
-	var input1="x = c(2, 3, 5);n = c('aa', 'bb', 'cc');b = c(TRUE, FALSE, TRUE);df = data.frame(x, n, b);print(df)"; // code1
+	var input1="x = c(2, 3, 5);n = c('GANDU', 'bb', 'cc');b = c(TRUE, FALSE, TRUE);df = data.frame(x, n, b);print(df)"; // code1
 	
     casper.start(rcloud_url, function () {
         functions.inject_jquery(casper);
@@ -55,15 +55,18 @@ casper.test.begin("After reloading the page workspace div doesn't contain Datafr
 			}
 	});
 	
-	//check data frame contents in dataframe div
-	casper.then(function(){
-		this.wait(1000);
+	//check data frame in dataframe div
+	casper.then(function (){
 		var z = casper.evaluate(function () {
-			$('#enviewer-body>table>tr>td>a').click();//clicking dataframe link
+			$("#enviewer-body > table:nth-child(1) > tr:nth-child(2) > td:nth-child(2) > a:nth-child(1)").click();//clicking dataframe link
 			this.echo('clicking on dataframe');
 			});
-		this.wait(8000);
-		this.test.assertSelectorHasText({ type: 'xpath', path: "/html/body/div[3]/div/div[3]/div[1]/div/div/div[3]/div[2]/div/div/div/table"},"TRUE","Dataframe contents are displayed");
+	});
+
+	casper.wait(4000).then(function (){
+		this.waitForSelector(x(".//*[@id='viewer-body']"), function (){
+			this.test.assertSelectorHasText(x(".//*[@id='viewer-body']"),"GANDU","Dataframe contents is displayed");	
+		});
 	});
 	
 	casper.then(function(){
@@ -75,7 +78,7 @@ casper.test.begin("After reloading the page workspace div doesn't contain Datafr
 	casper.wait(18000);
 	
 	casper.then(function(){
-		this.test.assertNotVisible('#enviewer-body>table>tr>th');
+		this.test.assertNotVisible('#enviewer-body > table:nth-child(1) > tr:nth-child(2) > td:nth-child(2) > a:nth-child(1)');
 		console.log('data frame is not generated after reloading the page');
 	});	
 		

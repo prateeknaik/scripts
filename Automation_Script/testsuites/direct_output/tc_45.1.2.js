@@ -50,11 +50,9 @@ casper.test.begin(" Making editable cell after clicking on toggle edit button", 
 			});
 		});
 	casper.then(function(){	
-		this.sendKeys({type: 'xpath', path: '/html/body/div[3]/div/div[2]/div/div[1]/div/div[3]/div[1]/div[2]/div/div[2]/div'}, input_code1);
-		this.echo('adding again contents to the cell');
-        this.click({type: 'xpath', path: '/html/body/div[3]/div/div[2]/div/div[1]/div/div[2]/div[2]/span[1]/i'});//xpath for executing the contents
-        this.echo('input_code1 is added');
-		this.wait(10000);
+		this.sendKeys(x(".//*[@id='part1.R']/div[3]/div[1]/div[2]/div/textarea"), input_code1);
+        console.log('adding again contents to the same cell');
+        functions.runall(casper);
 	});
 	
 	//Verify the input_code1 contets

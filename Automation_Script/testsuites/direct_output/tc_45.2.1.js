@@ -34,7 +34,6 @@ casper.test.begin(" Creating cell from the command propmt", 4, function suite(te
     //Add contents to prompt cell
     casper.then(function() {
 		this.sendKeys("#command-prompt", "casperjs", { keepFocus: true });
-		this.capture("typed.png");
 		this.page.sendEvent("keypress", this.page.event.key.Enter);
 		this.click({type:'xpath', path: ".//*[@id='prompt-area']/div[1]/div/span/i"});
     });

@@ -15,10 +15,9 @@ casper.test.begin(" Cell status for a cancelled cell", 6, function suite(test) {
     var temp ;
     var res;
     var actual_res = 'icon-asterisk';
-    var notebook_id = "d147cf455f9b3a019d32";//slow notebook id
+    var notebook_id = "45f9453f833f2f8f78b902be829fab7f";//slow notebook id
     var errors = [];
-    
-    
+       
     casper.start(rcloud_url, function () {
         functions.inject_jquery(casper);
     });
@@ -34,25 +33,20 @@ casper.test.begin(" Cell status for a cancelled cell", 6, function suite(test) {
         functions.validation(casper);
     });
     
-    //open mark down notebook belonging to some different user
-    casper.viewport(1366, 768).thenOpen('http://127.0.0.1:8080/main.html?notebook=' + notebook_id, function () {
-        this.wait(10000);
-        this.then(function () {
-            title = functions.notebookname(casper);
-            this.echo("Notebook title : " + title);
-            this.wait(3000);
-        });
+    //open notebook belonging to some different user
+    casper.then(function (){
+        this.thenOpen('http://127.0.0.1:8080/main.html?notebook=' + notebook_id);
+    });
+
+    casper.wait(5000).then( function (){
+         title = functions.notebookname(casper);
+        this.echo("Notebook title : " + title);
+        this.wait(3000);
     });
     
     functions.fork(casper);
     
-    casper.then(function(){
-		var x = casper.evaluate(function () {
-			$('#run-notebook').click();
-		});
-	});
-    
-    //casper.wait(1000);
+    functions.runall(casper);
     
     casper.then(function(){
 		this.evaluate(function() {
@@ -67,7 +61,7 @@ casper.test.begin(" Cell status for a cancelled cell", 6, function suite(test) {
     
     //Fetching the elemnt information and comparing with the var status
 	casper.then(function () {
-		var temp = this.getElementInfo({type:'xpath', path:'/html/body/div[3]/div/div[2]/div/div[1]/div[9]/div[2]/div[1]/span[3]/i'}).tag;
+		var temp = this.getElementInfo(x(".//*[@id='part3.R']/div[2]/div[1]/span[3]/i")).tag;
 		this.echo(temp);
 		res = temp.substring(102, 115);
 		this.echo(res);
