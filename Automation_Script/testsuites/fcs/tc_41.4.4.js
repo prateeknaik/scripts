@@ -1,9 +1,8 @@
 /*
  Author: Prateek
  Description:  This is a casperjs automated test script for showing that,Clicking the individual run of the cell
- *  for multiple cells shows output of the cells executed in the order of execution
-
- */
+ for multiple cells shows output of the cells executed in the order of execution
+*/
 
 //Test begins
 casper.test.begin(" Individual cells produces respective output even after clicking on individual click of run", 6, function suite(test) {
@@ -32,7 +31,7 @@ casper.test.begin(" Individual cells produces respective output even after click
     });
 
     //Create a new Notebook.
-    functions.create_notebook(casper);
+    // functions.create_notebook(casper);
 
     //Enter the code in command prompt cell
     casper.then(function(){
@@ -43,26 +42,35 @@ casper.test.begin(" Individual cells produces respective output even after click
     casper.viewport(1024, 768).then(function () {
         title = functions.notebookname(casper);
         this.echo("Present title of notebook: " + title);
-        /*var z = casper.evaluate(function triggerKeyDownEvent() {
-            jQuery("#notebook-title").text("S3456bg");
-            var e = jQuery.Event("keydown");
-            e.which = 13;
-            e.keyCode = 13;
-            jQuery("#notebook-title").trigger(e);
-            return true;
-        });*/
-        this.evaluate(function () {
-            $(function ()
-            {
-                $(document).on("keydown", "#textareaId", function(e)
-                {
-                    if ((e.keyCode == 10 || e.keyCode == 13) && e.ctrlKey)
-                    {
-                        alert('ctrl+enter');
-                    }
-                });
+
+        // this.wait(3000).then(function(){
+        //     var z = casper.evaluate(function triggerKeyDownEvent() {
+        //         var e = jQuery.Event("keydown");
+        //         e.which = 13;
+        //         e.keyCode = 13;
+        //         jQuery("#command-prompt > div:nth-child(3) > div:nth-child(1)").trigger(e);
+        //         return true;
+        //     });
+        // });    
+
+        casper.wait(2000).then(function(){
+            // this.mouse.click({type: 'css',path:'.live-plot'}, {keepFocus: true})
+            this.wait(1000).then(function(){
+                this.page.sendEvent("keypress", casper.page.event.key.Escape);
             });
         });
+        // this.evaluate(function () {
+        //     $(function ()
+        //     {
+        //         $(document).on("keydown", "#textareaId", function(e)
+        //         {
+        //             if ((e.keyCode == 10 || e.keyCode == 13) && e.ctrlKey)
+        //             {
+        //                 alert('ctrl+enter');
+        //             }
+        //         });
+        //     });
+        // });
 	});
         
         casper.wait(10000);

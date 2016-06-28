@@ -28,22 +28,16 @@ casper.test.begin("Return fewer than requested points", 6, function suite(test) 
         this.wait(9000);
         console.log("validating that the Main page has got loaded properly by detecting if some of its elements are visible. Here we are checking for Shareable Link and Logout options");
         functions.validation(casper);
-
     });
 
     //Create a new Notebook.
     functions.create_notebook(casper);
 
     //add a new cell and execute its contents
-    casper.wait(2000).then(function(){
-        functions.addnewcell(casper);
-    });
+    functions.addnewcell(casper);
 
-    casper.wait(2000).then(function(){
-        functions.addcontentstocell(casper,input_code);
-    });
+    functions.addcontentstocell(casper,input_code);
 
-    
     // casper.wait(2000).then(function(){
     //     this.mouse.click({type: 'css',path:'.live-plot'}, {keepFocus: true})
     //     this.wait(1000).then(function(){
@@ -60,28 +54,21 @@ casper.test.begin("Return fewer than requested points", 6, function suite(test) 
     // });
 
     casper.wait(2000).then(function(){
-
         this.mouse.click({ 
             type:'css',
             path:'.live-plot'
         });
-
-        this.wait(3000);
-
-        this.then(function(){
-
+        
+        this.wait(3000).then(function(){
             var z = casper.evaluate(function triggerKeyDownEvent() {
-            var e = jQuery.Event("keydown");
-            e.which = 27;
-            e.keyCode = 27;
-            jQuery(".live-plot").trigger(e);
-            return true;
-        });
-        });
-        
+                var e = jQuery.Event("keydown");
+                e.which = 27;
+                e.keyCode = 27;
+                jQuery(".live-plot").trigger(e);
+                return true;
+            });
+        });        
     });
-    
-        
 
     casper.wait(1000).then(function(){
         this.test.assertVisible({

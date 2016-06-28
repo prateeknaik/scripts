@@ -37,8 +37,7 @@ casper.test.begin(" Checking line numbers in executing mode", 6, function suite(
     
     //Add contents to cell
     functions.addcontentstocell(casper,input);
-    
-    
+        
 	casper.then(function(){
 		console.log('verifying line numbers are visible or not when the cell is in editable mode');
 		var line_numbers = [];
