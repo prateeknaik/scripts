@@ -13,8 +13,9 @@ casper.test.begin("Verifying for Recent option exists in Notebbok panel or not",
     var notebook_name;
 
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
+    
     casper.wait(10000);
 
     casper.viewport(1024, 768).then(function () {

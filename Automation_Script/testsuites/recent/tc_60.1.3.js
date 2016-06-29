@@ -1,10 +1,10 @@
 /* 
  Author: Prateek
  Description:This is a casperjs automated test script for
- * Verfying whether dropdown box appears or not with notebook names
+ * Check whether a particular Notebook opens or not from the recent options
 */
 //Begin Tests
-casper.test.begin("Verfying whether dropdown box appears or not with notebook names", 3, function suite(test) {
+casper.test.begin("Check whether a particular Notebook opens or not from the recent options",4,  function suite(test) {
 
     var x = require('casper').selectXPath;
     var github_username = casper.cli.options.username;
@@ -14,8 +14,9 @@ casper.test.begin("Verfying whether dropdown box appears or not with notebook na
     var notebook_name;
 
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
+    
     casper.wait(10000);
 
     casper.viewport(1024, 768).then(function () {
@@ -32,30 +33,27 @@ casper.test.begin("Verfying whether dropdown box appears or not with notebook na
     
     casper.then(function () {
 		notebook_name = this.fetchText('#notebook-title');
-		this.echo(notebook_name);
+		this.echo('Newly created Notebook name is: ' + notebook_name);
 	});
     
     casper.then( function () {
 		this.click(x(".//*[@id='notebooks-panel-inner']/div/a"));
-		console.log('Clicking on Recent Option to verify whether drop down contains Notebook names or not');
+		console.log('Clicking on Recent Option');
 	});
 	
-	casper.then(function () {		
-		for (var i = 1; i <= 5; i++) {
-			var temp = this.fetchText({
-                    type: 'xpath',
-                    path: ".//*[@id='notebooks-panel-inner']/div/ul/li[" + i + "]/a"
-                });
-                this.echo('Notebook names under Recent option drop down: ' + temp);
-			}
+	casper.then(function (casper) {
+		this.click(x(".//*[@id='notebooks-panel-inner']/div/ul/li[1]/a"));
+		console.log('Clicking on Notebook');
 		this.wait(5000);
 	});
 	
-	functions.delete_notebooksIstarred(casper);
+	casper.then(function () {
+		var notebook_name1 = this.fetchText('#notebook-title');
+		this.echo('After loading notebook from the Recent option, Notebook name is: ' + notebook_name1);
+		this.test.assertNotEquals(notebook_name,notebook_name1,'Confirmed that Notebook is opened from the Recent option');
+	});
 	
 	casper.run(function () {
         test.done();
     });
 });
-		
-   

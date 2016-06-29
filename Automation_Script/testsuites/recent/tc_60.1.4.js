@@ -4,7 +4,7 @@
  * Verify whether the Other users (alien users) notebook loads or not
 */
 //Begin Tests
-casper.test.begin("Verify whether the Other users (alien users) notebook loads or not",  function suite(test) {
+casper.test.begin("Verify whether the Other users (alien users) notebook loads or not", 7, function suite(test) {
 
     var x = require('casper').selectXPath;
     var github_username = casper.cli.options.username;
@@ -16,8 +16,9 @@ casper.test.begin("Verify whether the Other users (alien users) notebook loads o
     var new_user_password = 'musigma12';
 
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
+
     casper.wait(10000);
 
     casper.viewport(1024, 768).then(function () {
@@ -32,7 +33,7 @@ casper.test.begin("Verify whether the Other users (alien users) notebook loads o
     
     functions.create_notebook(casper);
     
-    casper.then(function () {
+    casper.wait(2000).then(function () {
 		user = this.fetchText("#notebook-author");
 		console.log('Notebook author: ' + user);
 		notebook_name = this.fetchText('#notebook-title');
@@ -50,30 +51,30 @@ casper.test.begin("Verify whether the Other users (alien users) notebook loads o
 	//functions.logout(casper);
 	
 	casper.then(function () {
-		this.click({type: 'xpath', path: ".//*[@id='rcloud-navbar-menu']/li[5]/a"});
+		this.click({type: 'xpath', path: ".//*[@id='rcloud-navbar-menu']/li[7]/a"});
             console.log('Logging out of RCloud');
             this.wait(3000);
     });
 
-    casper.wait(5000);
-
-    casper.viewport(1366, 768).then(function () {
-        this.click({type: 'xpath', path: '/html/body/div[2]/p[2]/a[2]'}, "Logged out of Github");
+    casper.wait(2000).then(function () {
+        this.click({type: 'xpath', path: ".//*[@id='main-div']/p[2]/a[2]"}, "Logged out of Github");
         console.log('Logging out of Github');
         this.wait(10000);
     });
 
-    casper.viewport(1366, 768).then(function () {
+    casper.wait(2000).then(function () {
         this.click(".btn");
         console.log('logged out of Github');
-        this.wait(7000);
-        this.echo("The url after logging out of Github : " + this.getCurrentUrl());
-        this.test.assertTextExists('GitHub', "Confirmed that successfully logged out of Github");
+        this.wait(4000).then(function(){
+        	this.echo("The url after logging out of Github : " + this.getCurrentUrl());
+        	this.test.assertTextExists('GitHub', "Confirmed that successfully logged out of Github");
+        });
+        
     });
 
 	
 	//Login to RCloud with new user
-    casper.then(function () {
+    casper.wait(1000).then(function () {
         this.thenOpen('http://127.0.0.1:8080/login.R');
         this.wait(13000);
         functions.login(casper, new_username, new_user_password, rcloud_url);
@@ -85,7 +86,7 @@ casper.test.begin("Verify whether the Other users (alien users) notebook loads o
         this.wait(5000);
     });
 
-    casper.then(function () {
+    casper.wait(2000).then(function () {
         functions.open_advanceddiv(casper);
         this.echo("Clicking on dropdown");
         this.wait(5000);
@@ -99,7 +100,7 @@ casper.test.begin("Verify whether the Other users (alien users) notebook loads o
         this.wait(10000);
     });
     
-    casper.then(function () {
+    casper.wait(2000).then(function () {
 		var temp = this.fetchText("#notebook-author");
 		console.log('Notebook author: ' + temp);
 		var temp1 = this.fetchText('#notebook-title');
@@ -107,9 +108,9 @@ casper.test.begin("Verify whether the Other users (alien users) notebook loads o
 	});
     
     functions.create_notebook(casper);
-	casper.wait(3000);
 	
-	casper.then(function () {
+	
+	casper.wait(3000).then(function () {
 		this.click('.dropdown-toggle.recent-btn');
 		console.log('Clicking on Recent option');
 		this.wait(4000);

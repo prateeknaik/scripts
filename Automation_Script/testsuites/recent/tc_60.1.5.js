@@ -4,7 +4,7 @@
  Check whether user is able to load History version of the notebook or not
 */
 //Begin Tests
-casper.test.begin("Check whether user is able to load History version of the notebook or not", 13, function suite(test) {
+casper.test.begin("Check whether user is able to load History version of the notebook or not", 14, function suite(test) {
 
     var x = require('casper').selectXPath;
     var github_username = casper.cli.options.username;
@@ -13,9 +13,11 @@ casper.test.begin("Check whether user is able to load History version of the not
     var functions = require(fs.absolute('basicfunctions'));
     var input = 'a<-12;b<-12;a+b;';
     var input1= '\nc<-2000;d<-1000;c+d';
+    var content;
+    var content1;
 
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
 
     casper.wait(10000);
@@ -92,6 +94,11 @@ casper.test.begin("Check whether user is able to load History version of the not
 		if(this.test.assertExists({type:'css', path:'#revert-notebook'},"verifying whether Revert back icon"))
 		{
 			this.test.pass("History version of a perticular notebook is loaded");
+
+            this.waitForSelector(x(".//*[@id='part1.R']/div[3]/div[1]/div[1]/pre/code"),function(){
+                content=this.fetchText(x(".//*[@id='part1.R']/div[3]/div[1]/div[1]/pre/code"));
+                // this.echo(content);
+            });
 		}else
 		{
 			this.test.fail("Failed to load History version of a notebook");
@@ -105,8 +112,18 @@ casper.test.begin("Check whether user is able to load History version of the not
 		console.log('Clicking on Recent option');
 		this.wait(4000);
 		this.click('.recent-notebooks-list > li:nth-child(1) > a:nth-child(1)');
-		console.log('Clicking on Notebook');
-	});
+        this.waitForSelector(x(".//*[@id='part1.R']/div[3]/div[1]/div[1]/pre/code"),function(){
+            content1=this.fetchText(x(".//*[@id='part1.R']/div[3]/div[1]/div[1]/pre/code"));
+            //this.echo(content);
+        });
+
+        if(this.test.assertNotEquals(content,content1)){
+            this.test.pass('The current version of notebook is loaded when accessed from "recent" option');
+        }else{
+            this.test.fail('The current version of notebook is loaded when accessed from "recent" option');
+        }
+
+    });
 	
 	casper.run(function () {
         test.done();

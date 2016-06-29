@@ -1,10 +1,10 @@
 /* 
  Author: Prateek
  Description:This is a casperjs automated test script to,
- Check whether user is able to load notebook from the recernt options or not
+ Check whether user is able to load own private notebook from the recent options or not
  */
 //Begin Tests
-casper.test.begin("Opening our own private notebook", 4, function suite(test) {
+casper.test.begin("Opening our own private notebook", 5, function suite(test) {
 
     var x = require('casper').selectXPath;
     var github_username = casper.cli.options.username;
@@ -14,7 +14,7 @@ casper.test.begin("Opening our own private notebook", 4, function suite(test) {
     var title, newtitle, before;
     
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
 
     casper.wait(10000);
@@ -52,7 +52,7 @@ casper.test.begin("Opening our own private notebook", 4, function suite(test) {
 
     });
 
-    //Making Notebook as Prib=vate
+    //Making Notebook as Private
     casper.then(function () {
         this.mouse.move('.jqtree-selected > div:nth-child(1)');
         this.wait(2000)
@@ -82,7 +82,7 @@ casper.test.begin("Opening our own private notebook", 4, function suite(test) {
 
     functions.create_notebook(casper);
 
-    casper.then(function () {
+    casper.wait(2000).then(function () {
         this.click(x(".//*[@id='notebooks-panel-inner']/div/a"));
         console.log("Clicking on RECENT option");
         this.test.assertExists(x(".//*[@id='notebooks-panel-inner']/div/ul"), "@ABCD#", "Prev created Notebook exists");
@@ -90,8 +90,8 @@ casper.test.begin("Opening our own private notebook", 4, function suite(test) {
         this.wait(4000);
     });
 
-    casper.then(function () {
-        var title1 = newtitle = functions.notebookname(casper);
+    casper.wait(3000).then(function () {
+        var title1 = functions.notebookname(casper);
         this.echo("After loading Notebook from the Recent option notebook name is: " + title1);
         this.test.assertEquals(newtitle, title1, "Opened our own private notebook");
     });

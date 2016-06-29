@@ -1,5 +1,10 @@
+/* 
+ Author: Prateek
+ Description:This is a casperjs automated test script for
+ * Verfying whether dropdown box appears or not with notebook names
+*/
 //Begin Tests
-casper.test.begin("Import External Notebooks without Prefix", 4, function suite(test) {
+casper.test.begin("Verfying whether dropdown box appears or not with notebook names", 3, function suite(test) {
 
     var x = require('casper').selectXPath;
     var github_username = casper.cli.options.username;
@@ -9,8 +14,9 @@ casper.test.begin("Import External Notebooks without Prefix", 4, function suite(
     var notebook_name;
 
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
+    
     casper.wait(10000);
 
     casper.viewport(1024, 768).then(function () {
@@ -26,37 +32,31 @@ casper.test.begin("Import External Notebooks without Prefix", 4, function suite(
     functions.create_notebook(casper);
     
     casper.then(function () {
-		this.exists(".dropdown-toggle.recent-btn");
-		this.echo('Recent option exists');
-	});
-	
-	casper.then(function () {
 		notebook_name = this.fetchText('#notebook-title');
 		this.echo(notebook_name);
 	});
-	
-	functions.create_notebook(casper);
-	
-	casper.then(function () {
-		this.click({type:'xpath', path:".//*[@id='notebooks-panel-inner']/div/a"}, 'Clicking on Recent option');
-		this.wait(8000);
+    
+    casper.then( function () {
+		this.click(x(".//*[@id='notebooks-panel-inner']/div/a"));
+		console.log('Clicking on Recent Option to verify whether drop down contains Notebook names or not');
 	});
-		
+	
 	casper.then(function () {		
-		for (var i = 1; i <= 20; i++) {
+		for (var i = 1; i <= 5; i++) {
 			var temp = this.fetchText({
                     type: 'xpath',
                     path: ".//*[@id='notebooks-panel-inner']/div/ul/li[" + i + "]/a"
                 });
-                this.echo( temp);
+                this.echo('Notebook names under Recent option drop down: ' + temp);
 			}
 		this.wait(5000);
-		this.test.assertSelectorHasText({type: 'xpath',	path: ".//*[@id='notebooks-panel-inner']/div/ul"}, notebook_name, 'The previously created notebook is present under Recent option list');	
 	});
-		
-	casper.wait(10000);
-	//~ 
+	
+	functions.delete_notebooksIstarred(casper);
+	
 	casper.run(function () {
         test.done();
     });
 });
+		
+   
