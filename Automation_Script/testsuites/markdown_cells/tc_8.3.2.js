@@ -6,7 +6,7 @@
 
 
 //Begin Test
-casper.test.begin("To insert a Markdown cell with respect to a Markdown cell ", 5, function suite(test) {
+casper.test.begin("To insert a Markdown cell with respect to a Markdown cell ", 6, function suite(test) {
     var x = require('casper').selectXPath;
     var github_username = casper.cli.options.username;
     var github_password = casper.cli.options.password;
@@ -16,7 +16,7 @@ casper.test.begin("To insert a Markdown cell with respect to a Markdown cell ", 
     var input_code = 'a<-25 ; print a';
 
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
     casper.wait(10000);
 
@@ -35,11 +35,7 @@ casper.test.begin("To insert a Markdown cell with respect to a Markdown cell ", 
 
 	functions.addnewcell(casper);
 	
-	casper.then(function(){
-		this.sendKeys({type:'xpath', path:"/html/body/div[3]/div/div[2]/div/div[1]/div/div[3]/div[1]/div[2]/div/div[2]/div"}, input_code);
-		this.wait(2000);
-	});
-	
+    functions.addcontentstocell(casper, input_code);
 	
     //change the language from R to Markdown
     casper.then(function(){
@@ -61,7 +57,10 @@ casper.test.begin("To insert a Markdown cell with respect to a Markdown cell ", 
     functions.addnewcell(casper);
     
     casper.then(function(){
-		this.sendKeys({type:'xpath', path:"/html/body/div[3]/div/div[2]/div/div[1]/div[2]/div[3]/div[1]/div[2]/div/div[2]/div"}, input_code);
+        this.waitForSelector(x(".//*[@id='part2.md']/div[3]/div[1]/div[2]/div/div[2]/div"), function (){
+            this.sendKeys(x(".//*[@id='part2.md']/div[3]/div[1]/div[2]/div/div[2]/div"), input_code);
+        })
+		
 		this.wait(2000);
 		
 		casper.then(function(){

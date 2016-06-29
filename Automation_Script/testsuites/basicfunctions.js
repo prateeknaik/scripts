@@ -80,8 +80,8 @@ exports.validation = function (casper) {
                 this.test.assertExists('.icon-share', 'the element Shareable Link exists');
             });
             this.wait(5000);
-            this.waitForSelector('#rcloud-navbar-menu > li:nth-child(7) > a:nth-child(1)', function () {
-                this.test.assertVisible("#rcloud-navbar-menu > li:nth-child(7) > a:nth-child(1)", 'Logout button exists');
+            this.waitForSelector('div.btn > input:nth-child(1)', function () {
+                this.test.assertVisible("#rcloud-navbar-menu > li:nth-child(7) > a:nth-child(1)", 'Cell delete check box exists');
             });
         });
 };
@@ -132,8 +132,10 @@ exports.addcontentstocell = function (casper, input_code) {
         .then(function () {
             if (this.visible("div.edit-code > div:nth-child(3) > div:nth-child(1)")) {
                 this.test.pass('The cell is present');
-                console.log('Adding contents to the cell')
-                this.sendKeys("div.edit-code > div:nth-child(3) > div:nth-child(1)", input_code);
+                console.log('Adding contents to the cell');
+                this.waitForSelector("div.edit-code > div:nth-child(3) > div:nth-child(1)", function (){
+                    this.sendKeys("div.edit-code > div:nth-child(3) > div:nth-child(1)", input_code);
+                });
                 this.wait(2000);
                 this.click("div.cell-control-bar:nth-child(2) > span:nth-child(2) > i:nth-child(1)", "Executing cell contents");
                 this.wait(6000);

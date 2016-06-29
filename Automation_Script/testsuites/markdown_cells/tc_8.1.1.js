@@ -4,7 +4,7 @@ Description:A Markdown cell can be created by changing the language of prompt ce
 */
 
 //Begin Test
-casper.test.begin("Writing a code in markdown cell", 6, function suite(test) {
+casper.test.begin("Writing a code in markdown cell", 5, function suite(test) {
 	var x = require('casper').selectXPath;
     var github_username = casper.cli.options.username;
     var github_password = casper.cli.options.password;
@@ -13,8 +13,8 @@ casper.test.begin("Writing a code in markdown cell", 6, function suite(test) {
     var errors = [];
     var input_code = 'a<-25 ; print a';
     
-casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+	casper.start(rcloud_url, function () {
+        functions.inject_jquery(casper);
     });
     casper.wait(10000);
 
@@ -54,7 +54,13 @@ casper.start(rcloud_url, function () {
 	});
 	
 	//adding contents to the newly created Markdown cells
-	functions.addcontentstocell(casper, input_code);
+	casper.then(function (){
+		this.waitForSelector(x(".//*[@id='part1.md']/div[3]/div[1]/div[2]/div/div[2]/div"), function (){
+			console.log("confirmed that cell has been created");
+			this.sendKeys(x(".//*[@id='part1.md']/div[3]/div[1]/div[2]/div/div[2]/div"), input_code);
+		});
+		functions.runall(casper);
+	});
 	
 	//verfying the results
 	casper.then(function(){

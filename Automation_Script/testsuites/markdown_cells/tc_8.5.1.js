@@ -4,7 +4,7 @@ Description:This is a casperjs automated test script for showing thatTo toggle t
 */
 
 //Begin Test
-casper.test.begin("Output div is visible even without clicking on toggle button", 6, function suite(test) {
+casper.test.begin("To toggle the display of output div for markdown cell which is already executed ", 5, function suite(test) {
 	var x = require('casper').selectXPath;
     var github_username = casper.cli.options.username;
     var github_password = casper.cli.options.password;
@@ -13,8 +13,8 @@ casper.test.begin("Output div is visible even without clicking on toggle button"
     var errors = [];
     var input_code = 'a<-25 ; print a';
     
-casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+	casper.start(rcloud_url, function () {
+        functions.inject_jquery(casper);
     });
     casper.wait(10000);
 
@@ -30,6 +30,14 @@ casper.start(rcloud_url, function () {
     
     //create a new notebook
     functions.create_notebook(casper);
+
+    //create a new cell
+	functions.addnewcell(casper);
+			
+	//adding contents to the newly created Markdown cells
+	casper.waitForSelector(x(".//*[@id='part1.R']/div[3]/div[1]/div[2]/div/div[2]/div"), function (){
+		this.sendKeys(x(".//*[@id='part1.R']/div[3]/div[1]/div[2]/div/div[2]/div"), input_code)
+	});
     
     //change the language from R to Markdown
     casper.then(function(){
@@ -47,15 +55,14 @@ casper.start(rcloud_url, function () {
 		});
 	});
 
-	//create a new cell
-	casper.then(function(){
-		functions.addnewcell(casper);
-		console.log('markdown Language is selected from the drop down menu');
+	casper.then(function (){
+		this.reload();
+		this.wait(5000).then(function (){
+			functions.runall(casper);
+		});
 	});
 	
-	//adding contents to the newly created Markdown cells
-	functions.addcontentstocell(casper, input_code);
-	
+
 	//verfying the results
 	casper.then(function(){
 		this.test.assertVisible({type:'xpath', path:".//*[@id='part1.md']/div[3]/div[2]/p"}, 'Cell gets executed');
@@ -80,8 +87,3 @@ casper.start(rcloud_url, function () {
 	  test.done();
 	});
 });
-	
-	
-
-	
-	

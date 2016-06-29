@@ -4,7 +4,7 @@
  */
 
 //Begin Test
-casper.test.begin("To show the source code in editable format/after executing the contents, clickin in toggle button ", 6, function suite(test) {
+casper.test.begin("To show the source code in editable format/after executing the contents, clicking in toggle button ", 7, function suite(test) {
     var x = require('casper').selectXPath;
     var github_username = casper.cli.options.username;
     var github_password = casper.cli.options.password;
@@ -17,7 +17,7 @@ casper.test.begin("To show the source code in editable format/after executing th
     var temp2;
 
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
     casper.wait(10000);
 
@@ -38,14 +38,7 @@ casper.test.begin("To show the source code in editable format/after executing th
     functions.addnewcell(casper);
     
     //add contents to the cell
-    casper.then(function () {
-        this.sendKeys({
-            type: 'xpath',
-            path: "/html/body/div[3]/div/div[2]/div/div[1]/div/div[3]/div[1]/div[2]/div/div[2]/div"
-        }, input_code);
-        this.wait(2000);
-    });
-
+    functions.addcontentstocell(casper, input_code);
 
     //change the language from R to Markdown
     casper.then(function(){
@@ -64,13 +57,18 @@ casper.test.begin("To show the source code in editable format/after executing th
         console.log('Markdown Language is selected from the drop down menu');
     });
 
+    casper.then(function (){
+        this.reload();
+        this.wait(5000).then(function (){
+            functions.runall(casper);
+        });   
+    });
     
-    functions.runall(casper);
 
 	//Check whether the output div is visible and also fetch the output for comaprison
     casper.then(function () {
-        this.test.assertVisible({type: 'xpath', path: "/html/body/div[3]/div/div[2]/div/div[1]/div/div[3]/div[2]/p"},'Executed the contents and output is visble');
-        temp = this.fetchText({type: 'xpath', path: "/html/body/div[3]/div/div[2]/div/div[1]/div/div[3]/div[2]"});
+        this.test.assertVisible(x(".//*[@id='part1.md']/div[3]/div[2]"),'Executed the contents and output is visble');
+        temp = this.fetchText(x(".//*[@id='part1.md']/div[3]/div[2]"));
     });
 
 	//Clicking on toggle button to edit the code
@@ -80,10 +78,7 @@ casper.test.begin("To show the source code in editable format/after executing th
         });
         console.log('clicking on Toggle button');
         this.wait(3000);
-        this.sendKeys({
-            type: 'xpath',
-            path: "/html/body/div[3]/div/div[2]/div/div[1]/div/div[3]/div[1]/div[2]/div/div[2]/div"
-        }, input_code1);
+        this.sendKeys(x(".//*[@id='part1.md']/div[3]/div[1]/div[2]/div/div[2]/div"),input_code1);
     });
     
     //Clicking on RunAll icon
@@ -91,7 +86,7 @@ casper.test.begin("To show the source code in editable format/after executing th
     
     //Fetch the output to compare with the earlier output of the code
     casper.then(function(){
-		temp1 = this.fetchText({type: 'xpath', path: "/html/body/div[3]/div/div[2]/div/div[1]/div/div[3]/div[2]"});
+		temp1 = this.fetchText(x(".//*[@id='part1.md']/div[3]/div[2]"));
     });
 
 	//Comparison between the output

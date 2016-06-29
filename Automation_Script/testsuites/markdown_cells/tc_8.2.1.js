@@ -13,8 +13,8 @@ casper.test.begin("deleting the created markdown cell ", 7, function suite(test)
     var errors = [];
     var input_code = 'a<-25 ; print a';
     
-casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+	casper.start(rcloud_url, function () {
+        functions.inject_jquery(casper);
     });
     casper.wait(10000);
 
@@ -54,20 +54,28 @@ casper.start(rcloud_url, function () {
 	});
 	
 	//adding contents to the newly created Markdown cells
-	functions.addcontentstocell(casper, input_code);
+	casper.then(function (){
+		this.waitForSelector(x(".//*[@id='part1.md']/div[3]/div[1]/div[2]/div/div[2]/div"), function (){
+			console.log("confirmed that cell has been created");
+			this.sendKeys(x(".//*[@id='part1.md']/div[3]/div[1]/div[2]/div/div[2]/div"), input_code);
+		});
+		functions.runall(casper);
+	});
 	
 	//verfying the results
 	casper.then(function(){
 		this.test.assertVisible({type:'xpath', path:".//*[@id='part1.md']/div[3]/div[2]/p"}, 'Cell gets executed');
-		console.log('Output is visible after cell gets executed');
+		console.log('Contents are added to the cell');
 	});
 	
 	//Deleting the created cell
 	casper.wait(3000,function(){
-		this.click({type:'xpath', path:".//*[@id='part1.md']/div[2]/div[2]/span[6]/i"});
+		this.click(x(".//*[@id='selection-bar']/div/div/input"));
+		console.log("Selecting check box to delete the cell");
+		this.click(x(".//*[@id='selection-bar-delete']"));
 		console.log('clicking on Delete icon');
 		this.wait(2000);
-		this.test.assertNotVisible({type:'xpath', path:".//*[@id='part1.md']/div[3]/div[2]/p"}, 'Cell gets deleted after clicking on Delete icon');
+		this.test.assertNotVisible(x(".//*[@id='part1.md']/div[3]/div[2]/p"), 'Cell gets deleted after clicking on Delete icon');
 	});
 		
 	//Registering to the page.errors actually not required but still if there are some errors found on the page it will gives us the details

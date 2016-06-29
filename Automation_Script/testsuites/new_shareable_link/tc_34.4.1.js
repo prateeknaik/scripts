@@ -7,7 +7,7 @@
 
 //Begin Tests
 
-casper.test.begin("mini.html test", 7, function suite(test) {
+casper.test.begin("mini.html test", 8, function suite(test) {
 
     var x = require('casper').selectXPath;
     var github_username = casper.cli.options.username;
@@ -17,7 +17,7 @@ casper.test.begin("mini.html test", 7, function suite(test) {
     var notebookid='f3480ceec707f5cbc84a';//to get the notebook id
 
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
 
     casper.wait(10000);
@@ -35,51 +35,44 @@ casper.test.begin("mini.html test", 7, function suite(test) {
 
     });
 
-    
-	//Loading Notebook having FastRWeb code 
-	casper.viewport(1366, 768).thenOpen('http://127.0.0.1:8080/edit.html?notebook=' + notebookid, function (){
-	   this.wait(5000);
-       this.waitForSelector({type: 'css', path: '#share-link .icon-share'}, function () {
-            console.log("Verified that page is loaded successfully");
-        }); 
-	}); 
-       
-       
-    casper.then(function(){   
-       this.mouse.click("#view-mode");
-            console.log("clicking on dropdown menu");
-           
-	   this.test.assertExists("#view-type > li:nth-child(3) > a:nth-child(1)",'mini.html found');
-       this.wait(3000);
-       
-       this.click("#view-type > li:nth-child(3) > a:nth-child(1)","clicking on mini.html");
-            
-       this.wait(3000)
-       
-       
-       });
-       
-       casper.then(function(){
-       this.click({type: 'css', path: '.icon-share'},'Clicked on Shareable link');   
-       this.wait(10000);                  
+    casper.then(function () {
+        this.thenOpen('http://127.0.0.1:8080/main.html?notebook=' + notebookid);
+        this.wait(5000);
+        this.test.assertVisible(x(".//*[@id='selection-bar']/div/div/input"), "Notebook opened");
     });
-       //verifying 'mini.html' link opened in new window 
-       casper.viewport(1366, 768).waitForPopup(/mini.html/, function () {
-                    this.test.assertEquals(this.popups.length, 1,'New window opened as expected');
 
-       });
-		// verifying the url and content for mini.html
-	   casper.viewport(1366, 768).withPopup(/mini.html/, function () {
-              
-		this.wait(7000);
-                
-		this.test.assertUrlMatch(/mini.html/, 'mini.html link is opened');
-		//verifying for the contents of mini.html link
-		this.then(function(){
-				this.test.assertExists("#SWvL_0_0 > svg:nth-child(2)",'Required element found hence "Mini.html" notebook opened successfully');
-				this.wait(2000);
-            });
-       });
+
+    functions.fork(casper);
+
+    //Choosing mini from dropdown
+    // casper.wait(3000).waitForSelector(x(".//*[@id='selection-bar']/div/div/input"), function () {
+    //     this.click("span.dropdown");
+    //     this.echo("Clicking on shareable dropdown menu button");
+
+    //     this.waitForSelector("#view-type > li:nth-child(4) > a:nth-child(1)", function () {
+    //         this.echo("mini option is visible");
+    //         this.click("#view-type > li:nth-child(4) > a:nth-child(1)");
+    //         console.log("Choosing 'mini' option from the dropdown'");
+    //     });
+    // });
+
+    casper.then(function (){
+        var URL = this.getCurrentUrl()
+        this.echo(URL);
+        var ID = URL.substring(41);
+        this.echo(ID);
+        this.thenOpen("http://127.0.0.1:8080/mini.html?notebook="+ID)
+    })
+
+    //Opening in mini.html
+    casper.wait(5000).then(function () {
+        this.test.assertUrlMatch(/mini.html/, 'mini.html link is opened');
+        this.wait(5000);
+        this.waitForSelector("body > h1:nth-child(1)", function () {
+            this.test.assertExists("body > h1:nth-child(1)",'Required element found hence "Mini.html" notebook opened successfully');
+            console.log("Confirmed Mini page opened");
+        });    
+    });
 
     casper.run(function () {
         test.done();

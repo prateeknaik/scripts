@@ -7,12 +7,12 @@ InsertDelete,musigma12,advanced_dropdown_option,FALSE
 ,,dataframe_div,FALSE
 ,,deleting_notebook,FALSE
 ,,direct_output,FALSE
-,,fcs,TRUE
+,,fcs,FALSE
 ,,history,FALSE
 ,,load_notebook,FALSE
 ,,login_logout,FALSE
 ,,logout,FALSE
-,,markdown_cells,FALSE
+,,markdown_cells,TRUE
 ,,new_shareable_link,FALSE
 ,,notebook_info,FALSE
 ,,notebook_naming,FALSE

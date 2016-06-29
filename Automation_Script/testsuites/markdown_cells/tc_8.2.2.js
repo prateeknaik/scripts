@@ -14,8 +14,8 @@ casper.test.begin("deleting the created markdown cell ", 8, function suite(test)
     var input_code = 'a<-25 ; print a';
     var temp;// To store the URL address
     
-casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+	casper.start(rcloud_url, function () {
+        functions.inject_jquery(casper);
     });
     casper.wait(10000);
 
@@ -55,23 +55,28 @@ casper.start(rcloud_url, function () {
 	});
 	
 	//adding contents to the newly created Markdown cells
-	functions.addcontentstocell(casper, input_code);
+	casper.then(function (){
+		this.waitForSelector(x(".//*[@id='part1.md']/div[3]/div[1]/div[2]/div/div[2]/div"), function (){
+			console.log("confirmed that cell has been created");
+			this.sendKeys(x(".//*[@id='part1.md']/div[3]/div[1]/div[2]/div/div[2]/div"), input_code);
+		});
+		functions.runall(casper);
+	});
 	
 	//verfying the results
 	casper.then(function(){
 		this.test.assertVisible({type:'xpath', path:".//*[@id='part1.md']/div[3]/div[2]/p"}, 'Cell gets executed');
-		console.log('Output is visible after cell gets executed');
+		console.log('Contents are added to the cell');
 	});
 	
 	//Deleting the created cell
 	casper.wait(3000,function(){
-		// this.click({type:'xpath', path:".//*[@id='part1.md']/div[2]/div[2]/span[6]/i"});
-		console.log('Clicking on check box of the cell');
-		this.click(x(".//*[@id='part1.md']/div[2]/div[1]/span[1]/span/input"));
-		this.click("#selection-bar-delete");
+		this.click(x(".//*[@id='selection-bar']/div/div/input"));
+		console.log("Selecting check box to delete the cell");
+		this.click(x(".//*[@id='selection-bar-delete']"));
 		console.log('clicking on Delete icon');
 		this.wait(2000);
-		this.test.assertNotVisible({type:'xpath', path:".//*[@id='part1.md']/div[3]/div[2]/p"}, 'Cell gets deleted after clicking on Delete icon');
+		this.test.assertNotVisible(x(".//*[@id='part1.md']/div[3]/div[2]/p"), 'Cell gets deleted after clicking on Delete icon');
 	});
 	
 	casper.then(function(){
@@ -88,7 +93,7 @@ casper.start(rcloud_url, function () {
 	});
 	
 	casper.then(function(){
-		this.test.assertNotVisible({type:'xpath', path:".//*[@id='part1.md']/div[3]/div[2]/p"}, 'The deleted cell is not visible after navigating from anothe notebook');
+		this.test.assertNotVisible(x(".//*[@id='part1.md']/div[3]/div[2]/p"), 'The deleted cell is not visible after navigating from anothe notebook');
 	});
 	
 		
