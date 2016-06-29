@@ -13,8 +13,8 @@ casper.test.begin("Splitting a python cell", 7, function suite(test) {
     var input = '"GABBAR IS BACK"';
     var input2 = '"BACK IS GABBAR"';
     
-casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+	casper.start(rcloud_url, function () {
+        functions.inject_jquery(casper);
     });
     casper.wait(10000);
 
@@ -30,7 +30,11 @@ casper.start(rcloud_url, function () {
     
     //create a new notebook
     functions.create_notebook(casper);
-    
+
+    functions.addnewcell(casper);
+
+    functions.addcontentstocell(casper, input);
+   
     //change the language from R to Python
     casper.then(function(){
 		this.mouse.click({ type: 'xpath' , path: ".//*[@id='prompt-area']/div[1]/div/select"});//x path for dropdown menu
@@ -48,34 +52,34 @@ casper.start(rcloud_url, function () {
 		console.log('Python Language is selected from the drop down menu');
 	});
 
-	//create a new cell
-	functions.addnewcell(casper);
-		
-	//adding python code in to the cell
-	casper.then(function(){
-		this.wait(4000)
-		this.sendKeys({type:'xpath', path:'/html/body/div[3]/div/div[2]/div/div[1]/div/div[3]/div[1]/div[2]/div/div[2]/div'}, input);
-		this.wait(2000);		
-	});
+	//Creating one more cell ablove the cell
+	casper.wait(3000).then(function (){
+		this.click(x(".//*[@id='part1.R']/div[1]/span[1]/i"));
+		this.wait(3000);
+		this.waitForSelector(x(".//*[@id='part1.py']/div[3]/div[1]/div[2]/div/div[2]/div"), function(){
+			this.sendKeys(x(".//*[@id='part1.py']/div[3]/div[1]/div[2]/div/div[2]/div"), input2);
+		})
+
+	})
 	
 	//to run the code
 	functions.runall(casper);
 	
-	//Create one more cell
-	functions.addnewcell(casper);
+	// //Create one more cell
+	// functions.addnewcell(casper);
 	
-	//add contents to the cell
-	casper.then(function(){
-		this.sendKeys({type:'xpath', path:'/html/body/div[3]/div/div[2]/div/div[1]/div[2]/div[3]/div[1]/div[2]/div/div[2]/div'}, input2);
-	});
+	// //add contents to the cell
+	// casper.then(function(){
+	// 	this.sendKeys({type:'xpath', path:'/html/body/div[3]/div/div[2]/div/div[1]/div[2]/div[3]/div[1]/div[2]/div/div[2]/div'}, input2);
+	// });
 	
 	casper.then(function(){
-		this.click({type:'xpath', path:"/html/body/div[3]/div/div[2]/div/div[1]/div[2]/div[1]/span[2]/i"});
+		this.click(x(".//*[@id='part2.py']/div[1]/span[2]/i"));
 		console.log("Joining 1st and 2nd cells");
 	});
 	
 	casper.then(function(){
-		this.test.assertDoesntExist({type:'xpath', path:"/html/body/div[3]/div/div[2]/div/div[1]/div[2]/div[2]"},'Second cells doesnot exists');
+		this.test.assertDoesntExist(x(".//*[@id='part2.py']/div[2]"),'Second cells doesnot exists');
 	});
 	
 	casper.then(function () {
@@ -96,7 +100,7 @@ casper.start(rcloud_url, function () {
 	
 	//Verifying whether second cell exists or not
 	casper.wait(4000).then(function(){
-		this.test.assertExists({type:'xpath', path:"/html/body/div[3]/div/div[2]/div/div[1]/div[2]/div[2]"},'Second cells exists after splitting');
+		this.test.assertExists(x(".//*[@id='part2.py']/div[2]"),'Second cells exists after splitting');
 	});
 	
 	casper.run(function () {

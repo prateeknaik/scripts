@@ -17,7 +17,7 @@ casper.test.begin("Upload an Asset and run a python code", 5, function suite(tes
     var input = 'a=5 ; print a';
 
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
 
     casper.wait(10000);
