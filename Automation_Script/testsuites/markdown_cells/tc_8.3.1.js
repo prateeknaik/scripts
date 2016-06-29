@@ -64,17 +64,18 @@ casper.test.begin("Creating a combination of R and Markdown cells ", 9, function
     });
 
     casper.then(function (){
-        this.click(x(".//*[@id='save-notebook']"));
+        this.click("#run-notebook");
         console.log("Saving the changes made to the notebook")
+        this.wait(3000);
         this.reload();
+        this.wait(3000);
     });
 
-    casper.wait(5000).then(function(){
-        this.wait(5000);
+    casper.wait(8000).then(function(){
         functions.runall(casper);
     })
 
-    casper.then(function(){
+    casper.wait(4000).then(function(){
         if(this.test.assertVisible(x(".//*[@id='part1.md']/div[3]/div[2]/p")))
         {
             this.test.pass('Output div for Markdown cell is visible');
@@ -84,19 +85,17 @@ casper.test.begin("Creating a combination of R and Markdown cells ", 9, function
         }
     });
 
-    casper.then(function(){
-        if(this.test.assertVisible(x(".//*[@id='part2.R']/div[3]/div[2]/pre/code")))
-        {
-            this.test.pass('Output div for R cell is visible');
-        }else
-        {
-            this.test.fail('Output div for R cell  is not visible');
-        }
+    casper.wait(5000).then(function (){
+        this.waitForSelector(x(".//*[@id='part2.R']/div[3]/div[2]/pre/code"), function (){
+            if(this.test.assertVisible(x(".//*[@id='part2.R']/div[3]/div[2]/pre/code")))
+            {
+                this.test.pass('Output div for R cell is visible');
+            }else
+            {
+                this.test.fail('Output div for R cell  is not visible');
+            }
+        });
     });
-
-
-    casper.wait(10000);
-
 
     casper.run(function () {
         test.done();

@@ -132,18 +132,15 @@ exports.addcontentstocell = function (casper, input_code) {
         .then(function () {
             if (this.visible("div.edit-code > div:nth-child(3) > div:nth-child(1)")) {
                 this.test.pass('The cell is present');
-                console.log('Adding contents to the cell');
-                this.waitForSelector("div.edit-code > div:nth-child(3) > div:nth-child(1)", function (){
-                    this.sendKeys("div.edit-code > div:nth-child(3) > div:nth-child(1)", input_code);
-                });
-                this.wait(2000);
+                console.log('Adding contents to the cell')
+                this.sendKeys("div.edit-code > div:nth-child(3) > div:nth-child(1)", input_code);
+                this.wait(4000);
                 this.click("div.cell-control-bar:nth-child(2) > span:nth-child(2) > i:nth-child(1)", "Executing cell contents");
                 this.wait(6000);
             }
             else {
                 this.test.fail('Cell is not present to pass the code content');
             }
-
         });
 };
 

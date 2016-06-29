@@ -56,28 +56,28 @@ casper.test.begin("To insert a Markdown cell with respect to a Markdown cell ", 
     
     functions.addnewcell(casper);
     
-    casper.then(function(){
+    casper.wait(3000).then(function(){
         this.waitForSelector(x(".//*[@id='part2.md']/div[3]/div[1]/div[2]/div/div[2]/div"), function (){
             this.sendKeys(x(".//*[@id='part2.md']/div[3]/div[1]/div[2]/div/div[2]/div"), input_code);
         })
 		
 		this.wait(2000);
 		
-		casper.then(function(){
-        this.mouse.click({ type: 'xpath' , path: ".//*[@id='prompt-area']/div[1]/div/select"});//x path for dropdown menu
-        this.echo('clicking on dropdown menu');
-        this.wait(2000);
-    });
-
-    //selecting Markdown from the drop down menu
-    casper.then(function(){
-        this.evaluate(function() {
-            var form = document.querySelector('.form-control');
-            form.selectedIndex = 0;
-            $(form).change();
+    	casper.then(function(){
+            this.mouse.click({ type: 'xpath' , path: ".//*[@id='prompt-area']/div[1]/div/select"});//x path for dropdown menu
+            this.echo('clicking on dropdown menu');
+            this.wait(2000);
         });
-        console.log('Markdown Language is selected from the drop down menu');
-    });
+
+        //selecting Markdown from the drop down menu
+        casper.then(function(){
+            this.evaluate(function() {
+                var form = document.querySelector('.form-control');
+                form.selectedIndex = 0;
+                $(form).change();
+            });
+            console.log('Markdown Language is selected from the drop down menu');
+        });
 	});
 	
 	functions.runall(casper);

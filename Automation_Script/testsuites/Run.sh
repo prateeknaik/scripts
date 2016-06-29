@@ -1,8 +1,8 @@
 #!/usr/bin/bash
 
-sudo libreoffice --headless --convert-to csv Details1.ods --outdir 
+sudo libreoffice --headless --convert-to csv Details.ods --outdir 
 
-INPUT_FILE='Details1.csv'
+INPUT_FILE='Details.csv'
 i=0
 IFS=','
 while read U P T C
