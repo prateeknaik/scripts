@@ -16,7 +16,7 @@ casper.test.begin(" Create an Asset and run a python code", 6, function suite(te
     var input_code = 'rcloud.execute.asset("Python.py")';
 
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
     casper.wait(10000);
 
@@ -49,20 +49,7 @@ casper.test.begin(" Create an Asset and run a python code", 6, function suite(te
         this.echo("Creating a new asset");
     });
 
-    casper.wait(2000);
-
-    casper.then(function () {
-        for (var j = 1; j <= 40; j++) {
-            this.click(x(".//*[@id='scratchpad-editor']/div[1]/div/div[2]/div"), {keepFocus: true});
-            this.page.sendEvent("keypress", casper.page.event.key.Delete);
-        }
-        for (var u = 1; u <= 40; u++) {
-            this.click(x(".//*[@id='scratchpad-editor']/div[1]/div/div[2]/div"), {keepFocus: true});
-            this.page.sendEvent("keypress", casper.page.event.key.Backspace);
-        }
-    });
-
-    casper.then(function () {
+    casper.wait(4000).then(function () {
         this.sendKeys(x(".//*[@id='scratchpad-editor']/div[1]/div/div[2]/div"), "a= 100; print a");
         console.log("Adding contents to the newly created asset");
     });
@@ -70,8 +57,6 @@ casper.test.begin(" Create an Asset and run a python code", 6, function suite(te
     functions.addnewcell(casper);
 
     functions.addcontentstocell(casper, input_code);
-
-    casper.wait(5000);
 
     casper.wait(4000).then(function(){
         this.test.assertExists(".r-result-div > pre:nth-child(1) > code:nth-child(1)");

@@ -4,7 +4,7 @@ Description: Checking whether on Executing a python cell with invalid python cod
  */
 
 //Begin Test
-casper.test.begin("Executing a python cell with invalid python code", 5, function suite(test) {
+casper.test.begin("Executing a python cell with invalid python code", 6, function suite(test) {
 	var x = require('casper').selectXPath;
     var github_username = casper.cli.options.username;
     var github_password = casper.cli.options.password;
@@ -13,8 +13,8 @@ casper.test.begin("Executing a python cell with invalid python code", 5, functio
     var errors = [];
     var input = 'a<-105';
     
-casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+	casper.start(rcloud_url, function () {
+        functions.inject_jquery(casper);
     });
     casper.wait(10000);
 
@@ -30,6 +30,12 @@ casper.start(rcloud_url, function () {
     
     //create a new notebook
     functions.create_notebook(casper);
+
+    //create a new cell
+	functions.addnewcell(casper);
+
+	//add contents to it
+	functions.addcontentstocell(casper, input);
     
     //change the language from R to Python
     casper.then(function(){
@@ -48,17 +54,14 @@ casper.start(rcloud_url, function () {
 		console.log('Python Language is selected from the drop down menu');
 	});
 
-	//create a new cell
-	functions.addnewcell(casper);
-	
-	//adding python code in to the cell
-	casper.then(function(){
-		this.sendKeys({type:'xpath', path:'/html/body/div[3]/div/div[2]/div/div[1]/div/div[3]/div[1]/div[2]/div/div[2]/div'}, input);
+	casper.then(function (){
+		this.reload();
 		this.wait(2000);
 	});
-	
-	//to run the code
-	functions.runall(casper);
+
+	casper.wait(3000).then(function (){
+		functions.runall(casper);
+	});
 	
 	//Verifying the output for the code
 	casper.wait(4000).then(function(){
