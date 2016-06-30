@@ -50,7 +50,7 @@ casper.test.begin(" Loaded Notebook of some different user (after the Notebook i
     functions.fork(casper);
 
     //get the notebook owner's name and verify that it belongs to local user
-    casper.then(function () {
+    casper.wait(2000).then(function () {
         var author = this.fetchText({type: 'css', path: '#notebook-author'});
         this.echo("Notebook author: " + author);
         this.test.assertEquals(author, github_username, "Confirmed that notebook now belongs to local user after being forked");
@@ -70,7 +70,6 @@ casper.test.begin(" Loaded Notebook of some different user (after the Notebook i
                 this.wait(7000);
                 this.viewport(1366, 768).waitForPopup(/gist.github.com/, function () {
                     this.test.assertEquals(this.popups.length, 1);
-
                 });
                 this.wait(11000);
                 this.viewport(1366, 768).withPopup(/gist.github.com/, function () {

@@ -45,9 +45,7 @@ casper.test.begin("Importing a Notebook in a folder", 7, function suite(test) {
         casper.evaluate(function () {
             $('#import-gists').val('bc2e94c8e0e35e8a44c0');
         });
-        this.echo('Entering notebook ID');
         this.wait(2000);
-
         this.evaluate(function () {
             $('#import-notebooks-dialog span.btn-primary').click();
             console.log("Clicking on import button");
@@ -64,12 +62,13 @@ casper.test.begin("Importing a Notebook in a folder", 7, function suite(test) {
                 counter = counter + 1;
                 this.wait(2000);
             } 
-            while (this.visible(x("/html/body/div[3]/div/div[1]/div[1]/div/div/div[1]/div[2]/div/div/ul/li[1]/ul/li[1]/ul/li[" + counter + "]/div/span[1]")));
+            while (this.visible('ul.jqtree_common:nth-child(1) > li:nth-child(1) > ul:nth-child(2) > li:nth-child(1) > ul:nth-child(2) > li:nth-child('+counter+') > div:nth-child(1)'));
             counter = counter - 1;
             for (i = 1; i <= counter; i++) {
                 this.wait(5000);
-                Notebook = this.fetchText(x("/html/body/div[3]/div/div[1]/div[1]/div/div/div[1]/div[2]/div/div/ul/li[1]/ul/li[1]/ul/li[" + i + "]/div/span[1]"))
-                if (Notebook == title) {
+                Notebook = this.fetchText('ul.jqtree_common:nth-child(1) > li:nth-child(1) > ul:nth-child(2) > li:nth-child(1) > ul:nth-child(2) > li:nth-child('+i+') > div:nth-child(1)')
+                Notebook=Notebook.substring(0,16)
+                if (title == Notebook) {
                     flag = 1;
                     break;
                 }
@@ -80,7 +79,7 @@ casper.test.begin("Importing a Notebook in a folder", 7, function suite(test) {
             else {
                 this.test.assertEquals(flag, 0, "Import Notebook from File, Notebook with title " + title + " is ABSENT under Notebooks tree");
             }
-            this.click(x("/html/body/div[3]/div/div[1]/div[1]/div/div/div[1]/div[2]/div/div/ul/li[1]/ul/li[1]/ul/li[" + i + "]/div/span[1]"));
+            this.click('ul.jqtree_common:nth-child(1) > li:nth-child(1) > ul:nth-child(2) > li:nth-child(1) > ul:nth-child(2) > li:nth-child('+i+') > div:nth-child(1)');
     });
 
     //open the Advanced Dropdown 
@@ -97,7 +96,6 @@ casper.test.begin("Importing a Notebook in a folder", 7, function suite(test) {
                 this.wait(7000);
                 this.viewport(1366, 768).waitForPopup(/gist.github.com/, function () {
                     this.test.assertEquals(this.popups.length, 1);
-
                 });
                 this.wait(11000);
                 this.viewport(1366, 768).withPopup(/gist.github.com/, function () {

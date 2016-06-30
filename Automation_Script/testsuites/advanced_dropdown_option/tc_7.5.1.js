@@ -8,7 +8,7 @@
  */
 //Begin Tests
 
-casper.test.begin("Import Notebook from File",  function suite(test) {
+casper.test.begin("Import Notebook from File", 4, function suite(test) {
 
     var x = require('casper').selectXPath;
     var github_username = casper.cli.options.username;

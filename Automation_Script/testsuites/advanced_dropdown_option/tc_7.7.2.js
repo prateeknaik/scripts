@@ -42,9 +42,11 @@ casper.test.begin("To load a published notebook using Shareable link", 6, functi
     
     //Create a new cell
     functions.addnewcell(casper);
-    
-    functions.addcontentstocell(casper, input);
 
+    casper.wait(2000).then(function(){
+        functions.addcontentstocell(casper, input);
+    });
+    
     //getting Notebook ID
     casper.viewport(1024, 768).then(function () {
         var temp1 = this.getCurrentUrl();
@@ -67,18 +69,15 @@ casper.test.begin("To load a published notebook using Shareable link", 6, functi
         this.click("#rcloud-navbar-menu > li:nth-child(7) > a:nth-child(1)");
         console.log('Logging out of RCloud');   
         this.wait(3000);
-    });
-    
-    casper.wait(1000);
-    
-    casper.viewport(1366, 768).then(function () {
+    });    
+     
+    casper.wait(1000).then(function () {
         this.click("#main-div > p:nth-child(2) > a:nth-child(2)", "Logged out of Github");
         console.log('Logging out of Github');
         this.wait(3000);
     });
 
-    casper.wait(10000);
-    casper.viewport(1366, 768).then(function () {
+    casper.wait(2000).then(function () {
         this.click(".btn");
         console.log('logged out of Github');
         this.wait(7000);
@@ -102,11 +101,9 @@ casper.test.begin("To load a published notebook using Shareable link", 6, functi
         this.echo("Opened the view.html of the published notebook " + title);
         });
     });
-
-    casper.wait(15000);
-    
+       
     //verify that the published notebook has been loaded
-    casper.then(function(){
+    casper.wait(3000).then(function(){
 		this.test.assertSelectorHasText({type:'xpath' , path:"/html/body/div[3]/div/div/div/div[1]/div/div[2]/div[1]/div[1]/pre"}, input,'Source code exists');
 	});
 
