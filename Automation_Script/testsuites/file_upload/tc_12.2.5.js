@@ -96,7 +96,7 @@ casper.test.begin("Can't upload file to Unforked Notebook", 5, function suite(te
         var temp = this.getElementInfo('#upload-to-notebook').tag;
         var res = temp.substring(17, 25);
         this.echo(res);
-        this.test.assertEquals(res1, res, "For unforked Notebooks file uploaad to notebook is disabled")
+        this.test.assertEquals(res1, res, "For unforked Notebooks file upload to notebook is disabled")
     })
 
     casper.run(function () {

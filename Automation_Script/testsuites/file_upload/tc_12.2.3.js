@@ -11,7 +11,12 @@ casper.test.begin("Upload file will be visible in assets div", 4, function suite
     var github_password = casper.cli.options.password;
     var rcloud_url = casper.cli.options.url;
     var functions = require(fs.absolute('basicfunctions'));
-    var fileName = '/home/prateek/FileUpload/PHONE.csv'; // File path directory     
+    var fileName = 'SampleFiles/PHONE.csv'; // File path directory     
+    var system = require('system')
+    var currentFile = require('system').args[4];
+    var curFilePath = fs.absolute(currentFile); 
+    var curFilePath = curFilePath.replace(currentFile, '');   
+    fileName=curFilePath+fileName;
 
     casper.start(rcloud_url, function () {
         functions.inject_jquery(casper);
