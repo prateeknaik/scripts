@@ -11,8 +11,14 @@ casper.test.begin("Upload a new File to Notebook", 4, function suite(test) {
     var github_password = casper.cli.options.password;
     var rcloud_url = casper.cli.options.url;
     var functions = require(fs.absolute('basicfunctions'));
-    var fileName = '/home/prateek/FileUpload/PHONE.csv'; // File path directory
-    var fileName1 = '/home/prateek/FileUpload/iris.csv'
+    var fileName = 'SampleFiles/PHONE.csv'; // File path directory
+    var fileName1 = 'SampleFiles/IRIS.csv';
+    var system = require('system')
+    var currentFile = require('system').args[4];
+    var curFilePath = fs.absolute(currentFile); 
+    var curFilePath = curFilePath.replace(currentFile, '');   
+    fileName=curFilePath+fileName;
+    fileName1=curFilePath+fileName1;
 
     casper.start(rcloud_url, function () {
         functions.inject_jquery(casper);
