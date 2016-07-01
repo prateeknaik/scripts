@@ -11,7 +11,13 @@ casper.test.begin("After uploading a file ,its contents are visible in the Asset
     var github_password = casper.cli.options.password;
     var rcloud_url = casper.cli.options.url;
     var functions = require(fs.absolute('basicfunctions'));
-    var fileName = '/home/prateek/FileUpload/PHONE.csv'; // File path directory   
+    var fileName = '/home/prateek/FileUpload/PHONE.csv'; // File path directory
+    var system = require('system');
+    var currentFile = require('system').args[4];
+    var curFilePath = fs.absolute(currentFile);
+    var curFilePath = curFilePath.replace(currentFile, '');
+    fileName=curFilePath+fileName;
+
 
     casper.start(rcloud_url, function () {
         functions.inject_jquery(casper);
@@ -70,7 +76,7 @@ casper.test.begin("After uploading a file ,its contents are visible in the Asset
         });
     });
 
-    casper.then(function (){
+    casper.then(function () {
         console.log('Verifying whether the uploaded contentsa are present in Asset div or not');
         this.test.assertSelectorHasText(x(".//*[@id='asset-list']/li[3]/a/span[1]"), 'PHONE.csv', 'Uploaded file is present in assets');
     });

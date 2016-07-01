@@ -11,12 +11,12 @@ casper.test.begin("Upload a file to another user's notebook before forking it", 
     var github_password = casper.cli.options.password;
     var rcloud_url = casper.cli.options.url;
     var functions = require(fs.absolute('basicfunctions'));
-    var new_username = 'djoky';
+    var new_username = 'InsertDelete';
     var new_user_password = 'musigma12';
-    var notebook_id;
-    var URL ;
-    var before_forking;
+    var notebook_id, URL, before_forking;
     var res1 = 'disabled';// to compare with res
+    var system = require('system');
+    
 
     casper.start(rcloud_url, function () {
         functions.inject_jquery(casper);
