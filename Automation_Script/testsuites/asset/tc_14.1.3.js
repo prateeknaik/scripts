@@ -5,15 +5,22 @@
  */
 
 //Begin Tests
-casper.test.begin("Modify contents of an asset", 5, function suite(test) {
+casper.test.begin(".Re-upload the previously modified file", 5, function suite(test) {
 
     var x = require('casper').selectXPath;
     var github_username = casper.cli.options.username;
     var github_password = casper.cli.options.password;
     var rcloud_url = casper.cli.options.url;
     var functions = require(fs.absolute('basicfunctions'));
-    var fileName = '/home/prateek/FileUpload/PHONE.csv'; // File path directory   
     var before, after;
+    var fileName = "SampleFiles/PHONE.csv";
+    var system = require('system');
+    var currentFile = require('system').args[4];
+    var curFilePath = fs.absolute(currentFile);
+    var curFilePath = curFilePath.replace(currentFile, '');
+    fileName = curFilePath + fileName;
+    console.log(fileName)
+
 
     casper.start(rcloud_url, function () {
         functions.inject_jquery(casper);
@@ -85,7 +92,7 @@ casper.test.begin("Modify contents of an asset", 5, function suite(test) {
     });
 
     casper.then(function () {
-        this.sendKeys('div.ace_editor:nth-child(1) > div:nth-child(3) > div:nth-child(1)', "JIM_RANDWA");
+        this.sendKeys('div.ace_editor:nth-child(1) > div:nth-child(3) > div:nth-child(1)', "J_RANDWA");
         this.click(x(".//*[@id='rcloud-navbar-main']/li[4]"));
     });
 

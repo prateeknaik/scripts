@@ -11,7 +11,13 @@ casper.test.begin("Duplicate names of assets shouldnot be created", 4, function 
     var github_password = casper.cli.options.password;
     var rcloud_url = casper.cli.options.url;
     var functions = require(fs.absolute('basicfunctions'));
-    var fileName = '/home/prateek//FileUpload/PHONE.csv'; // File path directory     
+    var fileName = "SampleFiles/PHONE.csv";
+    var system = require('system');
+    var currentFile = require('system').args[4];
+    var curFilePath = fs.absolute(currentFile);
+    var curFilePath = curFilePath.replace(currentFile, '');
+    fileName = curFilePath + fileName;
+    console.log(fileName)
 
     casper.start(rcloud_url, function () {
         functions.inject_jquery(casper);
@@ -78,7 +84,7 @@ casper.test.begin("Duplicate names of assets shouldnot be created", 4, function 
         this.waitUntilVisible(x('//*[contains(text(), "replaced")]'), function then() {
             console.log("Asset with duplicate name is not created, instead entire asset got replaced");
         });
-    })
+    });
 
     casper.run(function () {
         test.done();

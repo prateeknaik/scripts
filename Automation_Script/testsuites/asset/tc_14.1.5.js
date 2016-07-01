@@ -5,17 +5,25 @@
  */
 //Begin Tests
 
-casper.test.begin(" .Upload a file to another user's notebook after forking it ", 8, function suite(test) {
+casper.test.begin("Upload a file to another user's notebook after forking it ", 8, function suite(test) {
     var x = require('casper').selectXPath;
     var github_username = casper.cli.options.username;
     var github_password = casper.cli.options.password;
     var rcloud_url = casper.cli.options.url;
     var functions = require(fs.absolute('basicfunctions'));
-    var new_username = 'djoky';
+    var new_username = 'InsertDelete';
     var new_user_password = 'musigma12';
     var notebook_id, URL, before_forking ;
     var res1 = 'disabled';// to compare with res
-    var fileName = '/home/prateek/FileUpload/PHONE.csv'; // File path directory   
+    var fileName = "SampleFiles/PHONE.csv";
+    var system = require('system');
+    var currentFile = require('system').args[4];
+    var curFilePath = fs.absolute(currentFile);
+    var curFilePath = curFilePath.replace(currentFile, '');
+    fileName = curFilePath + fileName;
+    console.log(fileName)
+
+
 
     casper.start(rcloud_url, function () {
         functions.inject_jquery(casper);

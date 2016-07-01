@@ -11,8 +11,14 @@ casper.test.begin("Renaming the existing asset", 5, function suite(test) {
     var github_password = casper.cli.options.password;
     var rcloud_url = casper.cli.options.url;
     var functions = require(fs.absolute('basicfunctions'));
-    var fileName = '/home/prateek/FileUpload/PHONE.csv'; // File path directory   
-    var before, after;  
+    var before, after;
+    var fileName = "SampleFiles/PHONE.csv";
+    var system = require('system');
+    var currentFile = require('system').args[4];
+    var curFilePath = fs.absolute(currentFile);
+    var curFilePath = curFilePath.replace(currentFile, '');
+    fileName = curFilePath + fileName;
+    console.log(fileName);
 
     casper.start(rcloud_url, function () {
         functions.inject_jquery(casper);
@@ -71,19 +77,19 @@ casper.test.begin("Renaming the existing asset", 5, function suite(test) {
         });
     });
 
-    casper.then(function (){
+    casper.then(function () {
         console.log('Verifying whether the uploaded contentsa are present in Asset div or not');
         this.test.assertSelectorHasText(x(".//*[@id='asset-list']/li[3]/a/span[1]"), 'PHONE.csv', 'Uploaded file is present in assets');
     });
 
     casper.wait(3000);
 
-    casper.then(function(){
+    casper.then(function () {
         before = this.fetchText('.active > a:nth-child(1) > span:nth-child(1)');
         console.log("before Modifying asset name is:" + before);
     });
 
-    casper.then(function (){
+    casper.then(function () {
         var z = casper.evaluate(function triggerKeyDownEvent() {
             jQuery(".active > a:nth-child(1) > span:nth-child(1)").text("Modified");
             var e = jQuery.Event("keydown");
@@ -96,13 +102,13 @@ casper.test.begin("Renaming the existing asset", 5, function suite(test) {
         console.log("After editing, clicking on Save icon");
     });
 
-    casper.then(function(){
+    casper.then(function () {
         after = this.fetchText('.active > a:nth-child(1) > span:nth-child(1)');
         console.log("before Modifying asset name is:" + after);
     });
 
-    casper.then(function(){
-        this.test.assertNotEquals(before, after, "Uploaded asset" + before + "gets renamed with" + after );
+    casper.then(function () {
+        this.test.assertNotEquals(before, after, "Uploaded asset" + before + "gets renamed with" + after);
     });
 
     casper.wait(8000);

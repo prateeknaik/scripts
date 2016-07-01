@@ -1,7 +1,7 @@
 /*
  Author: Prateek
  Description: This is a casperjs automated test script for showing that,If the contents of an asset are modified,
-  they should be saved and changed contents should be visible on reload
+ they should be saved and changed contents should be visible on reload
  */
 
 //Begin Tests
@@ -12,8 +12,17 @@ casper.test.begin("Modify contents of an asset", 5, function suite(test) {
     var github_password = casper.cli.options.password;
     var rcloud_url = casper.cli.options.url;
     var functions = require(fs.absolute('basicfunctions'));
-    var fileName = '/home/prateek/FileUpload/PHONE.csv'; // File path directory   
-    var before, after;  
+    var before, after;
+    var fileName = "SampleFiles/PHONE.csv";
+    var system = require('system');
+    var currentFile = require('system').args[4];
+    var curFilePath = fs.absolute(currentFile);
+    var curFilePath = curFilePath.replace(currentFile, '');
+    fileName = curFilePath + fileName;
+    console.log(fileName)
+
+
+
 
     casper.start(rcloud_url, function () {
         functions.inject_jquery(casper);

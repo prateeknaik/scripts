@@ -1,9 +1,6 @@
-/*
- Author: Prateek
- Description: This is a casperjs automated test script for showing that,User should be able to upload an asset to a 
- notebook even if it does not have any assets from before
- */
-
+// Author: Prateek
+// Description: This is a casperjs automated test script for showing that,User should be able to upload an asset to a 
+// notebook even if it does not have any assets from before
 //Begin Tests
 casper.test.begin("Add an asset to a notebook with no assets", 5, function suite(test) {
 
@@ -12,9 +9,16 @@ casper.test.begin("Add an asset to a notebook with no assets", 5, function suite
     var github_password = casper.cli.options.password;
     var rcloud_url = casper.cli.options.url;
     var functions = require(fs.absolute('basicfunctions'));
-    var fileName = '/home/prateek/FileUpload/PHONE.csv'; // File path directory   
     var URL;
     var asset_name = 'JustCreatedAsset.R';
+    var fileName = "SampleFiles/PHONE.csv";
+    var system = require('system');
+    var currentFile = require('system').args[4];
+    var curFilePath = fs.absolute(currentFile);
+    var curFilePath = curFilePath.replace(currentFile, '');
+    fileName = curFilePath + fileName;
+    console.log(fileName)
+
 
     casper.start(rcloud_url, function () {
         functions.inject_jquery(casper);
@@ -67,15 +71,11 @@ casper.test.begin("Add an asset to a notebook with no assets", 5, function suite
         });
         this.click("#new-asset>a");
         this.echo("Creating a new asset");
-        // this.wait(2000);
     });
-
-    casper;
 
     casper.wait(15000).then(function () {
         this.test.assertSelectorHasText("#asset-list", asset_name, "Asset is added even though there were no assets present");
     });
-
 
     casper.run(function () {
         test.done();
