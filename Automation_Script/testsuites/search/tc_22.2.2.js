@@ -2,10 +2,9 @@
  Author: Prateek
  Description:    This is a casperjs automated test script for showning that,When multiple 
  * cells from multiple notebooks are deleted from Rcloud, the respective content should be deleted from search Results
- */
+*/
 
 //Begin Tests
-
 casper.test.begin(" Deleting multiple cells from multiple notebooks", 11, function suite(test) {
 
     var x = require('casper').selectXPath;
@@ -48,7 +47,7 @@ casper.test.begin(" Deleting multiple cells from multiple notebooks", 11, functi
     //Add contents to this cell and then execute it using run option
     functions.addcontentstocell(casper, item);
 
-    casper.then(function (){
+    casper.wait(5000).then(function (){
         this.click('div.cell-control-bar:nth-child(1) > span:nth-child(1) > i:nth-child(1)');
         console.log('creating one more cell');
         this.wait(4000)
@@ -72,7 +71,7 @@ casper.test.begin(" Deleting multiple cells from multiple notebooks", 11, functi
     //Add contents to this cell and then execute it using run option
     functions.addcontentstocell(casper, item);
 
-    casper.then(function (){
+    casper.wait(5000).then(function (){
         this.click('div.cell-control-bar:nth-child(1) > span:nth-child(1) > i:nth-child(1)');
         console.log('creating one more cell');
         this.wait(4000)
@@ -102,10 +101,8 @@ casper.test.begin(" Deleting multiple cells from multiple notebooks", 11, functi
         this.click('#search-form > div:nth-child(1) > div:nth-child(2) > button:nth-child(1)');
     });
 
-    casper.wait(5000);
-
     //counting number of Search results
-    casper.then(function () {
+    casper.wait(5000).then(function () {
         var counter = 0;
         do
         {
@@ -114,7 +111,7 @@ casper.test.begin(" Deleting multiple cells from multiple notebooks", 11, functi
         }
         while (this.visible(x(".//*[@id="+counter+"]/table/tbody/tr[2]/td/table/tbody/tr/td")));
 
-        counter = counter - 1;
+        // counter = counter - 1;
         this.echo("number of search results:" + counter);
 
         if (counter = 2) {
@@ -146,7 +143,7 @@ casper.test.begin(" Deleting multiple cells from multiple notebooks", 11, functi
     casper.wait(5000);
 
     //Switching to 2nd notebook
-    casper.then(function () {
+    casper.wait(5000).then(function () {
         this.thenOpen(URL2);        
         console.log('Opening 2nd notebook');
     });
@@ -179,7 +176,7 @@ casper.test.begin(" Deleting multiple cells from multiple notebooks", 11, functi
         }
         while (this.visible(x(".//*[@id="+counter+"]/table/tbody/tr[2]/td/table/tbody/tr/td")));
 
-        counter = counter - 1;
+        // counter = counter - 1;
         this.echo("number of search results:" + counter);
 
         if (counter >= 0) {

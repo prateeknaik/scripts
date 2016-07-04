@@ -11,10 +11,10 @@ casper.test.begin("Searching keywords present in Assets div",  function suite(te
     var github_password = casper.cli.options.password;
     var rcloud_url = casper.cli.options.url;
     var functions = require(fs.absolute('basicfunctions'));
-    var item = "KALUVA"; // keyword to be searched
+    var item = "HADSU_BASYA"; // keyword to be searched
     
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
 
     casper.wait(10000);
@@ -87,7 +87,7 @@ casper.test.begin("Searching keywords present in Assets div",  function suite(te
 	//Now verifying the searched 'assest' item found in search results or not
     casper.wait(3000).then(function(){
         this.wait(3000);
-        if(this.test.assertSelectorHasText(x(".//*[@id='0']/table/tbody/tr[2]/td/table/tbody/tr/td/code"), item, "verifyingfor the searcheed content from asset div"))
+        if(this.test.assertSelectorHasText(x(".//*[@id='0']/table/tbody/tr[2]/td/table/tbody/tr/td"), item, "verifyingfor the searcheed content from asset div"))
         {
 			this.test.pass("Asset's content is searched successfully");
 		}else

@@ -18,7 +18,7 @@ casper.test.begin("Sorting the searched results according to 'Date' in 'ascnding
     var date = [];
 
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
     casper.wait(10000);
 
@@ -75,7 +75,7 @@ casper.test.begin("Sorting the searched results according to 'Date' in 'ascnding
 	casper.then(function(){
         for (var i=0; i<10; i++)
         {
-            date[ i ] = this.fetchText({type:'xpath', path:'./html/body/div[3]/div/div[1]/div[1]/div/div/div[2]/div[2]/div/div/div[2]/div/div/table[' + i + ']/tbody/tr/td/span/i'});
+            date[ i ] = this.fetchText(x(x(".//*[@id='open_" + i + "']")));
         }
 		var t = date.sort();
         this.test.assertEquals(date, t, "Searched results are sorted according to 'date' in 'ascending' order" );

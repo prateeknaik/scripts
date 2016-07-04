@@ -20,15 +20,14 @@ casper.test.begin("Display Date on which the notebook was last modified", 8, fun
     var res;//to store the date
     var res1;//to store the modified date
 
-
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
     casper.wait(10000);
 
-    casper.on('remote.message', function(msg) {
-        this.echo('remote message caught: ' + msg);
-    });
+    // casper.on('remote.message', function(msg) {
+    //     this.echo('remote message caught: ' + msg);
+    // });
 
     casper.viewport(1024, 768).then(function () {
         functions.login(casper, github_username, github_password, rcloud_url);

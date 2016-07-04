@@ -18,7 +18,7 @@ casper.test.begin("Highlighting the searched keyword separately", 6, function su
     var highlight_search = 'background:yellow';//Searched content is highlighted for comparison
 
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
 
     casper.wait(10000);
@@ -69,10 +69,7 @@ casper.test.begin("Highlighting the searched keyword separately", 6, function su
         this.wait(3000);
         casper.then(function () {
             this.wait(5000);
-            temp = this.getElementInfo({
-                type: 'xpath',
-                path: ".//*[@id='0']/table/tbody/tr[2]/td/table/tbody/tr/td/code/b"
-            }).tag;
+            temp = this.getElementInfo(x(".//*[@id='0']/table/tbody/tr[2]/td/table/tbody/tr/td/code/b")).tag;
             temp1 = temp.substring(10,27);
         });
     });

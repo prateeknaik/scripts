@@ -2,10 +2,9 @@
  Author: Prateek
  Description:    This is a casperjs automated test script for showning that,When a cell from multiple 
  * notebooks is deleted from Rcloud, the respective content should be deleted from Search Results
- */
+*/
 
 //Begin Tests
-
 casper.test.begin(" Delete a cell from multiple notebooks", 11, function suite(test) {
 
     var x = require('casper').selectXPath;
@@ -50,7 +49,7 @@ casper.test.begin(" Delete a cell from multiple notebooks", 11, function suite(t
     functions.addcontentstocell(casper, item1);
 
     //Creating one more cell and adding contents to it
-    casper.then(function (){
+    casper.wait(3000).then(function (){
         this.click('div.cell-control-bar:nth-child(1) > span:nth-child(1) > i:nth-child(1)');
         this.wait(2000);
         this.waitForSelector(x(".//*[@id='part1.R']/div[3]/div[1]/div[2]/div/div[2]/div"), function(){
@@ -74,7 +73,7 @@ casper.test.begin(" Delete a cell from multiple notebooks", 11, function suite(t
     functions.addcontentstocell(casper, item1);
 
     //Creating one more cell and adding contents to it
-    casper.then(function (){
+    casper.wait(4000).then(function (){
         this.click('div.cell-control-bar:nth-child(1) > span:nth-child(1) > i:nth-child(1)');
         this.wait(2000);
         this.waitForSelector(x(".//*[@id='part1.R']/div[3]/div[1]/div[2]/div/div[2]/div"), function(){
@@ -97,7 +96,7 @@ casper.test.begin(" Delete a cell from multiple notebooks", 11, function suite(t
         }
         while (this.visible(x(".//*[@id='search-results']/table["+counter+"]/tbody/tr/td")));
 
-        counter = counter - 1;
+        // counter = counter - 1;
         this.echo("number of search results:" + counter);
 
         if (counter>= 2) {
@@ -117,27 +116,21 @@ casper.test.begin(" Delete a cell from multiple notebooks", 11, function suite(t
         console.log('Opening 1st notebbok');
     });
 
-    casper.wait(8000);
-	
     //Deleting cells from 1st notebook just to make searched list to minimize
-    casper.then(function () {
+    casper.wait(10000).then(function () {
         this.click(x(".//*[@id='selection-bar']/div/div/input"));
         this.click(x(".//*[@id='selection-bar-delete']"))
         console.log('Deleting a cell from 1st notebook');
     });
-    
-    casper.wait(5000);
 
     //Switching to 2nd notebook
-    casper.then(function () {
+    casper.wait(5000).then(function () {
         this.thenOpen(URL2);
         console.log('Opening 2nd notebook');
     });
 
-    casper.wait(8000);
-	
 	//Deleting cells from 2nd notebook just to make searched list to minimize
-    casper.then(function () {
+    casper.wait(8000).then(function () {
         this.click(x(".//*[@id='selection-bar']/div/div/input"));
         this.click(x(".//*[@id='selection-bar-delete']"))
         console.log('Deleting a cell from 2nd notebook');

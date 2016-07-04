@@ -16,7 +16,7 @@ casper.test.begin("Display Text under 'Search For' text box", 6, function suite(
     var title;//get notebook title
 
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
     casper.wait(10000);
 
@@ -35,7 +35,7 @@ casper.test.begin("Display Text under 'Search For' text box", 6, function suite(
     functions.addcontentstocell(casper, item);
 
     //function to search the entered item
-    casper.viewport(1024, 768).then(function () {
+    casper.wait(5000).then(function () {
         if (this.visible('#search-form')) {
             console.log('Search div is already opened');
         }
@@ -67,9 +67,7 @@ casper.test.begin("Display Text under 'Search For' text box", 6, function suite(
         this.click('#search-form > div:nth-child(1) > div:nth-child(2) > button:nth-child(1)');
     });
 
-    casper.wait(5000);
-
-    casper.then(function () {
+    casper.wait(5000).then(function () {
         var temp = this.fetchText({
             type: 'xpath',
             path: '//*[@id="input-text-search"]'
@@ -81,7 +79,7 @@ casper.test.begin("Display Text under 'Search For' text box", 6, function suite(
         }
     });
 
-    casper.then(function () {
+    casper.wait(2000).then(function () {
         this.click(x(".//*[@id='selection-bar']/div/div/input"));
         this.click(x(".//*[@id='selection-bar-delete']"))
         console.log('Deleting a cell from 1st notebook');

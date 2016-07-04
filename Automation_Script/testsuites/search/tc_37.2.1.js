@@ -16,9 +16,9 @@ casper.test.begin("Sorting the searched results according to 'Star' in 'ascnding
     var item = '"Notebook"';
     var star = [];
     var star1 = [];
-    
+
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
     casper.wait(10000);
 
@@ -33,7 +33,7 @@ casper.test.begin("Sorting the searched results according to 'Star' in 'ascnding
     });
 
     casper.then(function () {
-        if (this.visible('#input-text-search')) {
+        if ( this.visible('#input-text-search') ) {
             console.log('Search div is already opened');
         } else {
             this.click({type: 'xpath', path: ".//*[@id='accordion-left']/div[2]/div[1]/a/span"});
@@ -69,21 +69,20 @@ casper.test.begin("Sorting the searched results according to 'Star' in 'ascnding
         this.click('#search-form > div:nth-child(1) > div:nth-child(2) > button:nth-child(1)');
         console.log('clicking on search button');
     });
-    
+
     casper.wait(2000);
-    
-    casper.then(function(){
-		for (var i=0; i<10; i++)
-        {
-           star[ i ] = this.fetchText({type:'xpath', path:'/html/body/div[3]/div/div[1]/div[1]/div/div/div[2]/div[2]/div/div/div[2]/div/div/table[' + i + ']/tbody/tr/td/i/sub'});
+
+    casper.then(function () {
+        for (var i = 0; i < 10; i++) {
+            star[i] = this.fetchText(x(".//*[@id='open_" + i + "']"));
         }
     });
-        //Verifying the fetched results with the searched results using sort()
-	casper.then(function(){
+    //Verifying the fetched results with the searched results using sort()
+    casper.then(function () {
         star1 = star.sort();
-        this.test.assertEquals(star, star1, "Searched results are sorted according to 'Star' in 'ascending' order");        
-	});
-    
+        this.test.assertEquals(star, star1, "Searched results are sorted according to 'Star' in 'ascending' order");
+    });
+
     casper.run(function () {
         test.done();
     });

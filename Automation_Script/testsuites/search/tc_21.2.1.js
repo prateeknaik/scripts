@@ -95,7 +95,7 @@ casper.test.begin("Edit a cell from multiple notebooks", 11, function suite(test
         }
         while (this.visible(x(".//*[@id='search-results']/table[" + counter + "]/tbody/tr/td")));
 
-        counter = counter - 1;
+        // counter = counter - 1;
         this.echo("number of search results:" + counter);
 
         if (counter >= 2) {

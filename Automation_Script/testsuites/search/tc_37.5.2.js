@@ -20,7 +20,7 @@ casper.test.begin("Sorting the searched results according to 'Name' in 'descndin
     var p = [];
 
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
     casper.wait(10000);
 
@@ -86,7 +86,7 @@ casper.test.begin("Sorting the searched results according to 'Name' in 'descndin
     casper.then(function(){
 		for (var i=0; i<10; i++)
         {
-           p[ i ] = this.fetchText({type:'xpath', path:'/html/body/div[3]/div/div[1]/div[1]/div/div/div[2]/div[2]/div/div/div[2]/div/div/table[' + i + ']/tbody/tr[1]/td/i/sub'});
+           p[ i ] = this.fetchText(x(".//*[@id='open_" + i + "']"));
         }
         this.echo(p );
 	});

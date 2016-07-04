@@ -49,19 +49,18 @@ casper.test.begin(" Edit a multiple cells from a single notebook", 7, function s
     //Add contents to this cell and then execute it using run option
     functions.addcontentstocell(casper, item1);
 
-
-    casper.then(function (){
+    casper.wait(2000).then(function () {
         this.click(x(".//*[@id='prompt-area']/div[1]/div/span/i"));
         console.log("Creating one more cell");
-        this.waitForSelector(x(".//*[@id='part2.R']/div[3]/div[1]/div[2]/div/div[2]/div"), function(){
+        this.waitForSelector(x(".//*[@id='part2.R']/div[3]/div[1]/div[2]/div/div[2]/div"), function () {
             this.sendKeys(x(".//*[@id='part2.R']/div[3]/div[1]/div[2]/div/div[2]/div"), item1);
         });
-    })
+    });
 
     casper.viewport(1024, 768).then(function () {
         //checking if Search div is open
         casper.then(function () {
-            if (this.visible('#input-text-search')) {
+            if ( this.visible('#input-text-search') ) {
                 console.log('Search div is already opened');
             }
             else {
@@ -79,22 +78,20 @@ casper.test.begin(" Edit a multiple cells from a single notebook", 7, function s
             this.click('#search-form > div:nth-child(1) > div:nth-child(2) > button:nth-child(1)');
         });
 
-        casper.wait(5000);
-
         //counting number of Search results
-        casper.then(function () {
+        casper.wait(5000).then(function () {
             var counter = 0;
             do
             {
                 counter = counter + 1;
                 this.wait(2000);
             }
-            while (this.visible(x(".//*[@id='search-results']/table["+counter+"]/tbody/tr/td")));
+            while (this.visible(x(".//*[@id='search-results']/table[" + counter + "]/tbody/tr/td")));
 
-            counter = counter - 1;
+            // counter = counter - 1;
             this.echo("number of search results:" + counter);
 
-            if (counter > 0) {
+            if ( counter > 0 ) {
                 this.test.pass("searched item has been found ");
             }
             else {
@@ -104,24 +101,22 @@ casper.test.begin(" Edit a multiple cells from a single notebook", 7, function s
     });
 
     //Modify contents to this cell and then execute it using run option
-    casper.then(function () {
+    casper.wait(3000).then(function () {
         this.click(x(".//*[@id='part1.R']/div[2]/div[2]/span[2]/i"));
         this.sendKeys(x(".//*[@id='part1.R']/div[3]/div[1]/div[2]/div/div[2]/div"), item2);
     });
-    casper.then(function () {
+    casper.wait(4000).then(function () {
         this.click(x(".//*[@id='part2.R']/div[2]/div[2]/span[2]/i"));
         this.sendKeys(x(".//*[@id='part2.R']/div[3]/div[1]/div[2]/div/div[2]/div"), item2);
     });
 
-    casper.then(function (){
+    casper.wait(2000).then(function () {
         var z = casper.evaluate(function () {
             $('#save-notebook').click();
         });
-    })
+    });
 
-    casper.wait(5000);
-
-    casper.then(function () {
+    casper.wait(6000).then(function () {
         var z = casper.evaluate(function () {
             $('#save-notebook').click();
         });
@@ -141,7 +136,7 @@ casper.test.begin(" Edit a multiple cells from a single notebook", 7, function s
 
         //checking if Search div is open
         casper.then(function () {
-            if (this.visible('#input-text-search')) {
+            if ( this.visible('#input-text-search') ) {
                 console.log('Search div is already opened');
             }
             else {
@@ -170,12 +165,12 @@ casper.test.begin(" Edit a multiple cells from a single notebook", 7, function s
                 counter = counter + 1;
                 this.wait(2000);
             }
-            while (this.visible(x(".//*[@id='search-results']/table["+counter+"]/tbody/tr/td")));
+            while (this.visible(x(".//*[@id='search-results']/table[" + counter + "]/tbody/tr/td")));
 
             counter = counter - 1;
             this.echo("number of search results:" + counter);
 
-            if (counter > 0) {
+            if ( counter > 0 ) {
                 this.test.pass("searched item has been found as per cell modifications ");
             }
             else {

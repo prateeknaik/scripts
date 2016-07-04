@@ -18,7 +18,7 @@ casper.test.begin(" Star is shown for Notebooks with its respective star count",
     var combo;//store notebook author + title       
 
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
     casper.wait(10000);
 
@@ -34,8 +34,7 @@ casper.test.begin(" Star is shown for Notebooks with its respective star count",
 
     //Create a new Notebook.
     functions.create_notebook(casper);
-
-
+    
     // Getting the title of new Notebook
     casper.then(function () {
         title = functions.notebookname(casper);

@@ -52,7 +52,7 @@ casper.test.begin(" Edit a cell from a notebook", 7, function suite(test) {
 
     //checking if Search div is open
     casper.then(function () {
-        if (this.visible('#input-text-search')) {
+        if ( this.visible('#input-text-search') ) {
             console.log('Search div is already opened');
         }
         else {
@@ -70,22 +70,18 @@ casper.test.begin(" Edit a cell from a notebook", 7, function suite(test) {
         this.click('#search-form > div:nth-child(1) > div:nth-child(2) > button:nth-child(1)');
     });
 
-    casper.wait(5000);
-
     //counting number of Search results
-    casper.then(function () {
+    casper.wait(6000).then(function () {
         var counter = 0;
         do
         {
             counter = counter + 1;
             this.wait(2000);
-        }
-        while (this.visible(x(".//*[@id=" + counter + "]/table/tbody/tr[2]/td/table/tbody/tr/td")));
-
-        counter = counter - 1;
+        } while (this.visible(x(".//*[@id=" + counter + "]/table/tbody/tr[2]/td/table/tbody/tr/td")));
+        // counter = counter - 1;
         this.echo("number of search results:" + counter);
 
-        if (counter > 0) {
+        if ( counter > 0 ) {
             this.test.pass("searched item has been found ");
         }
         else {
@@ -99,17 +95,17 @@ casper.test.begin(" Edit a cell from a notebook", 7, function suite(test) {
         this.echo("Page reloaded");
         this.wait(10000);
     });
-    casper.wait(3000);
 
     //Modify contents to this cell and then execute it using run option
-    casper.viewport(1366, 768).then(function () {
+    casper.wait(5000).viewport(1366, 768).then(function () {
         this.click(x(".//*[@id='part1.R']/div[2]/div[2]/span[2]/i"));
         this.wait(2000);
         this.sendKeys(x(".//*[@id='part1.R']/div[3]/div[1]/div[2]/div/div[2]/div"), item2);
         this.wait(3000);
     });
 
-    casper.then(function (){
+    /* Saving Notebook contents*/
+    casper.then(function () {
         var z = casper.evaluate(function () {
             $('#save-notebook').click();
         });
@@ -123,7 +119,7 @@ casper.test.begin(" Edit a cell from a notebook", 7, function suite(test) {
 
     //checking if Search div is open
     casper.then(function () {
-        if (this.visible('#input-text-search')) {
+        if ( this.visible('#input-text-search') ) {
             console.log('Search div is already opened');
         }
         else {
@@ -136,29 +132,27 @@ casper.test.begin(" Edit a cell from a notebook", 7, function suite(test) {
 
     //entering item to be searched
 
-    casper.then(function () {
+    casper.wait(3000).then(function () {
         this.sendKeys('#input-text-search', temp);
         this.wait(6000);
         this.click('#search-form > div:nth-child(1) > div:nth-child(2) > button:nth-child(1)');
     });
 
-    casper.wait(5000);
-
     //counting number of Search results
-    casper.then(function () {
+    casper.wait(6000).then(function () {
         var counter = 0;
         do
         {
             counter = counter + 1;
             this.wait(2000);
         }
-        while (this.visible(x(".//*[@id="+counter+"]/table/tbody/tr[2]/td/table/tbody/tr/td")));
+        while (this.visible(x(".//*[@id=" + counter + "]/table/tbody/tr[2]/td/table/tbody/tr/td")));
 
 
         // counter = counter - 1;
         this.echo("number of search results:" + counter);
 
-        if (counter > 0) {
+        if ( counter > 0 ) {
             this.test.pass("searched item has been found ");
         }
         else {
@@ -166,7 +160,8 @@ casper.test.begin(" Edit a cell from a notebook", 7, function suite(test) {
         }
     });
 
-     casper.then(function () {
+    /*Deleting cells to make search contents unique*/
+    casper.then(function () {
         this.click(x(".//*[@id='selection-bar']/div/div/input"));
         this.click(x(".//*[@id='selection-bar-delete']"))
     });

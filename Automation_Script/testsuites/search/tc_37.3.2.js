@@ -18,7 +18,7 @@ casper.test.begin("Sorting the searched results according to 'User' in 'descendi
     var user1 = [];
 
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
     casper.wait(10000);
 
@@ -77,7 +77,7 @@ casper.test.begin("Sorting the searched results according to 'User' in 'descendi
         //Fetching the the searched results
         for (var i=0 ; i<10 ; i++ )
         {
-            user[ i ] = this.fetchText({type:'xpath', path:'//*[@id="open_' + i + '"]'});
+            user[ i ] = this.fetchText(x(x(".//*[@id='open_" + i + "']")));
         }
     });
 
@@ -86,7 +86,7 @@ casper.test.begin("Sorting the searched results according to 'User' in 'descendi
         //Verifying the serched results with reverse() function
         for (var i=0; i<10; i++)
         {
-            user1[ i ] = this.fetchText({type:'xpath', path:'//*[@id="open_' + i + '"]'});
+            user1[ i ] = this.fetchText(x(x(".//*[@id='open_" + i + "']")));
         }
         var s = user1.reverse();
         this.test.assertEquals(user1, s, "Searched results are sorted according to 'user' in 'descending' order" );

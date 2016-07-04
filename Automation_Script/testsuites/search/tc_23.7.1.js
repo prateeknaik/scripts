@@ -20,7 +20,7 @@ casper.test.begin(" Text searched is highligted in the text area when searched i
     var highlight = "background:yellow"	
 
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
     casper.wait(10000);
 

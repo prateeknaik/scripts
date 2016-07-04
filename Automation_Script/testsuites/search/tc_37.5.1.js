@@ -19,7 +19,7 @@ casper.test.begin("Sorting the searched results according to 'Name' in 'ascnding
     var name = [];
 
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
     casper.wait(10000);
 
@@ -73,7 +73,7 @@ casper.test.begin("Sorting the searched results according to 'Name' in 'ascnding
 
     casper.then(function () {
         for (var i = 0; i < 10; i++) {
-            date[i] = this.fetchText({type: 'xpath', path: ".//*[@id='open_" + i + "']"});//fetching username along with notebook name
+            date[i] = this.fetchText(x(".//*[@id='open_" + i + "']"));//fetching username along with notebook name
             var pos = date[i].lastIndexOf("/");//fetching only the notebook name from the above code
             name[i] = date[i].substring(pos + 1, date[i].length - 1);
         }

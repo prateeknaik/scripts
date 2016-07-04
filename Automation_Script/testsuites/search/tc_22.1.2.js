@@ -5,7 +5,7 @@
 */
 
 //Begin Tests
-casper.test.begin(" Search after deleting a cell from a notebook", 9, function suite(test) {
+casper.test.begin(" Search after deleting a cell from a notebook", 8, function suite(test) {
 
     var x = require('casper').selectXPath;
     var github_username = casper.cli.options.username;
@@ -139,7 +139,7 @@ casper.test.begin(" Search after deleting a cell from a notebook", 9, function s
         counter = counter - 1;
         this.echo("number of search results:" + counter);
     
-        if (counter => 0)
+        if (counter > 0)
         {
 			this.test.pass("The searched item has been deleted ");
 		}

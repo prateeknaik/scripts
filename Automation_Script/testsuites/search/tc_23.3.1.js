@@ -17,7 +17,7 @@ casper.test.begin(" Notebook Description is displayed for each result notebook "
     var combo;//store notebook author + title
 
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
     casper.wait(10000);
 

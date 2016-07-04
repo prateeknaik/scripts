@@ -50,10 +50,10 @@ casper.test.begin(" Modifying multiple cells of multiple notebooks", 11, functio
     functions.addcontentstocell(casper, item1);
 
     //Creating one more cell and adding contents to it
-    casper.then(function (){
+    casper.then(function () {
         this.click('div.cell-control-bar:nth-child(1) > span:nth-child(1) > i:nth-child(1)');
         this.wait(2000);
-        this.waitForSelector(x(".//*[@id='part1.R']/div[3]/div[1]/div[2]/div/div[2]/div"), function(){
+        this.waitForSelector(x(".//*[@id='part1.R']/div[3]/div[1]/div[2]/div/div[2]/div"), function () {
             this.sendKeys(x(".//*[@id='part1.R']/div[3]/div[1]/div[2]/div/div[2]/div"), item1);
         });
         functions.runall(casper);
@@ -74,10 +74,10 @@ casper.test.begin(" Modifying multiple cells of multiple notebooks", 11, functio
     functions.addcontentstocell(casper, item1);
 
     //Creating one more cell and adding contents to it
-    casper.then(function (){
+    casper.then(function () {
         this.click('div.cell-control-bar:nth-child(1) > span:nth-child(1) > i:nth-child(1)');
         this.wait(2000);
-        this.waitForSelector(x(".//*[@id='part1.R']/div[3]/div[1]/div[2]/div/div[2]/div"), function(){
+        this.waitForSelector(x(".//*[@id='part1.R']/div[3]/div[1]/div[2]/div/div[2]/div"), function () {
             this.sendKeys(x(".//*[@id='part1.R']/div[3]/div[1]/div[2]/div/div[2]/div"), item1);
         });
         functions.runall(casper);
@@ -85,7 +85,7 @@ casper.test.begin(" Modifying multiple cells of multiple notebooks", 11, functio
 
     //checking if Search div is open
     casper.then(function () {
-        if (this.visible('#input-text-search')) {
+        if ( this.visible('#input-text-search') ) {
             console.log('Search div is already opened');
         }
         else {
@@ -115,10 +115,10 @@ casper.test.begin(" Modifying multiple cells of multiple notebooks", 11, functio
         }
         while (this.visible(x(".//*[@id='search-results']/table[" + counter + "]/tbody/tr/td")));
 
-        counter = counter - 1;
+        // counter = counter - 1;
         this.echo("number of search results:" + counter);
 
-        if (counter >= 2) {
+        if ( counter >= 2 ) {
             this.test.pass("searching content has been found  ");
         }
         else {
@@ -217,7 +217,7 @@ casper.test.begin(" Modifying multiple cells of multiple notebooks", 11, functio
         // counter = counter - 1;
         this.echo("number of search results:" + counter);
 
-        if (counter >= 0) {
+        if ( counter >= 0 ) {
             this.test.pass("Modified contents from the cell has been successfully searched ");
         }
         else {
