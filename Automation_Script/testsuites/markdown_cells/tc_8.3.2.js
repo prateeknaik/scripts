@@ -12,7 +12,7 @@ casper.test.begin("To insert a Markdown cell with respect to a Markdown cell ", 
     var github_password = casper.cli.options.password;
     var rcloud_url = casper.cli.options.url;
     var functions = require(fs.absolute('basicfunctions'));
-	var errors = [];
+    var errors = [];
     var input_code = 'a<-25 ; print a';
 
     casper.start(rcloud_url, function () {
@@ -33,58 +33,57 @@ casper.test.begin("To insert a Markdown cell with respect to a Markdown cell ", 
     //Creating a new notebook
     functions.create_notebook(casper);
 
-	functions.addnewcell(casper);
-	
+    functions.addnewcell(casper);
+
     functions.addcontentstocell(casper, input_code);
-	
+
     //change the language from R to Markdown
-    casper.then(function(){
-        this.mouse.click({ type: 'xpath' , path: ".//*[@id='prompt-area']/div[1]/div/select"});//x path for dropdown menu
+    casper.wait(4000).then(function () {
+        this.mouse.click({type: 'xpath', path: ".//*[@id='prompt-area']/div[1]/div/select"});//x path for dropdown menu
         this.echo('clicking on dropdown menu');
         this.wait(2000);
     });
 
     //selecting Markdown from the drop down menu
-    casper.then(function(){
-        this.evaluate(function() {
+    casper.then(function () {
+        this.evaluate(function () {
             var form = document.querySelector('.form-control');
             form.selectedIndex = 0;
             $(form).change();
         });
         console.log('Markdown Language is selected from the drop down menu');
     });
-    
+
     functions.addnewcell(casper);
-    
-    casper.wait(3000).then(function(){
-        this.waitForSelector(x(".//*[@id='part2.md']/div[3]/div[1]/div[2]/div/div[2]/div"), function (){
+
+    casper.wait(3000).then(function () {
+        this.waitForSelector(x(".//*[@id='part2.md']/div[3]/div[1]/div[2]/div/div[2]/div"), function () {
             this.sendKeys(x(".//*[@id='part2.md']/div[3]/div[1]/div[2]/div/div[2]/div"), input_code);
         })
-		
-		this.wait(2000);
-		
-    	casper.then(function(){
-            this.mouse.click({ type: 'xpath' , path: ".//*[@id='prompt-area']/div[1]/div/select"});//x path for dropdown menu
+
+        this.wait(2000);
+
+        casper.wait(4000).then(function () {
+            this.mouse.click({type: 'xpath', path: ".//*[@id='prompt-area']/div[1]/div/select"});//x path for dropdown menu
             this.echo('clicking on dropdown menu');
             this.wait(2000);
         });
 
         //selecting Markdown from the drop down menu
-        casper.then(function(){
-            this.evaluate(function() {
+        casper.wait(4000).then(function () {
+            this.evaluate(function () {
                 var form = document.querySelector('.form-control');
                 form.selectedIndex = 0;
                 $(form).change();
             });
             console.log('Markdown Language is selected from the drop down menu');
         });
-	});
-	
-	functions.runall(casper);
-	
-	
-	//Registering to the page.errors actually not required but still if there are some errors found on the page it will gives us the details
-    casper.on("page.error", function(msg, trace) {
+    });
+
+    functions.runall(casper);
+
+    //Registering to the page.errors actually not required but still if there are some errors found on the page it will gives us the details
+    casper.on("page.error", function (msg, trace) {
         this.echo("Error:    " + msg, "ERROR");
         this.echo("file:     " + trace[0].file, "WARNING");
         this.echo("line:     " + trace[0].line, "WARNING");
@@ -92,7 +91,7 @@ casper.test.begin("To insert a Markdown cell with respect to a Markdown cell ", 
         errors.push(msg);
     });
 
-    casper.run(function() {
+    casper.run(function () {
         if (errors.length > 0) {
             this.echo(errors.length + ' Javascript errors found', "WARNING");
         } else {
@@ -101,8 +100,3 @@ casper.test.begin("To insert a Markdown cell with respect to a Markdown cell ", 
         test.done();
     });
 });
-
-
-
-
-

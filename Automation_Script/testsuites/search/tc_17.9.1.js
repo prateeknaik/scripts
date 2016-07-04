@@ -1,11 +1,10 @@
 /* 
- Author: Arko
+ Author: Prateek
  Description:    This is a casperjs automated test script for showning that For the "Search" option, the text entered in the text box for
  'full-text search' will consist of Equation as Search Text like Ex: x=2, y=x+2 etc. only
  */
 
 //Begin Tests
-
 casper.test.begin(" Equation as Search Text (Ex: y=x+2) )", 6, function suite(test) {
 
     var x = require('casper').selectXPath;
@@ -17,7 +16,7 @@ casper.test.begin(" Equation as Search Text (Ex: y=x+2) )", 6, function suite(te
     var title;//get notebook title
 
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
     casper.wait(10000);
 
@@ -44,19 +43,21 @@ casper.test.begin(" Equation as Search Text (Ex: y=x+2) )", 6, function suite(te
     //Added a new cell and execute the contents
     functions.addnewcell(casper);
 
-    
     functions.addcontentstocell(casper, search);
 
-    functions.search1(casper, search);
+    //Searching desired keyword
+    casper.wait(2000).then(function () {
+        functions.search1(casper, search);
+    });
 
     //counting number of Search results
-    casper.then(function () {
+    casper.wait(3000).then(function () {
         var counter = 0;
         do
         {
             counter = counter + 1;
             this.wait(2000);
-        } while (this.visible(x('/html/body/div[3]/div/div[1]/div[1]/div/div/div[2]/div[2]/div/div/div[2]/div/div/table[' + counter + ']/tbody/tr[1]/td/a')));
+        } while (this.visible(x(".//*[@id=" + counter + "]/table/tbody/tr[2]/td/table/tbody/tr/td")));
 
         counter = counter - 1;
         this.echo("number of search results:" + counter);

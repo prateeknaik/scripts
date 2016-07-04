@@ -13,15 +13,13 @@ casper.test.begin("Delete an asset by removing all its content", 4, function sui
     var rcloud_url = casper.cli.options.url;
     var functions = require(fs.absolute('basicfunctions'));
     var URL;
-    var asset_name = 'JustCreatedAsset.R' ;
+    var asset_name = 'JustCreatedAsset.R';
     var fileName = "SampleFiles/PHONE.csv";
     var system = require('system');
     var currentFile = require('system').args[4];
     var curFilePath = fs.absolute(currentFile);
     var curFilePath = curFilePath.replace(currentFile, '');
     fileName = curFilePath + fileName;
-    console.log(fileName)
-
 
     casper.start(rcloud_url, function () {
         functions.inject_jquery(casper);
@@ -41,7 +39,7 @@ casper.test.begin("Delete an asset by removing all its content", 4, function sui
 
     functions.create_notebook(casper);
 
-    casper.then( function (){
+    casper.then(function () {
         for (var k = 1; k <= 80; k++) {
             this.click(x(".//*[@id='scratchpad-editor']/div[1]/div/div[2]/div"), {keepFocus: true});
             this.page.sendEvent("keypress", casper.page.event.key.Delete);
@@ -56,11 +54,11 @@ casper.test.begin("Delete an asset by removing all its content", 4, function sui
         this.click(x(".//*[@id='save-notebook']"));
     });
 
-    casper.reload(function() {
+    casper.reload(function () {
         this.echo("loaded again");
     });
 
-    casper.then( function (){
+    casper.wait(8000).then(function () {
         this.test.assertSelectorDoesntHaveText(x(".//*[@id='asset-list']"), 'scratch.R', "Successfully deleted the scratch.R asset");
     });
 

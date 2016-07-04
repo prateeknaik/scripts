@@ -17,7 +17,6 @@ casper.test.begin("Duplicate names of assets shouldnot be created", 4, function 
     var curFilePath = fs.absolute(currentFile);
     var curFilePath = curFilePath.replace(currentFile, '');
     fileName = curFilePath + fileName;
-    console.log(fileName)
 
     casper.start(rcloud_url, function () {
         functions.inject_jquery(casper);
@@ -59,7 +58,7 @@ casper.test.begin("Duplicate names of assets shouldnot be created", 4, function 
         console.log('Selecting a file');
     });
 
-    casper.then(function () {
+    casper.wait(3000).then(function () {
         this.wait(5000, function () {
             this.click(x(".//*[@id='upload-to-notebook']"));
             console.log("Clicking on Upload to notebook check box");
@@ -68,16 +67,14 @@ casper.test.begin("Duplicate names of assets shouldnot be created", 4, function 
         });
     });
 
-    casper.wait(8000);
-
-    casper.then(function () {
+    casper.wait(5000).then(function () {
         this.waitUntilVisible(x('//*[contains(text(), "added")]'), function then() {
             console.log("File has been uploaded");
         });
         this.test.assertSelectorHasText(x(".//*[@id='asset-list']/li[3]/a/span[1]"), 'PHONE.csv', 'Uploaded file is present in assets');
     });
 
-    casper.then( function (){
+    casper.wait(3000).then(function () {
         this.click(x(".//*[@id='upload-submit']"));
         console.log("Clicking on Submit icon");
         this.wait(2000);

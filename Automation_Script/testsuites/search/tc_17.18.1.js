@@ -1,8 +1,8 @@
 /*
- Author: Arko
+ Author: Prateek
  Description:    This is a casperjs automated test script for showing that,When a text not present in any of
  * the notebooks is entered for Text Search, an error message: "no results found" is displayed
-*/
+ */
 
 //Begin Tests
 casper.test.begin("Text not present in any notebook as Search Text", 4, function suite(test) {
@@ -17,7 +17,7 @@ casper.test.begin("Text not present in any notebook as Search Text", 4, function
 
 
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
     casper.wait(10000);
 
@@ -67,14 +67,8 @@ casper.test.begin("Text not present in any notebook as Search Text", 4, function
         this.click('#search-form > div:nth-child(1) > div:nth-child(2) > button:nth-child(1)');
     });
 
-    casper.wait(5000);
-
-    casper.then(function () {
-        this.test.assertSelectorHasText({
-            type: 'xpath',
-            path: ".//*[@id='search-summary']/h4"
-        }, 'No Results Found', 'For empty notebook "No Results Found" text is displayed');
-        
+    casper.wait(5000).then(function () {
+        this.test.assertSelectorHasText(x(".//*[@id='search-summary']/h4"), 'No Results Found', 'For empty notebook "No Results Found" text is displayed');
     });
 
     casper.run(function () {

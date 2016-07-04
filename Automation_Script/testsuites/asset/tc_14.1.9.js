@@ -17,8 +17,6 @@ casper.test.begin("Add an asset to a notebook with no assets", 5, function suite
     var curFilePath = fs.absolute(currentFile);
     var curFilePath = curFilePath.replace(currentFile, '');
     fileName = curFilePath + fileName;
-    console.log(fileName)
-
 
     casper.start(rcloud_url, function () {
         functions.inject_jquery(casper);

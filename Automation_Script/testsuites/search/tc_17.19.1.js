@@ -6,7 +6,7 @@
  */
 //Begin Tests
 
-casper.test.begin("Assets contents as Searched text", 6, function suite(test) {
+casper.test.begin("Assets contents as Searched text", 8, function suite(test) {
 
     var x = require('casper').selectXPath;
     var github_username = casper.cli.options.username;
@@ -18,7 +18,7 @@ casper.test.begin("Assets contents as Searched text", 6, function suite(test) {
     var notebookid = '75e0966de0bb185d7432';//to get the notebook id
 
 	casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
     casper.wait(10000);
 
@@ -41,15 +41,17 @@ casper.test.begin("Assets contents as Searched text", 6, function suite(test) {
     });
 
     functions.fork(casper);
-    
-    functions.search1(casper, search)
+
+    functions.addnewcell(casper);
+
+    functions.addcontentstocell(casper, "INPUT_CODE");
+
+    functions.search1(casper, search);
 
     casper.wait(5000);
 
     casper.then(function () {
-        this.test.assertSelectorHasText({
-            type: 'xpath',
-            path: ".//*[@id='0']/table/tbody/tr[2]/td/table/tbody/tr/td"}, search , 'Assets contents as Searched text');
+        this.test.assertSelectorHasText(x(".//*[@id='0']/table/tbody/tr[2]/td/table/tbody/tr/td"), search, 'Assets contents as Searched text');
         
     });
 

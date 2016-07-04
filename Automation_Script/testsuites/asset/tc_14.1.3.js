@@ -19,8 +19,6 @@ casper.test.begin(".Re-upload the previously modified file", 5, function suite(t
     var curFilePath = fs.absolute(currentFile);
     var curFilePath = curFilePath.replace(currentFile, '');
     fileName = curFilePath + fileName;
-    console.log(fileName)
-
 
     casper.start(rcloud_url, function () {
         functions.inject_jquery(casper);

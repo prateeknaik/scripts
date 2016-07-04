@@ -18,7 +18,6 @@
  >Search Elements
  */
 
-
 var casper = require("casper").create();
 
 //login to Github and RCloud
@@ -121,7 +120,7 @@ exports.search1 = function (casper, search_Content) {
 exports.addnewcell = function (casper) {
     return casper
         .then(function () {
-            this.test.assertTruthy(this.click("span.cell-control > i:nth-child(1)",'created new cell'), "New cell created");
+            this.test.assertTruthy(this.click("span.cell-control > i:nth-child(1)", 'created new cell'), "New cell created");
             this.wait(7000);
         });
 };
@@ -193,7 +192,7 @@ exports.delete_notebooksIstarred = function (casper) {
 //getting notebook title
 exports.notebookname = function (casper) {
     casper.wait(3000);
-    return casper.fetchText("#notebook-title");
+    return casper.fetchText(".jqtree-selected > div:nth-child(1) > span:nth-child(1)");
 };
 
 //view.html link verifications

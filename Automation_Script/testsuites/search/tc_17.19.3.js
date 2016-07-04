@@ -17,7 +17,7 @@ casper.test.begin("Same Asset and Comment as Searched Text", 6, function suite(t
     var notebookid = 'ee063e3a6d63194870b4';//Loading notebook which contains item to be searched from assets title
 
 	casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
     casper.wait(10000);
 
@@ -37,10 +37,14 @@ casper.test.begin("Same Asset and Comment as Searched Text", 6, function suite(t
         this.waitForSelector({type: 'css', path: '#share-link .icon-share'}, function () {
             console.log("Verified that page is loaded successfully");
         });
-
-        functions.runall(casper);
     });
-    
+
+    functions.fork(casper);
+
+    functions.addnewcell(casper);
+
+    functions.runall(casper);
+
     functions.comments(casper, item);
     
     //Opening search div
@@ -67,13 +71,13 @@ casper.test.begin("Same Asset and Comment as Searched Text", 6, function suite(t
 	
 	//Verifying the searched item exists with notebook title
     casper.then(function () {
-        this.test.assertSelectorHasText(".search-result-item > tbody:nth-child(1) > tr:nth-child(1) > td:nth-child(1)", 'sanketd11' , 'Searched asset contents are displayed');
+        this.test.assertSelectorHasText(x(".//*[@id='search-results-scroller']"), 'sanketd11' , 'Searched asset contents are displayed');
         
     });
     
     //Verifying the searched item exists with notebook titel
     casper.then(function () {
-        this.test.assertSelectorHasText(".search-result-comment", item , 'searched text for comments, exists in comments section');
+        this.test.assertSelectorHasText(x(".//*[@id='search-results-scroller']"), item , 'searched text for comments, exists in comments section');
     });
     
     casper.then(function(){

@@ -21,9 +21,6 @@ casper.test.begin("Upload a file to another user's notebook after forking it ", 
     var curFilePath = fs.absolute(currentFile);
     var curFilePath = curFilePath.replace(currentFile, '');
     fileName = curFilePath + fileName;
-    console.log(fileName)
-
-
 
     casper.start(rcloud_url, function () {
         functions.inject_jquery(casper);

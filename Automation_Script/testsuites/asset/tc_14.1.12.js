@@ -27,23 +27,23 @@ casper.test.begin("Executing asset content", 3, function suite(test) {
         functions.validation(casper);
     });
 
-	//Loading a notebook which has asset with python code in it
+    //Loading a notebook which has asset with python code in it
     casper.then(function () {
-        this.thenOpen('http://127.0.0.1:8080/edit.html?notebook='+notebookid);
+        this.thenOpen('http://127.0.0.1:8080/edit.html?notebook=' + notebookid);
         this.wait(5000);
     });
 
-    casper.then(function () {
-        this.exists(x(".//*[@id='asset-list']/li[3]/a"),'ExecutingFromAsset.py asset exists');
+    casper.wait(3000).then(function () {
+        this.exists(x(".//*[@id='asset-list']/li[3]/a"), 'ExecutingFromAsset.py asset exists');
         functions.runall(casper);
     });
-    
-    casper.then(function () {
-		var output = this.fetchText(x(".//*[@id='part1.R']/div[3]/div[2]"));
+
+    casper.wait(3000).then(function () {
+        var output = this.fetchText(x(".//*[@id='part1.R']/div[3]/div[2]"));
         this.echo("Asset execution has produced this output:" + output);
-	});
-	
-	casper.run(function () {
+    });
+
+    casper.run(function () {
         test.done();
     });
 });

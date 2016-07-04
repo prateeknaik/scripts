@@ -16,9 +16,7 @@ casper.test.begin("Deleting an Assets div", 5, function suite(test) {
     var curFilePath = fs.absolute(currentFile);
     var curFilePath = curFilePath.replace(currentFile, '');
     fileName = curFilePath + fileName;
-    console.log(fileName)
-
-
+    
     casper.start(rcloud_url, function () {
         functions.inject_jquery(casper);
     });

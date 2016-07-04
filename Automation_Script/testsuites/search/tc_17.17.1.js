@@ -1,8 +1,9 @@
 /*
- Author: Arko
+ Author: Prateek
  Description:    This is a casperjs automated test script for showning that For the "Search" option, the text entered in the text box for
  'full-text search' will consist of Text with lexical error as Text Search like 5786%^%&*(*  etc. only
  */
+
 //Begin Tests
 casper.test.begin(" Text with lexical error as Text Search ", 6, function suite(test) {
 
@@ -16,7 +17,7 @@ casper.test.begin(" Text with lexical error as Text Search ", 6, function suite(
     var combo;//store notebook author + title
 
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
     casper.wait(10000);
 
@@ -61,7 +62,8 @@ casper.test.begin(" Text with lexical error as Text Search ", 6, function suite(
             this.echo("Opened Search div");
         }
     });
-    //entering item to be searched
+
+    //Opening search div
     casper.then(function () {
         if (this.visible('#input-text-search')) {
             console.log('Search div is already opened');
@@ -73,6 +75,7 @@ casper.test.begin(" Text with lexical error as Text Search ", 6, function suite(
             this.echo("Opened Search div");
         }
     });
+
     //entering item to be searched
     casper.then(function () {
         this.sendKeys('#input-text-search', item);
@@ -80,10 +83,8 @@ casper.test.begin(" Text with lexical error as Text Search ", 6, function suite(
         this.click('#search-form > div:nth-child(1) > div:nth-child(2) > button:nth-child(1)');
     });
 
-    casper.wait(5000);
-
-    casper.then(function () {
-        this.test.assertSelectorHasText("#session-info-panel", 'error',"search item doesnot parse special charaters, hence error occured in session-info-panel");
+    casper.wait(5000).then(function () {
+        this.test.assertSelectorHasText("#session-info-panel", 'error', "search item doesnot parse special charaters, hence error occured in session-info-panel");
     });
 
     casper.run(function () {

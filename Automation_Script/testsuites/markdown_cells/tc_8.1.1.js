@@ -63,7 +63,7 @@ casper.test.begin("Writing a code in markdown cell", 5, function suite(test) {
 	});
 	
 	//verfying the results
-	casper.then(function(){
+	casper.wait(3000).then(function(){
 		this.test.assertVisible({type:'xpath', path:".//*[@id='part1.md']/div[3]/div[2]/p"}, 'Cell gets executed');
 		console.log('Contents are added to the cell');
 	});

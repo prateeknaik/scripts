@@ -2,10 +2,9 @@
  Author: Prateek
  Description:    This is a casperjs automated test script for showning that For the "Search" option, the text entered in the text box for
  'full-text search' will consist of Text within double quotes for Search like "storm", "end" etc. only
-*/
+ */
 
 //Begin Tests
-
 casper.test.begin(" Text within double quotes for Search ", 6, function suite(test) {
 
     var x = require('casper').selectXPath;
@@ -13,7 +12,7 @@ casper.test.begin(" Text within double quotes for Search ", 6, function suite(te
     var github_password = casper.cli.options.password;
     var rcloud_url = casper.cli.options.url;
     var functions = require(fs.absolute('basicfunctions'));
-    var item = '"newnotebook"';//item to be searched
+    var item = '"WebStorm"';//item to be searched
     var title;//get notebook title
     var combo;//store notebook author + title	
 
@@ -30,7 +29,6 @@ casper.test.begin(" Text within double quotes for Search ", 6, function suite(te
         this.wait(9000);
         console.log("validating that the Main page has got loaded properly by detecting if some of its elements are visible. Here we are checking for Shareable Link and Logout options");
         functions.validation(casper);
-
     });
 
     //Create a new Notebook.
@@ -46,41 +44,37 @@ casper.test.begin(" Text within double quotes for Search ", 6, function suite(te
 
     //Added a new cell and execute the contents
     functions.addnewcell(casper);
-	
-	// Add contents to cell
+
+    // Add contents to cell
     functions.addcontentstocell(casper, item);
 
-     //entering item to be searched
-            
-		casper.then(function () {
-			this.sendKeys('#input-text-search', item);
-            this.wait(6000);
-            this.click('#search-form > div:nth-child(1) > div:nth-child(2) > button:nth-child(1)');
-            });
-            
-		casper.wait(5000);
-            
-	//counting number of Search results
-		casper.then(function () {
-			var counter = 0;
-            do
-            {
+    //entering item to be searched
+    casper.wait(3000).then(function () {
+        this.sendKeys('#input-text-search', item);
+        this.wait(6000);
+        this.click('#search-form > div:nth-child(1) > div:nth-child(2) > button:nth-child(1)');
+    });
+
+    //counting number of Search results
+    casper.wait(5000).then(function () {
+        var counter = 0;
+        do
+        {
             counter = counter + 1;
             this.wait(2000);
-            } 
-            while (this.visible(x(".//*[@id="+counter+"]/table/tbody/tr[2]/td/table/tbody/tr/td")));
-            counter = counter - 1;
-            this.echo("number of search results:" + counter);
-            
-            if (counter >0)
-            {
-				this.test.pass("search feature is working fine for texts entered in double quotes ");
-			}
-			else {
-					this.test.fail("search feature is not working fine for texts entered in double quotes ");
-				 }
-		});
-	
+        }
+        while (this.visible(x(".//*[@id=" + counter + "]/table/tbody/tr[2]/td/table/tbody/tr/td")));
+        counter = counter - 1;
+        this.echo("number of search results:" + counter);
+
+        if (counter > 0) {
+            this.test.pass("search feature is working fine for texts entered in double quotes ");
+        }
+        else {
+            this.test.fail("search feature is not working fine for texts entered in double quotes ");
+        }
+    });
+
     casper.run(function () {
         test.done();
     });

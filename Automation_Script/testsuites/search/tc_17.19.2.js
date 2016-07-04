@@ -5,7 +5,7 @@
 */
 //Begin Tests
 
-casper.test.begin("Assets name as Searched text", 5, function suite(test) {
+casper.test.begin("Assets name as Searched text", 7, function suite(test) {
 
     var x = require('casper').selectXPath;
     var github_username = casper.cli.options.username;
@@ -16,7 +16,7 @@ casper.test.begin("Assets name as Searched text", 5, function suite(test) {
     var search = 'DINGRA';
 
 	casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
     casper.wait(10000);
 
@@ -39,6 +39,12 @@ casper.test.begin("Assets name as Searched text", 5, function suite(test) {
     });
     
     functions.fork(casper);
+
+    functions.addnewcell(casper);
+
+    functions.addcontentstocell(casper, "INPUT_CODE");
+
+    functions.search1(casper, search);
 
     functions.search1(casper, search);
 

@@ -18,8 +18,7 @@ casper.test.begin("Renaming the existing asset", 5, function suite(test) {
     var curFilePath = fs.absolute(currentFile);
     var curFilePath = curFilePath.replace(currentFile, '');
     fileName = curFilePath + fileName;
-    console.log(fileName);
-
+    
     casper.start(rcloud_url, function () {
         functions.inject_jquery(casper);
     });
@@ -70,21 +69,19 @@ casper.test.begin("Renaming the existing asset", 5, function suite(test) {
         });
     });
 
-    casper.then(function () {
+    casper.wait(2000).then(function () {
         this.wait(5000);
         this.waitUntilVisible(x('//*[contains(text(), "added")]'), function then() {
             console.log("File has been uploaded");
         });
     });
 
-    casper.then(function () {
+    casper.wait(2000).then(function () {
         console.log('Verifying whether the uploaded contentsa are present in Asset div or not');
         this.test.assertSelectorHasText(x(".//*[@id='asset-list']/li[3]/a/span[1]"), 'PHONE.csv', 'Uploaded file is present in assets');
     });
 
-    casper.wait(3000);
-
-    casper.then(function () {
+    casper.wait(3000).then(function () {
         before = this.fetchText('.active > a:nth-child(1) > span:nth-child(1)');
         console.log("before Modifying asset name is:" + before);
     });
@@ -107,11 +104,9 @@ casper.test.begin("Renaming the existing asset", 5, function suite(test) {
         console.log("before Modifying asset name is:" + after);
     });
 
-    casper.then(function () {
+    casper.wait(3000).then(function () {
         this.test.assertNotEquals(before, after, "Uploaded asset" + before + "gets renamed with" + after);
     });
-
-    casper.wait(8000);
 
     casper.run(function () {
         test.done();

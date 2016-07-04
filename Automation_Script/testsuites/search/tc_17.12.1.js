@@ -1,13 +1,10 @@
 /* 
- Author: Arko
+ Author: Prateek
  Description:    This is a casperjs automated test script for showning that For the "Search" option, the text entered in the text box for
  'full-text search' will consist of Github Username like Arko2013etc. only
-
-
  */
 
 //Begin Tests
-
 casper.test.begin("Github Username as Search Text", 4, function suite(test) {
 
     var x = require('casper').selectXPath;
@@ -17,8 +14,8 @@ casper.test.begin("Github Username as Search Text", 4, function suite(test) {
     var functions = require(fs.absolute('basicfunctions'));
     var title;//get notebook title
     var combo;//store notebook author + title	
-	var item;//item to be searched
-    
+    var item;//item to be searched
+
     casper.start(rcloud_url, function () {
         functions.inject_jquery(casper);
     });
@@ -36,7 +33,6 @@ casper.test.begin("Github Username as Search Text", 4, function suite(test) {
 
     //Create a new Notebook.
     functions.create_notebook(casper);
-
 
     // Getting the title of new Notebook
     casper.then(function () {
@@ -63,29 +59,27 @@ casper.test.begin("Github Username as Search Text", 4, function suite(test) {
             this.sendKeys('#input-text-search', github_username);
             this.wait(6000);
             this.click('#search-form > div:nth-child(1) > div:nth-child(2) > button:nth-child(1)');
-            });
         });
-        //counting number of Search results
-            casper.then(function () {
-                var counter = 0;
-                do
-                {
-                    counter = counter + 1;
-                    this.wait(2000);
-                } while (this.visible("table.search-result-item:nth-child("+ counter +") > tbody:nth-child(1) > tr:nth-child(1) > td:nth-child(1)"));
-                                         
-                counter = counter - 1;
-                this.echo("number of search results:" + counter);
-            
-            if (counter >0)
-            {
-				this.test.pass("search feature is working with current github user ");
-			}
-			else
-				{
-					this.test.fail("search feature is not working with current github user	");
-				}
-		});
+    });
+    //counting number of Search results
+    casper.then(function () {
+        var counter = 0;
+        do
+        {
+            counter = counter + 1;
+            this.wait(2000);
+        } while (this.visible(x(".//*[@id='open_" + counter + "']")));
+
+        counter = counter - 1;
+        this.echo("number of search results:" + counter);
+
+        if (counter > 0) {
+            this.test.pass("search feature is working with current github user ");
+        }
+        else {
+            this.test.fail("search feature is not working with current github user	");
+        }
+    });
 
     casper.run(function () {
         test.done();

@@ -18,8 +18,6 @@ casper.test.begin("If there are no assets present, the Assets div should be uned
     var curFilePath = fs.absolute(currentFile);
     var curFilePath = curFilePath.replace(currentFile, '');
     fileName = curFilePath + fileName;
-    console.log(fileName)
-
 
     casper.start(rcloud_url, function () {
         functions.inject_jquery(casper);

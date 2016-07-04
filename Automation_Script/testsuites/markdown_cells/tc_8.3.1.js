@@ -2,7 +2,7 @@
  Author: Prateek
  Description:To insert a Markdown cell with respect to a R cell i.e, insert a Markdown cell by clicking on the '+' icon
  * present on top of the R Cell and changing the language
-*/
+ */
 
 //Begin Test
 casper.test.begin("Creating a combination of R and Markdown cells ", 9, function suite(test) {
@@ -11,7 +11,7 @@ casper.test.begin("Creating a combination of R and Markdown cells ", 9, function
     var github_password = casper.cli.options.password;
     var rcloud_url = casper.cli.options.url;
     var functions = require(fs.absolute('basicfunctions'));
-	var input_code = "'WELCOME TO RCLOUD'";
+    var input_code = "'WELCOME TO RCLOUD'";
     var input_code1 = "a<-25; a"
 
     casper.start(rcloud_url, function () {
@@ -37,7 +37,7 @@ casper.test.begin("Creating a combination of R and Markdown cells ", 9, function
     functions.addcontentstocell(casper, input_code);
 
     //change the language from R to Markdown
-    casper.then(function () {
+    casper.wait(4000).then(function () {
         this.mouse.click({type: 'xpath', path: ".//*[@id='part1.R']/div[2]/div[2]/select"});//x path for dropdown menu
         this.echo('clicking on dropdown menu');
         this.wait(2000);
@@ -52,18 +52,18 @@ casper.test.begin("Creating a combination of R and Markdown cells ", 9, function
         });
     });
 
-    casper.then(function (){
+    casper.wait(4000).then(function () {
         this.click("div.cell-control-bar:nth-child(1) > span:nth-child(1) > i:nth-child(1)");
         console.log('creating one more cell');
     });
 
-    casper.wait(5000).then(function (){
-        this.waitForSelector("div.edit-code > div:nth-child(3) > div:nth-child(1)", function (){
+    casper.wait(5000).then(function () {
+        this.waitForSelector("div.edit-code > div:nth-child(3) > div:nth-child(1)", function () {
             this.sendKeys("div.edit-code > div:nth-child(3) > div:nth-child(1)", input_code1);
         });
     });
 
-    casper.then(function (){
+    casper.wait(4000).then(function () {
         this.click("#run-notebook");
         console.log("Saving the changes made to the notebook")
         this.wait(3000);
@@ -71,27 +71,23 @@ casper.test.begin("Creating a combination of R and Markdown cells ", 9, function
         this.wait(3000);
     });
 
-    casper.wait(8000).then(function(){
+    casper.wait(8000).then(function () {
         functions.runall(casper);
     })
 
-    casper.wait(4000).then(function(){
-        if(this.test.assertVisible(x(".//*[@id='part1.md']/div[3]/div[2]/p")))
-        {
+    casper.wait(4000).then(function () {
+        if (this.test.assertVisible(x(".//*[@id='part1.md']/div[3]/div[2]/p"))) {
             this.test.pass('Output div for Markdown cell is visible');
-        }else
-        {
+        } else {
             this.test.fail('Output div for Markdown cell  is not visible');
         }
     });
 
-    casper.wait(5000).then(function (){
-        this.waitForSelector(x(".//*[@id='part2.R']/div[3]/div[2]/pre/code"), function (){
-            if(this.test.assertVisible(x(".//*[@id='part2.R']/div[3]/div[2]/pre/code")))
-            {
+    casper.wait(5000).then(function () {
+        this.waitForSelector(x(".//*[@id='part2.R']/div[3]/div[2]/pre/code"), function () {
+            if (this.test.assertVisible(x(".//*[@id='part2.R']/div[3]/div[2]/pre/code"))) {
                 this.test.pass('Output div for R cell is visible');
-            }else
-            {
+            } else {
                 this.test.fail('Output div for R cell  is not visible');
             }
         });

@@ -1,8 +1,8 @@
 /* 
- Author: Arko
+ Author: Prateek
  Description:    This is a casperjs automated test script for showning that For the "Search" option, the text entered in the text box for
  'full-text search' will consist of Unicode characters as Search Text like äåæçèéê etc. only
-*/
+ */
 
 //Begin Tests
 casper.test.begin(" Unicode characters as Search Text ", 6, function suite(test) {
@@ -17,7 +17,7 @@ casper.test.begin(" Unicode characters as Search Text ", 6, function suite(test)
     var combo;//store notebook author + title	
 
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
     casper.wait(10000);
 
@@ -46,9 +46,9 @@ casper.test.begin(" Unicode characters as Search Text ", 6, function suite(test)
     functions.addnewcell(casper);
 
     //Add contents to this cell and then execute it using run option
-    casper.then(function(){
-		functions.addcontentstocell(casper,item);
-	});
+    casper.then(function () {
+        functions.addcontentstocell(casper, item);
+    });
 
     //function to search the entered item
     casper.viewport(1024, 768).then(function () {
@@ -61,6 +61,7 @@ casper.test.begin(" Unicode characters as Search Text ", 6, function suite(test)
             });
             this.echo("Opened Search div");
         }
+
         //entering item to be searched
         casper.then(function () {
             this.sendKeys('#input-text-search', item);
@@ -70,14 +71,14 @@ casper.test.begin(" Unicode characters as Search Text ", 6, function suite(test)
             });
         });
         var counter = 0;
-        casper.wait(5000);
+
         //counting number of Search results
-        casper.then(function () {
+        casper.wait(5000).then(function () {
             do
             {
                 counter = counter + 1;
                 this.wait(2000);
-            } while (this.visible(x(".//*[@id='search-results']/table/tbody/tr["+counter+"]/td")));
+            } while (this.visible(x(".//*[@id='search-results']/table/tbody/tr[" + counter + "]/td")));
             counter = counter - 1;
             this.echo("number of search results:" + counter);
             this.test.assertEquals(counter, 0, "Confirmed that no search results are displayed");

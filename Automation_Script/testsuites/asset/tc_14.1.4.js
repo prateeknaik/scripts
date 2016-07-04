@@ -17,7 +17,6 @@ casper.test.begin("Upload a file to another user's notebook before forking it", 
     var res1 = 'disabled';// to compare with res
     var system = require('system');
     
-
     casper.start(rcloud_url, function () {
         functions.inject_jquery(casper);
     });
