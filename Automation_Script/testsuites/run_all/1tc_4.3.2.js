@@ -16,8 +16,9 @@ casper.test.begin("Execute one or more R cells pre executed using Run All", 6, f
     var expected_result = "100";
     
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
+
     casper.wait(10000);
 
     casper.viewport(1024, 768).then(function () {
@@ -32,13 +33,15 @@ casper.test.begin("Execute one or more R cells pre executed using Run All", 6, f
 
     //Create a new Notebook.
     functions.create_notebook(casper);
-	
-	//Creating cell and adding contents to it
-	casper.then(function () {
-		functions.addnewcell(casper);
-		functions.addcontentstocell(casper, input_code);
-		this.wait(3000);
-	});
+
+    //Added a new R cell and execute contents
+    casper.wait(2000).then(function () {
+        functions.addnewcell(casper);
+    });
+
+    casper.wait(2000).then(function () {
+        functions.addcontentstocell(casper,input_code)
+    });
 	
 	casper.then(function() {
 		this.click('div.cell-control-bar:nth-child(1) > span:nth-child(1) > i:nth-child(1)');
@@ -46,7 +49,7 @@ casper.test.begin("Execute one or more R cells pre executed using Run All", 6, f
 		console.log('Creating one more cell');
 	});
 	
-	casper.then(function() {
+	casper.wait(1000).then(function() {
 		this.wait(4000);
 		this.sendKeys({type:'xpath', path:".//*[@id='part2.R']/div[3]/div[1]/div[2]/div/div[2]/div/div[3]"}, input_code);
 		console.log('Adding contents to the new cell');

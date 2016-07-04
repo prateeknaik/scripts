@@ -18,8 +18,9 @@ casper.test.begin("Pre executed two or more R cells and Markdown cells to be exe
     var errors = [];
 
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
+
     casper.wait(10000);
 
     casper.viewport(1024, 768).then(function () {
@@ -44,7 +45,7 @@ casper.test.begin("Pre executed two or more R cells and Markdown cells to be exe
         this.test.assertVisible('.r-result-div', "Output div is visible which means that cell execution has occured successfully");
 		for ( var i =1; i<=2 ; i++)
 		{
-			var result = this.fetchText({type: 'xpath', path: '/html/body/div[3]/div/div[2]/div/div[1]/div['+ i +']/div[3]/div[2]/pre/code'});//fetch the output after execution
+			var result = this.fetchText({type: 'xpath', path: ".//*[@id='part"+i+".R']/div[3]/div[2]/pre/code"});//fetch the output after execution
 			this.echo(result);
 			var res = result.substring(4,7);//remove the unwanted characters
 			this.test.assertEquals(res, expected_result, "The R code has produced the expected output using Run All for cell  " + i); 
@@ -52,8 +53,8 @@ casper.test.begin("Pre executed two or more R cells and Markdown cells to be exe
 		}   
 		for ( var i =3; i<=4 ; i++)
 		{
-			var result = this.fetchText({type: 'xpath', path: '/html/body/div[3]/div/div[2]/div/div[1]/div[' +i+ ']/div[3]/div[2]/p'});//fetch the output after execution
-	        this.test.assertEquals(result, input_code, "The R code executed in Markdown cell has produced the expected output using Run All for cell "+i);        
+			var result = this.fetchText({type: 'xpath', path: ".//*[@id='part"+i+".md']/div[3]/div[2]/p"});//fetch the output after execution
+	        this.test.assertEquals(result, input_code, "The code executed in Markdown cell has produced the expected output using Run All for cell "+i);        
 			this.wait(4000);
 		}			 
     });

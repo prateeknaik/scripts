@@ -16,9 +16,10 @@ casper.test.begin("Execute Rmarkdown cell (not pre-executed) using Run All", 5, 
     var functions = require(fs.absolute('basicfunctions'));
     var input_code = "hello" ;
 
-    casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+   casper.start(rcloud_url, function () {
+        functions.inject_jquery(casper);
     });
+
     casper.wait(10000);
 
     casper.viewport(1024, 768).then(function () {
@@ -35,15 +36,8 @@ casper.test.begin("Execute Rmarkdown cell (not pre-executed) using Run All", 5, 
     //Create a new Notebook.
     functions.create_notebook(casper);
 
-    //changing language in drop down menu
-    casper.then(function(){
-        this.mouse.click({ type: 'xpath' , path: ".//*[@id='prompt-area']/div[1]/div/select"});//x path for dropdown menu
-        this.echo('clicking on dropdown menu');
-        this.wait(2000);
-    });
-
     //selecting markdown from the drop down menu
-    casper.then(function(){
+    casper.wait(1000).then(function(){
         this.evaluate(function() {
             var form = document.querySelector('.form-control');
             form.selectedIndex = 0;
@@ -51,25 +45,26 @@ casper.test.begin("Execute Rmarkdown cell (not pre-executed) using Run All", 5, 
         });
     });
 
+    casper.wait(1000).then(function(){
+        functions.addnewcell(casper);
+    });
 
     //create a new markdown cell with some contents
-    casper.then(function () {
-        functions.addnewcell(casper);
-        casper.then(function(){
-            this.sendKeys({type:'xpath', path:'/html/body/div[3]/div/div[2]/div/div[1]/div/div[3]/div[1]/div[2]/div/div[2]/div'}, input_code);
+    casper.wait(2000).then(function () {
+        this.wait(2000).then(function(){
+            this.sendKeys({type:'xpath', path:".//*[@id='part1.md']/div[3]/div[1]/div[2]/div/div[2]/div"}, input_code); 
             this.echo("Entered code into the cell but did not execute it yet");
         });
     });
 
     //to run the code
-	casper.then(function(){
-		this.click({type:'xpath', path:".//*[@id='run-notebook']"});
-		this.wait(9000);
+	casper.wait(1000).then(function(){
+		functions.runall(casper);
 	});
 	
     //Verifying the output for the code
 	casper.then(function(){
-		this.test.assertSelectorHasText({type:'xpath', path:"/html/body/div[3]/div/div[2]/div/div[1]/div/div[3]/div[2]/p"}, input_code, 'Code has produced expected output under markdown cell');
+		this.test.assertSelectorHasText({type:'xpath', path:".//*[@id='part1.md']/div[3]/div[2]/p"}, input_code, 'Code has produced expected output under markdown cell');
 	});
 
     casper.run(function () {
