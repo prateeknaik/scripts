@@ -15,8 +15,9 @@ casper.test.begin("Clicking on run all button when some part of the code in comm
     var input_code = "hello";
 
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
+
     casper.wait(10000);
 
     casper.viewport(1024, 768).then(function () {
@@ -35,7 +36,7 @@ casper.test.begin("Clicking on run all button when some part of the code in comm
     
     casper.then(function (){
 		casper.then(function () {
-			if(this.visible({type:'xpath', path:"/html/body/div[3]/div/div[2]/div/div[3]/div[2]/div[2]/div"}))
+			if(this.visible({type:'xpath', path:".//*[@id='command-prompt']/div[2]/div"}))
 			{
 				console.log('Command prompt is enabled');
 			}else
@@ -65,8 +66,9 @@ casper.test.begin("Clicking on run all button when some part of the code in comm
 		this.click('#run-notebook');
 		this.wait(4000);
 		this.then( function () {
-			this.sendKeys({type: 'xpath', path: "/html/body/div[3]/div/div[2]/div/div[3]/div[2]/div[2]/div"}, input_code);
+			this.sendKeys({type: 'xpath', path: ".//*[@id='command-prompt']/div[2]/div"}, input_code);
 		});
+
         functions.runall(casper);
     });
 

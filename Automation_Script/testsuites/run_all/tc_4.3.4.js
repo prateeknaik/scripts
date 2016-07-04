@@ -4,7 +4,7 @@
  Description:The notebook will contain two or more RMarkdown cells, each with some code which are already executed .Execute them using Run All option
 
  */
-casper.test.begin("Execute two or more RMarkdown cells pre executed using Run All", 9, function suite(test) {
+casper.test.begin("Execute two or more Markdown cells pre executed using Run All", 8, function suite(test) {
 
     var x = require('casper').selectXPath;
     var github_username = casper.cli.options.username;
@@ -15,8 +15,9 @@ casper.test.begin("Execute two or more RMarkdown cells pre executed using Run Al
     
 
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
+
     casper.wait(10000);
 
     casper.viewport(1024, 768).then(function () {
@@ -42,19 +43,39 @@ casper.test.begin("Execute two or more RMarkdown cells pre executed using Run Al
         });
     });
 
-    //Added a markdown cell and execute contents
-    casper.then(function () {
+    //Added a new markdown cell and execute contents
+    casper.wait(2000).then(function () {
         functions.addnewcell(casper);
-        functions.addcontentstocell(casper,input_code);
     });
 
-    // Add another markdown cell and execute contents
-    functions.addnewcell(casper);
+    //Add some content to markdown cell and execute cell
+    casper.wait(1000).then(function () {
+        this.wait(1000).then(function(){
+            this.sendKeys({type:'xpath', path:".//*[@id='part1.md']/div[3]/div[1]/div[2]/div/div[2]/div"}, input_code); 
+            this.echo("Entered code into the cell but did not execute it yet");
+        });
+        this.wait(1000).then(function(){
+            this.click(x(".//*[@id='part1.md']/div[2]/div[2]/span[1]/i"));
+        });
+    });
+
+    //Add another markdown cell
+    casper.wait(2000).then(function () {
+        functions.addnewcell(casper);
+    });
+
+    //Add some content to markdown cell and execute cell
+    casper.wait(1000).then(function () {
+        this.wait(1000).then(function(){
+            this.sendKeys({type:'xpath', path:".//*[@id='part2.md']/div[3]/div[1]/div[2]/div/div[2]/div"}, input_code); 
+            this.echo("Entered code into the cell but did not execute it yet");
+        });
+        this.wait(1000).then(function(){
+            this.click(x(".//*[@id='part2.md']/div[2]/div[2]/span[1]/i"));
+        });
+    });
     
-    casper.wait(3000);
-    
-    casper.viewport(1366, 768).then(function () {
-        this.sendKeys({type:'xpath', path:"/html/body/div[3]/div/div[2]/div/div[1]/div[2]/div[3]/div[1]/div[2]/div/div[2]/div"}, input_code);
+    casper.wait(2000).then(function () {
         functions.runall(casper);
 	});
 
@@ -63,8 +84,8 @@ casper.test.begin("Execute two or more RMarkdown cells pre executed using Run Al
         this.test.assertVisible('div:nth-child(3) > div:nth-child(2) > p:nth-child(1)', "Output div is visible which means that cell execution has occured successfully");
 		for ( var i =1; i<=2 ; i++)
 		{
-			var result = this.fetchText({type: 'xpath', path: '/html/body/div[3]/div/div[2]/div/div/div['+i+']/div[3]/div[2]/p'});//fetch the output after execution
-			this.test.assertEquals(result, input_code, "The R code executed in Markdown cell has produced the expected output using Run All for cell "+i);        
+			var result = this.fetchText({type: 'xpath', path: ".//*[@id='part"+i+".md']/div[3]/div[2]/p"});//fetch the output after execution
+			this.test.assertEquals(result, input_code, "The code executed in Markdown cell has produced the expected output using Run All for cell "+i);        
 			this.wait(4000);
 		}		
     });

@@ -5,7 +5,7 @@
  Run all button is then clicked and checked wheather the given R cell is executed or no.
 
  */
-casper.test.begin("Execute R cell (pre executed) using Run All", 6, function suite(test) {
+casper.test.begin("Execute R cell (pre executed) using Run All", 7, function suite(test) {
 
     var x = require('casper').selectXPath;
     var github_username = casper.cli.options.username;
@@ -17,8 +17,9 @@ casper.test.begin("Execute R cell (pre executed) using Run All", 6, function sui
 
 
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
+
     casper.wait(10000);
 
     casper.viewport(1024, 768).then(function () {
@@ -36,20 +37,22 @@ casper.test.begin("Execute R cell (pre executed) using Run All", 6, function sui
     functions.create_notebook(casper);
 
     //Added a new R cell and execute contents
-    casper.then(function () {
+    casper.wait(2000).then(function () {
         functions.addnewcell(casper);
-        functions.addcontentstocell(casper,input_code);
+    });
 
+    casper.wait(2000).then(function () {
+        functions.addcontentstocell(casper,input_code)
     });
 
     //Now we have a R cell with some code pre-executed . Will execute it using Run All
     functions.runall(casper);
     casper.then(function () {
         this.test.assertVisible({type:'xpath', path:".//*[@id='part1.R']/div[3]/div[2]"}, "Output div is visible which means that cell execution has occured successfully");
-		/*var result = this.fetchText({type: 'xpath', path: '/html/body/div[3]/div/div[2]/div/div/div/div[3]/div[2]/pre[2]/code'});//fetch the output after execution
-        var res = result.substring(7);//remove the unwanted characters
+		var result = this.fetchText({type: 'xpath', path: ".//*[@id='part1.R']/div[3]/div[2]/pre/code"});//fetch the output after execution
+        var res = result.substring(4,8);//remove the unwanted characters
         this.echo("The output of the R code is: " + res);
-        this.test.assertEquals(res, expected_result, "The R code has produced the expected output using Run All");  */  
+        this.test.assertEquals(res, expected_result, "The R code has produced the expected output using Run All");  
     });
 
     casper.run(function () {
