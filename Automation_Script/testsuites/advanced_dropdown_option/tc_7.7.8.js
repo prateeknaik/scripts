@@ -20,7 +20,7 @@ casper.test.begin("Show Source option in Advanced drop-down link for a published
     casper.start(rcloud_url, function () {
         functions.inject_jquery(casper);
     });
-    casper.wait(10000);
+    casper.wait(5000);
 
     casper.viewport(1024, 768).then(function () {
         functions.login(casper, github_username, github_password, rcloud_url);
@@ -36,23 +36,27 @@ casper.test.begin("Show Source option in Advanced drop-down link for a published
     functions.create_notebook(casper);
 
     //Get notebook title
-    casper.then(function () {
+    casper.wait(1000).then(function () {
         title = functions.notebookname(casper);
         this.echo("New Notebook title : " + title);
         this.wait(3000);
     });
 
     //getting Notebook ID
-    casper.viewport(1024, 768).then(function () {
+    casper.wait(1000).then(function () {
         var temp1 = this.getCurrentUrl();
         notebookid = temp1.substring(41);
         this.echo("The Notebook Id: " + notebookid);
     });
 
     //add a new cell and execute its contents
-    functions.addnewcell(casper);
-    functions.addcontentstocell(casper,input_code);
+    casper.wait(1000).then(function(){
+        functions.addnewcell(casper);
+    });
     
+    casper.wait(2000).then(function(){
+        functions.addcontentstocell(casper,input_code);
+    });
     
     //Now clicking on the advanced div
     functions.open_advanceddiv(casper);
@@ -71,16 +75,15 @@ casper.test.begin("Show Source option in Advanced drop-down link for a published
         this.wait(3000);
     });
     
-    casper.wait(1000);
     
-    casper.viewport(1366, 768).then(function () {
+    
+    casper.wait(1000).then(function () {
         this.click("#main-div > p:nth-child(2) > a:nth-child(2)", "Logged out of Github");
         console.log('Logging out of Github');
         this.wait(3000);
     });
 
-    casper.wait(10000);
-    casper.viewport(1366, 768).then(function () {
+    casper.wait(3000).then(function () {
         this.click(".btn");
         console.log('logged out of Github');
         this.wait(7000);
@@ -88,7 +91,7 @@ casper.test.begin("Show Source option in Advanced drop-down link for a published
     });
 
     //load the view.html of the Published notebook
-    casper.viewport(1366, 768).then(function () {
+    casper.wait(2000).then(function () {
         sharedlink = "http://127.0.0.1:8080/view.html?notebook=" + notebookid;
         this.thenOpen(sharedlink, function () {
         this.wait(2000);
@@ -96,32 +99,22 @@ casper.test.begin("Show Source option in Advanced drop-down link for a published
         });
     });
 
-    //load the view.html of the Published notebook
-    casper.viewport(1366, 768).then(function () {
-        sharedlink = "http://127.0.0.1:8080/view.html?notebook=" + notebookid;
-        this.thenOpen(sharedlink, function () {
-        this.wait(7000);
-        this.echo("Opened the view.html of the published notebook " + title);
-        });
-    });
-
-    casper.wait(15000);
-
     //verify that the published notebook has been loaded
-    casper.then(function () {
-        publishedtitle = functions.notebookname(casper);
+    casper.wait(2000).then(function () {
+        publishedtitle =this.fetchText('#notebook-title');
         this.echo("Published Notebook title : " + publishedtitle);
         this.test.assertEquals(publishedtitle, title, "Confirmed that the view.html of published notebook has been loaded");
     });
 
     //verify that the source code is not visible
-    casper.then(function () {
+    casper.wait(1000).then(function () {
         this.test.assertNotVisible({type: 'css', path: 'div:nth-child(3) > div:nth-child(2) > pre:nth-child(1) > code:nth-child(1)'}, 'Source code not visible');
     });
 
     //open the advanced dropdown and select Show Source option
     functions.open_advanceddiv(casper);
-    casper.then(function () {
+
+    casper.wait(1000).then(function () {
         var z = casper.evaluate(function () {
             $('#show_source').click();
         });
@@ -130,10 +123,9 @@ casper.test.begin("Show Source option in Advanced drop-down link for a published
     });
 
     //verify that source code is now visible
-    casper.then(function () {
+    casper.wait(1000).then(function () {
         this.test.assertVisible({type: 'xpath', path: '/html/body/div[3]/div/div/div/div[1]/div/div[2]/div[1]/div[1]/pre/code'}, 'Source code is now visible since Show source option is clicked');
-    });
-   
+    });   
 
     casper.run(function () {
         test.done();

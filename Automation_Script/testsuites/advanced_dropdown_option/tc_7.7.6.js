@@ -35,14 +35,14 @@ casper.test.begin("Notebook name of published notebook in uneditable form", 5, f
     functions.create_notebook(casper);
 
     //Get notebook title
-    casper.then(function () {
+    casper.wait(2000).then(function () {
         title = functions.notebookname(casper);
         this.echo("New Notebook title : " + title);
         this.wait(3000);
     });
 
     //getting Notebook ID
-    casper.viewport(1024, 768).then(function () {
+    casper.wait(1000).then(function () {
         var temp1 = this.getCurrentUrl();
         notebookid = temp1.substring(41);
         this.echo("The Notebook Id: " + notebookid);
@@ -52,7 +52,7 @@ casper.test.begin("Notebook name of published notebook in uneditable form", 5, f
     functions.open_advanceddiv(casper);
 
     //clicking the checkbox to publish notebook
-    casper.viewport(1024, 768).then(function () {
+    casper.wait(1000).then(function () {
 		this.wait(2000);
         var z = casper.evaluate(function () {
             $('.icon-check-empty').click();
@@ -63,18 +63,15 @@ casper.test.begin("Notebook name of published notebook in uneditable form", 5, f
         this.click("#rcloud-navbar-menu > li:nth-child(7) > a:nth-child(1)");
         console.log('Logging out of RCloud');   
         this.wait(3000);
-    });
+    });   
     
-    casper.wait(1000);
-    
-    casper.viewport(1366, 768).then(function () {
+    casper.wait(1000).then(function () {
         this.click("#main-div > p:nth-child(2) > a:nth-child(2)", "Logged out of Github");
         console.log('Logging out of Github');
         this.wait(3000);
     });
-
-    casper.wait(10000);
-    casper.viewport(1366, 768).then(function () {
+    
+    casper.wait(2000).then(function () {
         this.click(".btn");
         console.log('logged out of Github');
         this.wait(7000);
@@ -82,35 +79,24 @@ casper.test.begin("Notebook name of published notebook in uneditable form", 5, f
     });
 
     //load the view.html of the Published notebook
-    casper.viewport(1366, 768).then(function () {
+    casper.wait(1000).then(function () {
         sharedlink = "http://127.0.0.1:8080/view.html?notebook=" + notebookid;
         this.thenOpen(sharedlink, function () {
         this.wait(2000);
         this.echo("Opened the view.html of the published notebook " + title);
         });
     });
-
-    //load the view.html of the Published notebook
-    casper.viewport(1366, 768).then(function () {
-        sharedlink = "http://127.0.0.1:8080/view.html?notebook=" + notebookid;
-        this.thenOpen(sharedlink, function () {
-        this.wait(7000);
-        this.echo("Opened the view.html of the published notebook " + title);
-        });
-    });
-
-    casper.wait(15000);
-
+   
     //verify that the published notebook has been loaded
-    casper.then(function () {
-        publishedtitle = functions.notebookname(casper);
-        this.echo("Published Notebook title : " + publishedtitle);
+    casper.wait(3000).then(function () {
+        publishedtitle=this.fetchText('#notebook-title');
+        // this.echo("Published Notebook title : " + publishedtitle);
         this.test.assertEquals(publishedtitle, title, "Confirmed that the view.html of published notebook has been loaded");
     });
 
     //verify that notebook title is uneditable
-    casper.then(function () {
-        initialtitle = functions.notebookname(casper);
+    casper.wait(1000).then(function () {
+        initialtitle = this.fetchText('#notebook-title');
         this.echo("Present title of published notebook: " + initialtitle);
         var z = casper.evaluate(function triggerKeyDownEvent() {
             jQuery("#notebook-title").text("change");
@@ -121,12 +107,12 @@ casper.test.begin("Notebook name of published notebook in uneditable form", 5, f
             return true;
         });
         this.reload();
-        this.wait(8000);
+        this.wait(5000);
     });
 
-    casper.then(function () {
-        newtitle = functions.notebookname(casper);
-        this.echo(10000);
+    casper.wait(3000).then(function () {
+        this.wait(2000);
+        newtitle=this.fetchText('#notebook-title');
         this.test.assertEquals(newtitle, initialtitle, "Confirmed that notebook title can't be modified");
     });
 

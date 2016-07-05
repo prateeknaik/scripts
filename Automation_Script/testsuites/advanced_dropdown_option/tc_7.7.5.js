@@ -36,31 +36,37 @@ casper.test.begin("For a published notebook ,run all the cells using 'Run All' o
     functions.create_notebook(casper);
 
     //Get notebook title
-    casper.then(function () {
+    casper.wait(1000).then(function () {
         title = functions.notebookname(casper);
         this.echo("New Notebook title : " + title);
         this.wait(3000);
     });
 
     //getting Notebook ID
-    casper.viewport(1024, 768).then(function () {
+    casper.wait(100).then(function () {
         var temp1 = this.getCurrentUrl();
         notebookid = temp1.substring(41);
         this.echo("The Notebook Id: " + notebookid);
     });
 
-    //add a new cell and execute its contents
-    functions.addnewcell(casper);
-    functions.addcontentstocell(casper,input_code);
+    //add a new cell and execute its contents    
+    casper.wait(1000).then(function(){
+        functions.addnewcell(casper);
+    });
+
+    casper.wait(3000).then(function(){
+        functions.addcontentstocell(casper,input_code);
+    });
+    
 
     //Now clicking on the advanced div
-    casper.then(function(){
+    casper.wait(2000).then(function(){
 		functions.open_advanceddiv(casper);
 		this.echo("Clicking on advance drop down menu");
 	});
     
     //clicking the checkbox to publish notebook
-    casper.viewport(1024, 768).then(function () {
+    casper.wait(1000).then(function () {
 		this.wait(2000);
         var z = casper.evaluate(function () {
             $('.icon-check-empty').click();
@@ -73,16 +79,15 @@ casper.test.begin("For a published notebook ,run all the cells using 'Run All' o
         this.wait(3000);
     });
     
-    casper.wait(1000);
     
-    casper.viewport(1366, 768).then(function () {
+    
+    casper.wait(1000).then(function () {
         this.click("#main-div > p:nth-child(2) > a:nth-child(2)", "Logged out of Github");
         console.log('Logging out of Github');
         this.wait(3000);
     });
 
-    casper.wait(10000);
-    casper.viewport(1366, 768).then(function () {
+    casper.wait(3000).then(function () {
         this.click(".btn");
         console.log('logged out of Github');
         this.wait(7000);
@@ -90,7 +95,7 @@ casper.test.begin("For a published notebook ,run all the cells using 'Run All' o
     });
 
     //load the view.html of the Published notebook
-    casper.viewport(1366, 768).then(function () {
+    casper.wait(1000).then(function () {
         sharedlink = "http://127.0.0.1:8080/view.html?notebook=" + notebookid;
         this.thenOpen(sharedlink, function () {
         this.wait(2000);
@@ -98,27 +103,16 @@ casper.test.begin("For a published notebook ,run all the cells using 'Run All' o
         });
     });
 
-    //load the view.html of the Published notebook
-    casper.viewport(1366, 768).then(function () {
-        sharedlink = "http://127.0.0.1:8080/view.html?notebook=" + notebookid;
-        this.thenOpen(sharedlink, function () {
-        this.wait(7000);
-        this.echo("Opened the view.html of the published notebook " + title);
-        });
-    });
-
-    casper.wait(15000);
-
     //verify that the published notebook has been loaded
-    casper.then(function () {
-        publishedtitle = functions.notebookname(casper);
+    casper.wait(2000).then(function () {
+        publishedtitle=this.fetchText('#notebook-title');
         this.echo("Published Notebook title : " + publishedtitle);
         this.test.assertEquals(publishedtitle, title, "Confirmed that the view.html of published notebook has been loaded");
     });
 
     //Run all the cells and verify that the output divs are visible
     functions.runall(casper);
-    casper.then(function () {
+    casper.wait(2000).then(function () {
         this.test.assertSelectorHasText({type: 'xpath', path: "/html/body/div[3]/div/div/div/div[1]/div/div[2]/div[2]"}, expectedresult,'Cells have been executed successfully');
     });
 

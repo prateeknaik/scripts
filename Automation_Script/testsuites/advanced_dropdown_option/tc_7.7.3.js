@@ -34,7 +34,7 @@ casper.test.begin("Load notebook as Anonymous User", 5, function suite(test) {
     functions.create_notebook(casper);
 
     //Get notebook title
-    casper.then(function () {
+    casper.wait(1000).then(function () {
         title = functions.notebookname(casper);
         this.echo("New Notebook title : " + title);
         this.wait(3000);
@@ -51,7 +51,7 @@ casper.test.begin("Load notebook as Anonymous User", 5, function suite(test) {
     functions.open_advanceddiv(casper);
 
     //clicking the checkbox to publish notebook
-    casper.viewport(1024, 768).then(function () {
+    casper.wait(1000).then(function () {
 		this.wait(2000);
         var z = casper.evaluate(function () {
             $('.icon-check-empty').click();
@@ -64,16 +64,15 @@ casper.test.begin("Load notebook as Anonymous User", 5, function suite(test) {
         this.wait(3000);
     });
 	
-	casper.wait(1000);
-    
-    casper.viewport(1366, 768).then(function () {
+	   
+    casper.wait(1000).then(function () {
         this.click("#main-div > p:nth-child(2) > a:nth-child(2)", "Logged out of Github");
         console.log('Logging out of Github');
         this.wait(3000);
     });
 
-    casper.wait(10000);
-    casper.viewport(1366, 768).then(function () {
+    
+    casper.wait(2000).then(function () {
         this.click(".btn");
         console.log('logged out of Github');
         this.wait(7000);
@@ -81,19 +80,17 @@ casper.test.begin("Load notebook as Anonymous User", 5, function suite(test) {
     });
 
     //load the view.html of the Published notebook
-    casper.viewport(1366, 768).then(function () {
+    casper.wait(1000).then(function () {
         sharedlink = "http://127.0.0.1:8080/view.html?notebook=" + notebookid;
         this.thenOpen(sharedlink, function () {
         this.wait(2000);
         this.echo("Opened the view.html of the published notebook " + title);
         });
     });
-
-    casper.wait(5000);
-    
+   
     //verify that the published notebook has been loaded
-    casper.then(function () {
-        publishedtitle = functions.notebookname(casper);
+    casper.wait(3000).then(function () {
+        publishedtitle=this.fetchText('#notebook-title');
         this.echo("Published Notebook title : " + publishedtitle);
         this.test.assertEquals(publishedtitle, title, "Confirmed that the view.html of published notebook has been loaded");
         this.test.assertTextExists("anonymous user", "Confirmed that Notebook loaded under anonymous user");

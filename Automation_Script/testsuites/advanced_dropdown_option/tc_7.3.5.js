@@ -45,7 +45,7 @@ casper.test.begin("Naming of the Imported Notebook in a folder", 8, function sui
 	
 	functions.fork(casper);
 	
-	casper.then(function(){
+	casper.wait(2000).then(function(){
 		this.wait(2000);
 		var z = casper.evaluate(function triggerKeyDownEvent() {
             jQuery("#notebook-title").text("TESTING/NOTEBOOK_NAME_CHANGED");
