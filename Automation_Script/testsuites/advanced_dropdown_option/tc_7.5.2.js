@@ -14,10 +14,15 @@ casper.test.begin("Import Notebook from wrong file(non-JSON file)", 4, function 
     var github_password = casper.cli.options.password;
     var rcloud_url = casper.cli.options.url;
     var functions = require(fs.absolute('basicfunctions'));
-    var fileName = '/home/prateek/FileUpload/PHONE.csv'; // File path directory
+    var fileName = 'SampleFiles/PHONE.csv'; // File path directory
     var URL, counter, i, Notebook;
     var title= "iris";
     var error = "Invalid notebook format: couldn't parse JSON";
+    var system = require('system')
+    var currentFile = require('system').args[4];
+    var curFilePath = fs.absolute(currentFile);
+    var curFilePath = curFilePath.replace(currentFile, '');
+    fileName = curFilePath + fileName;
 
     casper.start(rcloud_url, function () {
         functions.inject_jquery(casper);
@@ -36,7 +41,7 @@ casper.test.begin("Import Notebook from wrong file(non-JSON file)", 4, function 
         functions.validation(casper);
     });
 
-    casper.then(function (){
+    casper.wait(1000).then(function (){
         URL = (this.getCurrentUrl());
     })
 
@@ -45,15 +50,15 @@ casper.test.begin("Import Notebook from wrong file(non-JSON file)", 4, function 
         this.wait(5000);
     });
 
-    casper.then(function () {
+    casper.wait(3000).then(function () {
 
-        casper.then(function () {
+        this.then(function () {
             functions.open_advanceddiv(casper);
             this.click(x(".//*[@id='import_notebook_gist']"));
             this.wait(3000);
         });
 
-        casper.then(function () {
+        this.then(function () {
             this.evaluate(function (fileName) {
                 __utils__.findOne('input[id="notebook-file-upload"]').setAttribute('value', fileName)
             }, {fileName: fileName});
@@ -61,17 +66,15 @@ casper.test.begin("Import Notebook from wrong file(non-JSON file)", 4, function 
             console.log('Selecting a file');
         });
 
-        casper.wait(5000);
+        this.wait(5000);
     });
 
-    casper.then(function () {
+    casper.wait(2000).then(function () {
         var temp = this.fetchText(x(".//*[@id='import-notebook-file-dialog']/div/div/div[2]/p[2]/span"));
         this.echo("Following message is displayed when we choose a wrong file other than '.gist' format: " + temp);
         this.test.assertEquals(temp, error,"Unable to import other than .gist files)")
         this.wait(3000);
     });
-
-    casper.wait(5000);
 
     casper.run(function () {
         test.done();

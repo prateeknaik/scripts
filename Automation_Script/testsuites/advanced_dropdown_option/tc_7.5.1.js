@@ -15,9 +15,14 @@ casper.test.begin("Import Notebook from File", 4, function suite(test) {
     var github_password = casper.cli.options.password;
     var rcloud_url = casper.cli.options.url;
     var functions = require(fs.absolute('basicfunctions'));
-    var fileName = '/home/prateek/FileUpload/RCAPiFrameErrorTest.gist'; // File path directory
-    var URL, counter, i, Notebook;
-    var title= "RCAPiFrameErrorTest";
+    var fileName = 'SampleFiles/ggplot-Multiplot.gist'; // File path directory
+    var URL, counter, i,v, Notebook,flag;
+    var title= "ggplot-Multiplot";
+    var system = require('system')
+    var currentFile = require('system').args[4];
+    var curFilePath = fs.absolute(currentFile);
+    var curFilePath = curFilePath.replace(currentFile, '');
+    fileName = curFilePath + fileName;
 
     casper.start(rcloud_url, function () {
         functions.inject_jquery(casper);
@@ -44,7 +49,7 @@ casper.test.begin("Import Notebook from File", 4, function suite(test) {
         this.wait(5000);
     });
 
-    casper.then(function () {
+    casper.wait(2000).then(function () {
 
         casper.then(function () {
             functions.open_advanceddiv(casper);
@@ -63,7 +68,7 @@ casper.test.begin("Import Notebook from File", 4, function suite(test) {
         casper.wait(5000);
     });
 
-    casper.then(function () {
+    casper.wait(2000).then(function () {
         var temp = this.fetchText("div.container:nth-child(2) > p:nth-child(3) > span:nth-child(1) > input:nth-child(1)");
         this.echo(temp);
         var temp = this.fetchText("#notebook-file-upload");
@@ -71,35 +76,51 @@ casper.test.begin("Import Notebook from File", 4, function suite(test) {
         this.wait(3000);
     });
 
-    casper.wait(5000);
-
     casper.then(function (){
-        var flag = 0;//flag variable to test if the Notebook was found in the div
-        var counter = 0;
-            do
-            {
-                counter = counter + 1;
-                this.wait(2000);
-            } 
-            while (this.visible(x("/html/body/div[3]/div/div[1]/div[1]/div/div/div[1]/div[2]/div/div/ul/li[1]/ul/li[1]/ul/li[" + counter + "]/div/span[1]")));
-            counter = counter - 1;
-            for (i = 1; i <= counter; i++) {
-                this.wait(5000);
-                Notebook = this.fetchText(x("/html/body/div[3]/div/div[1]/div[1]/div/div/div[1]/div[2]/div/div/ul/li[1]/ul/li[1]/ul/li[" + i + "]/div/span[1]"))
-                this.echo(Notebook);
-                if (Notebook == title) {
-                    flag = 1;
-                    break;
-                }
-            }//for closes
-            if (flag == 1) {
-                this.test.assertEquals(flag, 1, "Import Notebook from File, Notebook with title " + title + " is PRESENT under Notebooks tree");
+        flag = 0;//to check if notebook has been found
+        var counter = 0;//counts the number of notebooks
+        do
+        {
+            counter = counter + 1;
+            this.wait(2000); 
+        } while (this.visible({ type:'css', path:'ul.jqtree_common:nth-child(1) > li:nth-child(1) > ul:nth-child(2) > li:nth-child(1) > ul:nth-child(2) > li:nth-child('+counter+') > div:nth-child(1)'}));
+        counter = counter - 1;
+        for (v = 1; v <= counter; v++) {
+            this.wait(2000);
+            var temp = this.fetchText({type:'css', path: 'ul.jqtree_common:nth-child(1) > li:nth-child(1) > ul:nth-child(2) > li:nth-child(1) > ul:nth-child(2) > li:nth-child('+v+') > div:nth-child(1)'});
+            temp=temp.substring(0,16);
+            // this.echo(temp)
+            if (temp == title) {
+                flag = 1;
+                break;
             }
-            else {
-                this.test.assertEquals(flag, 0, "Import Notebook from File, Notebook with title " + title + " is ABSENT under Notebooks tree");
-            }
-    })
+        }//for closes
+        this.test.assertEquals(flag, 1, "Located the newly created notebook");        
+    });
 
+    casper.then(function(){
+    	if (flag == 1) {
+            this.test.assertEquals(flag, 1, "Import Notebook from File, Notebook with title " + title + " is PRESENT under Notebooks tree");
+        }
+        else {
+            this.test.assertEquals(flag, 0, "Import Notebook from File, Notebook with title " + title + " is ABSENT under Notebooks tree");
+        }
+        
+		this.then(function (){
+        	this.thenOpen(URL);
+        	this.wait(2000);
+    	});
+
+        //deleting the notebook
+        this.wait(3000).then(function(){
+            this.wait(3000);
+            this.mouse.move('ul.jqtree_common:nth-child(1) > li:nth-child(1) > ul:nth-child(2) > li:nth-child(1) > ul:nth-child(2) > li:nth-child(' + v + ') > div:nth-child(1)');
+            this.waitUntilVisible('ul.jqtree_common:nth-child(1) > li:nth-child(1) > ul:nth-child(2) > li:nth-child(1) > ul:nth-child(2) > li:nth-child(' + v + ') > div:nth-child(1) > span:nth-child(2) > span:nth-child(3) > span:nth-child(1) > span:nth-child(5) > i:nth-child(1)', function () {
+            	this.click('ul.jqtree_common:nth-child(1) > li:nth-child(1) > ul:nth-child(2) > li:nth-child(1) > ul:nth-child(2) > li:nth-child(' + v + ') > div:nth-child(1) > span:nth-child(2) > span:nth-child(3) > span:nth-child(1) > span:nth-child(5) > i:nth-child(1)');
+        	});
+        });
+    });
+    
     casper.run(function () {
         test.done();
     });
