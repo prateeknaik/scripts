@@ -2,8 +2,8 @@
  Author: Prateek
  Description: This is a casperjs automated test script for showing that,An empty file cannot be uploaded to a notebook
  */
-//Begin Tests
 
+//Begin Tests
 casper.test.begin("An empty file cannot be uploaded to a notebook", 3, function suite(test) {
 
     var x = require('casper').selectXPath;
@@ -14,9 +14,9 @@ casper.test.begin("An empty file cannot be uploaded to a notebook", 3, function 
     var fileName = 'SampleFiles/EmptyText.txt'; // File path directory     
     var system = require('system')
     var currentFile = require('system').args[4];
-    var curFilePath = fs.absolute(currentFile); 
-    var curFilePath = curFilePath.replace(currentFile, '');   
-    fileName=curFilePath+fileName;
+    var curFilePath = fs.absolute(currentFile);
+    var curFilePath = curFilePath.replace(currentFile, '');
+    fileName = curFilePath + fileName;
 
     casper.start(rcloud_url, function () {
         functions.inject_jquery(casper);
@@ -35,7 +35,7 @@ casper.test.begin("An empty file cannot be uploaded to a notebook", 3, function 
     });
 
     //Verifying whether file upload div is open or not
-    casper.then(function () {
+    casper.wait(2000).then(function () {
         if (this.visible(x(".//*[@id='file']"))) {
             this.echo('File Upload pane div is open');
             this.wait(5000);
@@ -65,7 +65,7 @@ casper.test.begin("An empty file cannot be uploaded to a notebook", 3, function 
         });
     });
 
-    casper.then(function () {
+    casper.wait(2000).then(function () {
         this.wait(5000);
         this.waitUntilVisible(x('//*[contains(text(), "(unexpected) rcloud.update.notebook: Validation Failed (422)")]'), function then() {
             console.log("Empty file cannot be uploaded to assets");

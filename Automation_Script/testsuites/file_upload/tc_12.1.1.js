@@ -2,8 +2,8 @@
  Author: Prateek
  Description: This is a casperjs automated test script for showing that,Upload a new file in Rcloud which gets saved in the home directory of the user
  */
-//Begin Tests
 
+//Begin Tests
 casper.test.begin("Upload a new File", 3, function suite(test) {
 
     var x = require('casper').selectXPath;
@@ -11,12 +11,12 @@ casper.test.begin("Upload a new File", 3, function suite(test) {
     var github_password = casper.cli.options.password;
     var rcloud_url = casper.cli.options.url;
     var functions = require(fs.absolute('basicfunctions'));
-    var fileName = 'SampleFiles/PHONE11.csv'; // File path directory 
+    var fileName = 'SampleFiles/PHONE.csv'; // File path directory
     var system = require('system')
     var currentFile = require('system').args[4];
-    var curFilePath = fs.absolute(currentFile); 
-    var curFilePath = curFilePath.replace(currentFile, '');   
-    fileName=curFilePath+fileName;    
+    var curFilePath = fs.absolute(currentFile);
+    var curFilePath = curFilePath.replace(currentFile, '');
+    fileName = curFilePath + fileName;
 
     casper.start(rcloud_url, function () {
         functions.inject_jquery(casper);

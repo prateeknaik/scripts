@@ -2,19 +2,17 @@
  Author: Prateek
  Description: This is a casperjs automated test script for showing that,After a file is uploaded to a notebook, it will be present in the Assets div
  */
-//Begin Tests
 
+//Begin Tests
 casper.test.begin("Can't upload file to Unforked Notebook", 5, function suite(test) {
     var x = require('casper').selectXPath;
     var github_username = casper.cli.options.username;
     var github_password = casper.cli.options.password;
     var rcloud_url = casper.cli.options.url;
     var functions = require(fs.absolute('basicfunctions'));
-    var new_username = 'djoky';
+    var new_username = 'InsertDelete';
     var new_user_password = 'musigma12';
-    var notebook_id;
-    var URL ;
-    var before_forking;
+    var notebook_id, URL, before_forking;
     var res1 = 'disabled';// to compare with res
 
     casper.start(rcloud_url, function () {
@@ -24,10 +22,6 @@ casper.test.begin("Can't upload file to Unforked Notebook", 5, function suite(te
 
     casper.viewport(1024, 768).then(function () {
         functions.login(casper, github_username, github_password, rcloud_url);
-    });
-
-    casper.waitUntilVisible('#run-notebook', function () {
-        this.echo('waiting for page to open completely');
     });
 
     casper.viewport(1024, 768).then(function () {
@@ -77,10 +71,8 @@ casper.test.begin("Can't upload file to Unforked Notebook", 5, function suite(te
         this.echo("The url after logging out of Github : " + this.getCurrentUrl());
     });
 
-    casper.wait(3000);
-
     //Login to RCloud with new user
-    casper.then(function () {
+    casper.wait(4000).then(function () {
         this.thenOpen('http://127.0.0.1:8080/login.R');
         this.wait(13000);
         functions.login(casper, new_username, new_user_password, rcloud_url);
@@ -91,7 +83,7 @@ casper.test.begin("Can't upload file to Unforked Notebook", 5, function suite(te
         this.wait(8000);
     });
 
-    casper.then(function () {
+    casper.wait(2000).then(function () {
         console.log('Checking whether user is able to upload files to notebook or not by fetching element info')
         var temp = this.getElementInfo('#upload-to-notebook').tag;
         var res = temp.substring(17, 25);

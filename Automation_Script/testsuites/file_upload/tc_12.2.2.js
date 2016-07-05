@@ -3,8 +3,8 @@
  Description: This is a casperjs automated test script for showing that,Overwrite an already existing file i.e, 
  some file with the same name is already uploaded with respect to that particular Notebook
  */
-//Begin Tests
 
+//Begin Tests
 casper.test.begin("Overwrite a File to Notebook", 5, function suite(test) {
 
     var x = require('casper').selectXPath;
@@ -15,9 +15,9 @@ casper.test.begin("Overwrite a File to Notebook", 5, function suite(test) {
     var fileName = 'SampleFiles/PHONE.csv'; // File path directory  
     var system = require('system')
     var currentFile = require('system').args[4];
-    var curFilePath = fs.absolute(currentFile); 
-    var curFilePath = curFilePath.replace(currentFile, '');   
-    fileName=curFilePath+fileName;   
+    var curFilePath = fs.absolute(currentFile);
+    var curFilePath = curFilePath.replace(currentFile, '');
+    fileName = curFilePath + fileName;
 
     casper.start(rcloud_url, function () {
         functions.inject_jquery(casper);
@@ -38,7 +38,7 @@ casper.test.begin("Overwrite a File to Notebook", 5, function suite(test) {
     functions.create_notebook(casper);
 
     //Verifying whether file upload div is open or not
-    casper.then(function () {
+    casper.wait(2000).then(function () {
         if (this.visible(x(".//*[@id='file']"))) {
             this.echo('File Upload pane div is open');
             this.wait(5000);
@@ -52,7 +52,7 @@ casper.test.begin("Overwrite a File to Notebook", 5, function suite(test) {
     });
 
     //File upload
-    casper.then(function () {
+    casper.wait(2000).then(function () {
         this.evaluate(function (fileName) {
             __utils__.findOne('input[type="file"]').setAttribute('value', fileName)
         }, {fileName: fileName});
@@ -69,9 +69,7 @@ casper.test.begin("Overwrite a File to Notebook", 5, function suite(test) {
         });
     });
 
-    casper.wait(8000);
-
-    casper.then(function () {
+    casper.wait(10000).then(function () {
         this.waitUntilVisible(x('//*[contains(text(), "added")]'), function then() {
             console.log("File has been uploaded");
         });
@@ -79,19 +77,16 @@ casper.test.begin("Overwrite a File to Notebook", 5, function suite(test) {
     });
 
     //Uploading file again
-    casper.then(function () {
+    casper.wait(2000).then(function () {
         this.wait(5000, function () {
             this.click(x(".//*[@id='upload-submit']"));
             console.log("Clicking on Submit icon again");
         });
     });
 
-    casper.wait(4000);
-
-    casper.then(function () {
+    casper.wait(5000).then(function () {
         this.test.assertSelectorHasText(x(".//*[@id='file-upload-results']/div[2]"), 'replaced', "File has been replaced")
-    })
-
+    });
 
     casper.run(function () {
         test.done();

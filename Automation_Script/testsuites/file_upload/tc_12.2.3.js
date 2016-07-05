@@ -2,8 +2,8 @@
  Author: Prateek
  Description: This is a casperjs automated test script for showing that,After a file is uploaded to a notebook, it will be present in the Assets div
  */
-//Begin Tests
 
+//Begin Tests
 casper.test.begin("Upload file will be visible in assets div", 4, function suite(test) {
 
     var x = require('casper').selectXPath;
@@ -14,9 +14,9 @@ casper.test.begin("Upload file will be visible in assets div", 4, function suite
     var fileName = 'SampleFiles/PHONE.csv'; // File path directory     
     var system = require('system')
     var currentFile = require('system').args[4];
-    var curFilePath = fs.absolute(currentFile); 
-    var curFilePath = curFilePath.replace(currentFile, '');   
-    fileName=curFilePath+fileName;
+    var curFilePath = fs.absolute(currentFile);
+    var curFilePath = curFilePath.replace(currentFile, '');
+    fileName = curFilePath + fileName;
 
     casper.start(rcloud_url, function () {
         functions.inject_jquery(casper);
@@ -37,7 +37,7 @@ casper.test.begin("Upload file will be visible in assets div", 4, function suite
     functions.create_notebook(casper);
 
     //Verifying whether file upload div is open or not
-    casper.then(function () {
+    casper.wait(2000).then(function () {
         if (this.visible(x(".//*[@id='file']"))) {
             this.echo('File Upload pane div is open');
             this.wait(5000);
@@ -50,7 +50,7 @@ casper.test.begin("Upload file will be visible in assets div", 4, function suite
         }
     });
 
-    casper.then(function () {
+    casper.wait(2000).then(function () {
         this.evaluate(function (fileName) {
             __utils__.findOne('input[type="file"]').setAttribute('value', fileName)
         }, {fileName: fileName});
@@ -58,7 +58,7 @@ casper.test.begin("Upload file will be visible in assets div", 4, function suite
         console.log('Selecting a file');
     });
 
-    casper.then(function () {
+    casper.wait(2000).then(function () {
         this.wait(5000, function () {
             this.click(x(".//*[@id='upload-to-notebook']"));
             console.log("Clicking on Upload to notebook check box");
@@ -67,9 +67,7 @@ casper.test.begin("Upload file will be visible in assets div", 4, function suite
         });
     });
 
-    casper.wait(8000);
-
-    casper.then(function () {
+    casper.wait(10000).then(function () {
         this.waitUntilVisible(x('//*[contains(text(), "added")]'), function then() {
             console.log("File has been uploaded");
         });
