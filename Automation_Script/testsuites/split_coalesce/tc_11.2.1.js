@@ -15,7 +15,7 @@ casper.test.begin("No Coalesce Cell option for the topmost cell", 5, function su
     var functions = require(fs.absolute('basicfunctions'));
 
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
     casper.wait(10000);
 
@@ -27,14 +27,14 @@ casper.test.begin("No Coalesce Cell option for the topmost cell", 5, function su
         this.wait(9000);
         console.log("validating that the Main page has got loaded properly by detecting if some of its elements are visible. Here we are checking for Shareable Link and Logout options");
         functions.validation(casper);
-
     });
+
     //Add new notebook
     casper.then(function(){
 		functions.create_notebook(casper); 
 		this.wait(5000);
-		
     });
+
     //Add new cell
     casper.then(function () {
         functions.addnewcell(casper);

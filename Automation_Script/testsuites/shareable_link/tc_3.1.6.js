@@ -2,7 +2,7 @@
  Author: Arko
  Description:    This is a casperjs automated test script for showing that on clicking the "Run All" option present on top left corner of the main.html
  page, all the cells should be executed
-*/
+ */
 
 //Begin Tests
 casper.test.begin(" Run all the cells using 'Run All' option", 9, function suite(test) {
@@ -14,7 +14,7 @@ casper.test.begin(" Run all the cells using 'Run All' option", 9, function suite
     var functions = require(fs.absolute('basicfunctions'));
     var viewhtmlurl = "http://127.0.0.1:8080/view.html?notebook=3b632a2214f623347810"//view.html link for a notebook containing some codes
     var notebookid = '3b632a2214f623347810';
-    
+
     casper.start(rcloud_url, function () {
         functions.inject_jquery(casper);
     });
@@ -32,13 +32,12 @@ casper.test.begin(" Run all the cells using 'Run All' option", 9, function suite
         functions.validation(casper);
         this.wait(4000);
     });
-    
-    //open the view.html link for a notebook
+
     //open the view.html link for a notebook
     casper.viewport(1366, 768).then(function () {
         this.thenOpen('http://127.0.0.1:8080/view.html?notebook=' + notebookid);
         this.wait(8000)
-        this.waitForSelector(".r-result-div > pre:nth-child(1) > code:nth-child(1)", function (){
+        this.waitForSelector(".r-result-div > pre:nth-child(1) > code:nth-child(1)", function () {
             this.test.assertExists('#edit-notebook > i:nth-child(1)', 'the element Edit icon exists. Hence page has got loaded properly');
         });
     });
@@ -61,8 +60,8 @@ casper.test.begin(" Run all the cells using 'Run All' option", 9, function suite
     //validating that source code and output is visible after Executing the cells in Runall
     functions.runall(casper);
     casper.viewport(1024, 768).then(function () {
-        this.test.assertExists({type: 'xpath', path: "/html/body/div[3]/div/div[2]/div/div[1]/div/div[3]/div[1]/div[1]/pre/code"}, "The source code exists");
-        this.test.assertExists({type: 'xpath', path: '/html/body/div[3]/div/div[2]/div/div[1]/div/div[3]/div[2]/pre/code'}, "The output is also present");
+        this.test.assertExists(x(".//*[@id='part1.R']/div[3]/div[1]/div[1]/pre/code"), "The source code exists");
+        this.test.assertExists(x(".//*[@id='part1.R']/div[3]/div[2]/pre/code"), "The output is also present");
     });
 
     casper.run(function () {

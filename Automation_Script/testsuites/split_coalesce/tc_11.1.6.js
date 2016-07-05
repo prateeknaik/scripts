@@ -1,11 +1,11 @@
 /* 
-Author: Prateek
-Description:This is a casperjs automated test script for showing that if we use split cells to split a cell into two and
-navigate to another notebook then back. The cells should remain split and in the same order as before navigating away.
-*/
-    
+ Author: Prateek
+ Description:This is a casperjs automated test script for showing that if we use split cells to split a cell into two and
+ navigate to another notebook then back. The cells should remain split and in the same order as before navigating away.
+ */
+
 //Begin Tests
-    
+
 casper.test.begin("Split a cell and switch to another notebook", 6, function suite(test) {
 
     var x = require('casper').selectXPath;
@@ -18,7 +18,7 @@ casper.test.begin("Split a cell and switch to another notebook", 6, function sui
     var notebookid;
 
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
     casper.wait(10000);
 
@@ -32,7 +32,7 @@ casper.test.begin("Split a cell and switch to another notebook", 6, function sui
         functions.validation(casper);
     });
     //Add new notebook
-    casper.then(function(){
+    casper.then(function () {
         functions.create_notebook(casper);
         this.wait(5000);
     });
@@ -44,21 +44,21 @@ casper.test.begin("Split a cell and switch to another notebook", 6, function sui
         this.echo("The Notebook Id: " + notebookid);
     });
 
-	// Add contents to cell
-    casper.then(function(){
+    // Add contents to cell
+    casper.then(function () {
         functions.addnewcell(casper);
-        functions.addcontentstocell(casper,input_code1);
+        functions.addcontentstocell(casper, input_code1);
     });
 
     //adding new cell
-    casper.then(function(){
+    casper.then(function () {
         this.click(x(".//*[@id='prompt-area']/div[1]/div/span/i"));
         console.log("creating one more cell");
     });
 
     // Add contents to cell
-    casper.wait(3000).then(function(){
-        this.sendKeys(x(".//*[@id='part2.R']/div[3]/div[1]/div[2]/div/div[2]/div"), input_code2 );
+    casper.wait(3000).then(function () {
+        this.sendKeys(x(".//*[@id='part2.R']/div[3]/div[1]/div[2]/div/div[2]/div"), input_code2);
         this.echo("adding contents to second cell");
     });
 
@@ -90,27 +90,25 @@ casper.test.begin("Split a cell and switch to another notebook", 6, function sui
     });
 
     //Add new notebook
-    casper.then(function(){
+    casper.then(function () {
         functions.create_notebook(casper);
         this.wait(5000);
     });
 
     //Going back to the previous notebook
-    casper.viewport(1024, 768).then(function(){
+    casper.viewport(1024, 768).then(function () {
         this.open('http://127.0.0.1:8080/edit.html?notebook=' + notebookid).then(function () {
             this.wait(10000);
             this.echo('Switching back to the previous notebook');
         });
     });
 	
-	casper.wait(5000);
-	
     //checking for split cell		
-    casper.viewport(1024, 768).then(function(){
-		this.wait(5000)
+    casper.wait(6000).viewport(1024, 768).then(function () {
+        this.wait(5000)
         this.echo('verifying that the cells are still in split mode ');
         this.wait(3000);
-        this.test.assertSelectorHasText({ type :  'xpath' , path : '/html/body/div[3]/div/div[2]/div/div[1]/div[2]/div[3]/div[1]/div[1]/pre/code'},input_code2,'Cells will be splitted, even after switching back from another notebook');
+        this.test.assertSelectorHasText(x(".//*[@id='part2.R']/div[3]/div[1]/div[1]/pre/code"), input_code2, 'Cells will be splitted, even after switching back from another notebook');
     });
 
     casper.run(function () {

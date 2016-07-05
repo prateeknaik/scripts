@@ -6,7 +6,7 @@
  */
 
 //Test begins
-casper.test.begin(" Checking prompt window present or not when check box is selected", 5, function suite(test) {
+casper.test.begin(" Checking prompt window present or not when check box is selected", 6, function suite(test) {
 
     var x = require('casper').selectXPath;
     var github_username = casper.cli.options.username;
@@ -14,9 +14,9 @@ casper.test.begin(" Checking prompt window present or not when check box is sele
     var rcloud_url = casper.cli.options.url;
     var functions = require(fs.absolute('basicfunctions'));
     var i;
-    
+
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
     casper.wait(10000);
 
@@ -29,48 +29,54 @@ casper.test.begin(" Checking prompt window present or not when check box is sele
         console.log("validating that the Main page has got loaded properly by detecting if some of its elements are visible. Here we are checking for Shareable Link and Logout options");
         functions.validation(casper);
     });
-    
+
     //Checking for command propmt cell
-    casper.then(function(){
-		if (this.test.assertExists({type:'xpath', path:".//*[@id='command-prompt']/div[2]/div"},'Command prompt is exists'))
-		{
-			console.log("Command propmt is visible");
-		}else
-		{
-			console.log("command propmt is not visible so clicking on setting div");
-		}
-	});
-    
+    casper.then(function () {
+        if (this.test.assertExists(x(".//*[@id='command-prompt']/div[2]/div"), 'Command prompt is exists')) {
+            console.log("Command propmt is visible");
+        } else {
+            console.log("command propmt is not visible so clicking on setting div");
+        }
+    });
+
     //Settings div is open or not
-    casper.then(function(){
-		if (this.visible('.form-control-ext')) {
-                console.log('Settings div is already opened');
-            }
+    casper.then(function () {
+        if (this.visible('.form-control-ext')) {
+            console.log('Settings div is already opened');
+        }
         else {
-                var z = casper.evaluate(function () {
-                    $(' .panel-heading').click();
-                });
-                this.echo("Opened Settings div");
-            }
-	});
-		
-	casper.wait(3000);
-	
-	casper.then(function(){
-		this.click({type:'xpath', path: '/html/body/div[3]/div/div[1]/div[1]/div/div/div[3]/div[2]/div/div/div/div[1]/label/span'});
-		this.wait(3000);
-		this.echo("Clicking on show command propmt checkbox to uncheck it");
-		this.click({type:'xpath', path: '/html/body/div[3]/div/div[1]/div[1]/div/div/div[3]/div[2]/div/div/div/div[1]/label/span'});
-		this.echo("Clicking on show command propmt checkbox");
-		this.wait(8000);
-	});
-	
-	casper.then(function(){
-		(this.test.assertExists('#command-prompt > div:nth-child(3) > div:nth-child(1)'),'Command prompt is exists');
-		this.echo('command propmt is visible');
-	});
-				
-	casper.run(function () {
+            var z = casper.evaluate(function () {
+                $(' .panel-heading').click();
+            });
+            this.echo("Opened Settings div");
+        }
+    });
+
+    casper.wait(3000);
+
+    casper.then(function () {
+        this.click(x(".//*[@id='settings-body']/div[1]/label/input"));
+        this.wait(3000);
+        this.echo("Clicking on show command propmt checkbox to uncheck it");
+    });
+
+    casper.then(function () {
+        this.test.assertNotVisible(x(".//*[@id='command-prompt']/div[2]/div"));
+        console.log("{rompt isnot visible");
+    });
+
+    casper.then(function () {
+        this.click(x(".//*[@id='settings-body']/div[1]/label/input"));
+        this.echo("Clicking on show command propmt checkbox");
+        this.wait(8000);
+    });
+
+    casper.then(function () {
+        (this.test.assertExists('#command-prompt > div:nth-child(3) > div:nth-child(1)'), 'Command prompt is exists');
+        this.echo('command propmt is visible');
+    });
+
+    casper.run(function () {
         test.done();
     });
 });

@@ -30,12 +30,12 @@ casper.test.begin(" Make Notebook Editable in the view.html", 9, function suite(
         functions.validation(casper);
         this.wait(4000);
     });
-    
+
     functions.create_notebook(casper);
-    
+
     functions.addnewcell(casper);
-    
-    functions.addcontentstocell(casper,'"Welcome to RCloud"');
+
+    functions.addcontentstocell(casper, '"Welcome to RCloud"');
 
     //getting Notebook ID
     casper.viewport(1024, 768).then(function () {
@@ -51,13 +51,13 @@ casper.test.begin(" Make Notebook Editable in the view.html", 9, function suite(
         this.then(function () {
             this.thenOpen('http://127.0.0.1:8080/view.html?notebook=' + notebookid);
             this.wait(8000)
-            this.waitForSelector(".r-result-div > pre:nth-child(1) > code:nth-child(1)", function (){
+            this.waitForSelector(x(".//*[@id='part1.R']/div[2]/div[2]/pre/code"), function () {
                 this.test.assertExists('#edit-notebook > i:nth-child(1)', 'the element Edit icon exists. Hence page has got loaded properly');
             });
-            
-         });
+
+        });
     });
-    
+
     //clicking on the Edit icon and verifying if the main.html page opens
     casper.viewport(1024, 768).then(function () {
         var z = casper.evaluate(function () {
@@ -71,7 +71,7 @@ casper.test.begin(" Make Notebook Editable in the view.html", 9, function suite(
 
     //validating that only source code is visible and not the output
     casper.viewport(1024, 768).then(function () {
-        this.test.assertDoesntExist('r-result-div','output code is not present');
+        this.test.assertDoesntExist('r-result-div', 'output code is not present');
     });
 
     casper.run(function () {

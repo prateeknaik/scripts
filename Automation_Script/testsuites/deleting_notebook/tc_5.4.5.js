@@ -40,16 +40,16 @@ casper.test.begin("Delete notebook which is not loaded and unstarred", 5, functi
     casper.then(function () {
         initial_title = functions.notebookname(casper);
         this.echo("New Notebook title : " + initial_title);
-        this.wait(3000);        
+        this.wait(3000);
     });
 
-    casper.wait(1000).then(function(){
-        initial_title=this.fetchText('.jqtree-selected > div:nth-child(1)');
+    casper.wait(1000).then(function () {
+        initial_title = this.fetchText('.jqtree-selected > div:nth-child(1)');
         // this.echo(initial_title);
         functions.checkstarred(casper);
 
-    });    
-    
+    });
+
     //Creating another New notebook
     functions.create_notebook(casper);
 
@@ -67,13 +67,19 @@ casper.test.begin("Delete notebook which is not loaded and unstarred", 5, functi
         do
         {
             counter = counter + 1;
-            this.wait(2000); 
-        } while (this.visible({ type:'css', path:'ul.jqtree_common:nth-child(1) > li:nth-child(1) > ul:nth-child(2) > li:nth-child(1) > ul:nth-child(2) > li:nth-child('+counter+') > div:nth-child(1)'}));
+            this.wait(2000);
+        } while (this.visible({
+            type: 'css',
+            path: 'ul.jqtree_common:nth-child(1) > li:nth-child(1) > ul:nth-child(2) > li:nth-child(1) > ul:nth-child(2) > li:nth-child(' + counter + ') > div:nth-child(1)'
+        }));
         counter = counter - 1;
         for (v = 1; v <= counter; v++) {
             this.wait(2000);
-            var temp = this.fetchText({type:'css', path: 'ul.jqtree_common:nth-child(1) > li:nth-child(1) > ul:nth-child(2) > li:nth-child(1) > ul:nth-child(2) > li:nth-child('+v+') > div:nth-child(1)'});
-            
+            var temp = this.fetchText({
+                type: 'css',
+                path: 'ul.jqtree_common:nth-child(1) > li:nth-child(1) > ul:nth-child(2) > li:nth-child(1) > ul:nth-child(2) > li:nth-child(' + v + ') > div:nth-child(1)'
+            });
+
             if (temp == initial_title) {
                 flag = 1;
                 break;
@@ -81,17 +87,17 @@ casper.test.begin("Delete notebook which is not loaded and unstarred", 5, functi
         }//for closes
         this.test.assertEquals(flag, 1, "Located the newly created notebook");
     });
-        //deleting the notebook
-        casper.then(function(){
-            this.wait(3000);
-            this.mouse.move('ul.jqtree_common:nth-child(1) > li:nth-child(1) > ul:nth-child(2) > li:nth-child(1) > ul:nth-child(2) > li:nth-child(' + v + ') > div:nth-child(1)');
-            this.waitUntilVisible('ul.jqtree_common:nth-child(1) > li:nth-child(1) > ul:nth-child(2) > li:nth-child(1) > ul:nth-child(2) > li:nth-child(' + v + ') > div:nth-child(1) > span:nth-child(2) > span:nth-child(3) > span:nth-child(1) > span:nth-child(5) > i:nth-child(1)', function () {
+    //deleting the notebook
+    casper.then(function () {
+        this.wait(3000);
+        this.mouse.move('ul.jqtree_common:nth-child(1) > li:nth-child(1) > ul:nth-child(2) > li:nth-child(1) > ul:nth-child(2) > li:nth-child(' + v + ') > div:nth-child(1)');
+        this.waitUntilVisible('ul.jqtree_common:nth-child(1) > li:nth-child(1) > ul:nth-child(2) > li:nth-child(1) > ul:nth-child(2) > li:nth-child(' + v + ') > div:nth-child(1) > span:nth-child(2) > span:nth-child(3) > span:nth-child(1) > span:nth-child(5) > i:nth-child(1)', function () {
             this.click('ul.jqtree_common:nth-child(1) > li:nth-child(1) > ul:nth-child(2) > li:nth-child(1) > ul:nth-child(2) > li:nth-child(' + v + ') > div:nth-child(1) > span:nth-child(2) > span:nth-child(3) > span:nth-child(1) > span:nth-child(5) > i:nth-child(1)');
         });
         this.echo("Deleted the newly created notebook with title " + initial_title);
     });
 
-       
+
     //checking if the currently loaded notebook is still loaded
     casper.viewport(1024, 768).then(function () {
         var current_title = functions.notebookname(casper);

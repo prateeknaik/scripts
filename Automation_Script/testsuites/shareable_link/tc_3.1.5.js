@@ -39,8 +39,7 @@ casper.test.begin(" Notebook Name is editable in main.html after selecting Edit 
 
     //getting Notebook ID
     casper.viewport(1024, 768).then(function () {
-        this.click("#new-notebook > span:nth-child(1) > i:nth-child(1)");
-        this.wait(5000);
+        functions.create_notebook(casper);
         var temp1 = this.getCurrentUrl();
         notebookid = temp1.substring(41);
         this.echo("The Notebook Id: " + notebookid);
@@ -53,7 +52,7 @@ casper.test.begin(" Notebook Name is editable in main.html after selecting Edit 
     casper.viewport(1366, 768).then(function () {
         this.thenOpen('http://127.0.0.1:8080/view.html?notebook=' + notebookid);
         this.wait(8000)
-        this.waitForSelector(".r-result-div > pre:nth-child(1) > code:nth-child(1)", function (){
+        this.waitForSelector(".r-result-div > pre:nth-child(1) > code:nth-child(1)", function () {
             this.test.assertExists('#edit-notebook > i:nth-child(1)', 'the element Edit icon exists. Hence page has got loaded properly');
         });
     });
@@ -91,10 +90,10 @@ casper.test.begin(" Notebook Name is editable in main.html after selecting Edit 
         this.echo("Modified notebook title: " + newtitle);
         this.test.assertNotEquals(newtitle, initial_title, "the title has been successfully modified");
     });
-    
+
     //changing the title again so that the test case runs successfully next time
-    casper.then(function(){
-		var z = casper.evaluate(function triggerKeyDownEvent() {
+    casper.then(function () {
+        var z = casper.evaluate(function triggerKeyDownEvent() {
             jQuery("#notebook-title").text("S345bg");
             var e = jQuery.Event("keydown");
             e.which = 13;
@@ -103,7 +102,7 @@ casper.test.begin(" Notebook Name is editable in main.html after selecting Edit 
             return true;
         });
         this.wait(4000);
-	});
+    });
 
     casper.run(function () {
         test.done();

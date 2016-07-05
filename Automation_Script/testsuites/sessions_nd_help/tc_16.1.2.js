@@ -16,7 +16,7 @@ casper.test.begin("Invalid R command in Help div", 4, function suite(test) {
     var functions = require(fs.absolute('basicfunctions'));
 
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
     casper.wait(10000);
 
@@ -28,7 +28,6 @@ casper.test.begin("Invalid R command in Help div", 4, function suite(test) {
         this.wait(9000);
         console.log("validating that the Main page has got loaded properly by detecting if some of its elements are visible. Here we are checking for Shareable Link and Logout options");
         functions.validation(casper);
-
     });
 
     casper.viewport(1366, 768).then(function () {
@@ -39,12 +38,12 @@ casper.test.begin("Invalid R command in Help div", 4, function suite(test) {
         else {
             this.echo('Help div is not open,hence opening it');
             this.wait(5000);
-            this.click({type:'css',path :'#accordion-left > div:nth-child(4) > div:nth-child(1)'});						  
+            this.click({type: 'css', path: '#accordion-left > div:nth-child(4) > div:nth-child(1)'});
             this.wait(5000);
         }
         this.sendKeys('#input-text-help', help_content);
         this.wait(6000);
-        if (this.click({type: 'xpath', path: '/html/body/div[3]/div/div[1]/div[1]/div/div/div[4]/div[2]/div/div[1]/form/div/div/button'})) {
+        if (this.click(x(".//*[@id='help-form']/div/div/button"))) {
             this.echo('topic for help entered successfully');
         }
         else {
@@ -53,19 +52,22 @@ casper.test.begin("Invalid R command in Help div", 4, function suite(test) {
         this.wait(8000);
     });
 
-    casper.then(function () {
-		this.page.switchToChildFrame(0)
-		this.wait(5000);
+    casper.wait(3000).then(function () {
+        this.page.switchToChildFrame(0)
+        this.wait(5000);
         console.log('validating that the appropriate documentation is displayed for the incorrect R command entered');
         var z = this.fetchText('html>body>h2');
-        this.echo( z );
-	//});
-    
-    //casper.then(function () {
-		
-        this.test.assertSelectorHasText({type:'css', path:'html>body>h2'},"No help found", "Confirmed that no Help content shown for invalid R command");
+        this.echo(z);
+        //});
+
+        //casper.then(function () {
+
+        this.test.assertSelectorHasText({
+            type: 'css',
+            path: 'html>body>h2'
+        }, "No help found", "Confirmed that no Help content shown for invalid R command");
     });
-    
+
     casper.run(function () {
         test.done();
     });

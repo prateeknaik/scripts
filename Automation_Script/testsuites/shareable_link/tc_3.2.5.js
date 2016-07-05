@@ -58,12 +58,10 @@ casper.test.begin("Fork Notebook and check if contents are editable", 15, functi
 
     //checking if notebook title is editable
     casper.viewport(1366, 768).then(function () {
-        if (this.test.assertExists(x(".//*[@id='readonly-notebook']")))
-        {
+        if (this.test.assertExists(x(".//*[@id='readonly-notebook']"))) {
             this.echo("Notebook title is uneditable");
         }
-        else
-        {
+        else {
             this.echo("Notebook title is editable")
         }
     });
@@ -73,17 +71,16 @@ casper.test.begin("Fork Notebook and check if contents are editable", 15, functi
 
     //checking if command prompt is visible and whether new code can be entered. This is a validation to check 
     //if contents of notebook are in editable form
-    casper.viewport(1366, 768).then(function () {
-        this.test.assertVisible('#command-prompt', 'option present to enter contents. Hence notebook is editable.');
+    casper.wait(5000).viewport(1366, 768).then(function () {
+        this.test.assertVisible(x(".//*[@id='command-prompt']/div[2]/div"), 'option present to enter contents. Hence notebook is editable.');
         functions.runall(casper);//this is done so that we can insert code in the newly created cell
-        
     });
-    
+
     functions.addnewcell(casper);
-    casper.then(function(){
-		this.echo("successfully created a new cell. hence confirmed that notebook content can be modified");
-	});
-        
+    casper.then(function () {
+        this.echo("successfully created a new cell. hence confirmed that notebook content can be modified");
+    });
+
     casper.run(function () {
         test.done();
     });

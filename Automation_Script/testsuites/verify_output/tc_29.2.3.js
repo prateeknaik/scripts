@@ -5,7 +5,7 @@ The cell should run successfully and produce correct results.
  */
 
 //Begin Test
-casper.test.begin("Execute Python code in Markdown cell", 5, function suite(test) {
+casper.test.begin("Execute Python code in Markdown cell", 6, function suite(test) {
 	var x = require('casper').selectXPath;
     var github_username = casper.cli.options.username;
     var github_password = casper.cli.options.password;

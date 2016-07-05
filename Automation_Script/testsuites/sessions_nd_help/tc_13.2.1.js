@@ -18,7 +18,7 @@ casper.test.begin(" Closing the Error which is produced under session div", 5, f
     var title;
 
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
     casper.wait(10000);
 
@@ -36,28 +36,34 @@ casper.test.begin(" Closing the Error which is produced under session div", 5, f
     casper.viewport(1366, 768).thenOpen('http://127.0.0.1:8080/main.html?notebook=' + notebook_id, function () {
         this.wait(10000);
     });
-    
+
     casper.wait(5000);
-    
+
     //Checking whether session div has produced error messgae or not
-    casper.then(function() {
-		this.test.assertExists({type:'xpath', path:".//*[@id='session-info']/div"},'Error is displayed under session div');
-		console.log('session div has produced Error');
-	});
-	
-	//clicking on close icon
-	casper.then(function(){
-		this.wait(5000);
-		this.click({type:'xpath' , path:".//*[@id='session-info']/div/button"}, 'clicking on close icon');
-		this.wait(3000);
-	});
-	
-	casper.then(function() {
-		this.test.assertDoesntExist({type:'xpath', path:".//*[@id='session-info']/div"},'After clicking on close icon,Error is closed from the session div');
-		console.log('Error is not present under session div');
-	});
-	
-	casper.run(function () {
+    casper.then(function () {
+        this.test.assertExists({
+            type: 'xpath',
+            path: ".//*[@id='session-info']/div"
+        }, 'Error is displayed under session div');
+        console.log('session div has produced Error');
+    });
+
+    //clicking on close icon
+    casper.then(function () {
+        this.wait(5000);
+        this.click({type: 'xpath', path: ".//*[@id='session-info']/div/button"}, 'clicking on close icon');
+        this.wait(3000);
+    });
+
+    casper.then(function () {
+        this.test.assertDoesntExist({
+            type: 'xpath',
+            path: ".//*[@id='session-info']/div"
+        }, 'After clicking on close icon,Error is closed from the session div');
+        console.log('Error is not present under session div');
+    });
+
+    casper.run(function () {
         test.done();
     });
 });
