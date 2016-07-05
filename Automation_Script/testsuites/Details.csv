@@ -1,4 +1,4 @@
-satyasomsahoo,somsat@123,advanced_dropdown_option,FALSE
+InsertDelete,musigma12,advanced_dropdown_option,FALSE
 ,,anonymous_user,FALSE
 ,,asset,FALSE
 ,,cell_numbers,FALSE
@@ -34,8 +34,8 @@ satyasomsahoo,somsat@123,advanced_dropdown_option,FALSE
 ,,sessions_nd_help,FALSE
 ,,settings,FALSE
 ,,shareable_link,FALSE
-,,shell_cell,FALSE
-,,split_coalesce,FALSE
+,,shell_cell,TRUE
+,,split_coalesce,TRUE
 ,,star_count,FALSE
 ,,stop,FALSE
 ,,verify_output,FALSE

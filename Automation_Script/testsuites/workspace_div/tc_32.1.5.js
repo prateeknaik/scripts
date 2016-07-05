@@ -1,10 +1,10 @@
 /*
- Auther : Tejas
+ Auther : Prateek
  Description:    This is a casperjs automated test script for showing that workspace div will display updated variable values
  */
 
 //Begin test
-casper.test.begin("Display updated variable value in workspace div", 8, function suite(test) {
+casper.test.begin("Display updated variable value in workspace div", 7, function suite(test) {
 
     var x = require('casper').selectXPath;
     var github_username = casper.cli.options.username;
@@ -14,7 +14,7 @@ casper.test.begin("Display updated variable value in workspace div", 8, function
     var notebookid;//to get the notebook id
     var input_content_1 = "a<-12"; // numeric variable initialisation
     var input_content_2 = "a<-95"; // updated numeric value
-    
+
     casper.start(rcloud_url, function () {
         functions.inject_jquery(casper);
     });
@@ -69,19 +69,21 @@ casper.test.begin("Display updated variable value in workspace div", 8, function
         this.test.assertSelectorHasText({
             type: 'css',
             path: '#enviewer-body > table:nth-child(1) > tr:nth-child(2) > td:nth-child(3)'
-        }, "12");
-        console.log("Initial value is 12");
+        }, "12", "Initial value is 12 in Workspace div");
     });
 
     // Updatting the variable value
     casper.then(function () {
-        functions.addnewcell(casper); //adding new cell
-        this.wait(15000);
+        this.click(x(".//*[@id='prompt-area']/div[1]/div/span/i"));
+        this.wait(10000);
     });
 
-    casper.then(function () {
-        this.sendKeys('div.ace_editor.ace-chrome:nth-child(1) > textarea:nth-child(1)', input_content_2);
-        this.wait(15000);
+    casper.wait(2000).then(function () {
+        this.waitForSelector(x(".//*[@id='part2.R']/div[3]/div[1]/div[2]/div/div[2]/div"), function () {
+            console.log("Cell is present adding contents to the second cell");
+            this.sendKeys(x(".//*[@id='part2.R']/div[3]/div[1]/div[2]/div/div[2]/div"), input_content_2);
+        });
+        this.wait(5000);
     });
 
     casper.then(function () {
