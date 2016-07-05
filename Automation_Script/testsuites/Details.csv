@@ -31,11 +31,11 @@ InsertDelete,musigma12,advanced_dropdown_option,FALSE
 ,,run_all,FALSE
 ,,saving_contents,FALSE
 ,,search,FALSE
-,,sessions_nd_help,FALSE
+,,sessions_nd_help,TRUE
 ,,settings,FALSE
-,,shareable_link,FALSE
-,,shell_cell,TRUE
-,,split_coalesce,TRUE
+,,shareable_link,TRUE
+,,shell_cell,FALSE
+,,split_coalesce,FALSE
 ,,star_count,FALSE
 ,,stop,FALSE
 ,,verify_output,FALSE

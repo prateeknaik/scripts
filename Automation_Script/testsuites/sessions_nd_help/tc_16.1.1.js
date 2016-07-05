@@ -15,7 +15,7 @@ casper.test.begin("Correct R command in Help div", 4, function suite(test) {
     var functions = require(fs.absolute('basicfunctions'));
 
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
     casper.wait(10000);
 
@@ -37,14 +37,14 @@ casper.test.begin("Correct R command in Help div", 4, function suite(test) {
         else {
             this.echo('Help div is not open,hence opening it');
             this.wait(5000);
-            this.click({type:'css',path :'#accordion-left > div:nth-child(4) > div:nth-child(1)'});						  
+            this.click({type: 'css', path: '#accordion-left > div:nth-child(4) > div:nth-child(1)'});
             this.wait(5000);
         }
         this.sendKeys('#input-text-help', help_content);
         this.wait(6000);
-	});
-	
-	casper.then(function () {
+    });
+
+    casper.then(function () {
         if (this.click('.btn.btn-default-ext')) {
             this.echo('topic for help entered successfully');
         }
@@ -57,7 +57,10 @@ casper.test.begin("Correct R command in Help div", 4, function suite(test) {
     casper.then(function () {
         console.log('validating that the appropriate documentation is displayed for the correct R command entered');
         casper.then(function () {
-            this.test.assertExists({type:'css', path:'html>body'},"R Documentation", "Confirmed that Help content is displayed successfully");
+            this.test.assertExists({
+                type: 'css',
+                path: 'html>body'
+            }, "R Documentation", "Confirmed that Help content is displayed successfully");
         });
     });
 

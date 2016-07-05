@@ -49,9 +49,18 @@ casper.test.begin("Open an alien user's notebook through his/her's Notebook id i
 
     //verify that only output div is visible and editable icon exists which proves that the notebook is currently not in Editable form
     casper.viewport(1366, 768).then(function () {
-        this.test.assertVisible({type: 'css', path: '#edit-notebook > i:nth-child(1)' }, 'Edit option visible which proves that notebook currently is uneditable');
-        this.test.assertVisible({type: 'xpath', path: '/html/body/div[3]/div/div/div/div[1]/div/div[2]/div[2]/pre/code'}, 'output div visible');
-        this.test.assertNotVisible({type: 'css', path: 'div:nth-child(3) > div:nth-child(2) > pre:nth-child(1) > code:nth-child(1)'}, 'source code not visible');
+        this.test.assertVisible({
+            type: 'css',
+            path: '#edit-notebook > i:nth-child(1)'
+        }, 'Edit option visible which proves that notebook currently is uneditable');
+        this.test.assertVisible({
+            type: 'xpath',
+            path: '/html/body/div[3]/div/div/div/div[1]/div/div[2]/div[2]/pre/code'
+        }, 'output div visible');
+        this.test.assertNotVisible({
+            type: 'css',
+            path: 'div:nth-child(3) > div:nth-child(2) > pre:nth-child(1) > code:nth-child(1)'
+        }, 'source code not visible');
     });
 
     casper.run(function () {

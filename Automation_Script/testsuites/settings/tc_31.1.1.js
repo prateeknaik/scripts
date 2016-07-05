@@ -14,7 +14,7 @@ casper.test.begin(" Checking prompt window present or not when check box is sele
     var functions = require(fs.absolute('basicfunctions'));
 
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
     casper.wait(10000);
 
@@ -28,66 +28,41 @@ casper.test.begin(" Checking prompt window present or not when check box is sele
         functions.validation(casper);
     });
 
-    casper.then(function (){
-        //'/home/fresh/FileUpload/isris.csv'
-        var data = Papa.parse(csvString);
-        Papa.parse(file, {
-            complete: function(results) {
-                console.log(results);
-            }
-        });     
-
-        Papa.parse("/home/fresh/FileUpload/isris.csv", {
-            download: true,
-            step: function(row) {
-                console.log("Row:", row.data);
-            },
-            complete: function() {
-                console.log("All done!");
-            }
-        });
-    });
-
     casper.wait(30000);
 
-  //   //Checking for command propmt cell
-  //   casper.then(function () {
-  //       //this.wait(5000);
-  //       if (this.exists({type: 'xpath', type: '/html/body/div[3]/div/div[2]/div/div[3]/div[2]/div[2]/div'})) {
-  //           console.log("Command propmt is visible");
-  //       } else {
+    //Checking for command propmt cell
+    casper.then(function () {
+        //this.wait(5000);
+        if (this.exists(x(".//*[@id='command-prompt']/div[2]/div"))) {
+            console.log("Command propmt is visible");
+        } else {
 
-		// //Settings div is open or not
-		// 	if (this.visible('.form-control-ext')) {
-  //               console.log('Settings div is already opened');
-  //           }
-  //           else {
-  //               var z = casper.evaluate(function () {
-  //                   $(' .panel-heading').click();
-  //               });
-  //               this.echo("Opened Settings div");
-  //           }
+            //Settings div is open or not
+            if (this.visible('.form-control-ext')) {
+                console.log('Settings div is already opened');
+            }
+            else {
+                var z = casper.evaluate(function () {
+                    $(' .panel-heading').click();
+                });
+                this.echo("Opened Settings div");
+            }
 
-  //           this.click({
-  //               type: 'xpath',
-  //               path: '/html/body/div[3]/div/div[1]/div[1]/div/div/div[3]/div[2]/div/div/div/div[1]/label/span'
-  //           });
-  //           this.wait(3000);
-  //           this.echo("Clicking on show command propmt checkbox to uncheck it");
-  //           this.wait(8000);
+            this.click(x(".//*[@id='settings-body']/div[1]/label/input"));
+            this.wait(3000);
+            this.echo("Clicking on show command propmt checkbox to uncheck it");
+            this.wait(8000);
 
-		// 	//Checking for command prmpt
-  //           if (this.exists({type: 'xpath', type: '/html/body/div[3]/div/div[2]/div/div[3]/div[2]/div[2]/div'})) {
-  //               console.log("Command propmt is  visible");
-  //           } else {
-  //               console.log('command propmt is not visible after clicking on check box');
-  //           }
-  //           this.click({
-  //               type: 'xpath',
-  //               path: '/html/body/div[3]/div/div[1]/div[1]/div/div/div[3]/div[2]/div/div/div/div[1]/label/span'
-  //           });
-  //       }
-  //   });
+            //Checking for command prmpt
+            if (this.exists(x(".//*[@id='command-prompt']/div[2]/div"))) {
+                console.log("Command propmt is  visible");
+            } else {
+                console.log('command propmt is not visible after clicking on check box');
+            }
+            //Clicking again on check box to ensure that, when next time the test runs it wont fail
+            this.click(x(".//*[@id='settings-body']/div[1]/label/input"));
+        }
+    });
 
     casper.run(function () {
         test.done();

@@ -16,7 +16,7 @@ casper.test.begin("Fork Notebook and check if title is editable", 14, function s
     var notebook_id = "82198d654e36c7e86761";//contains the notebook id to be searched
 
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
 
     casper.wait(10000);
@@ -66,7 +66,7 @@ casper.test.begin("Fork Notebook and check if title is editable", 14, function s
         });
         this.wait(5000);
         var new_name = functions.notebookname(casper);
-        this.test.assertNotEquals(new_name, current_name, "Notebook title is uneditable");
+        this.test.assertEquals(new_name, current_name, "Notebook title is uneditable");
 
     });
 
