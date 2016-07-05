@@ -3,8 +3,8 @@
  Description: This is a casperjs automated test script for showing that,The name of the files uploaded to a notebook will be in the form of links, 
  clicking on which, the respective file will get downloaded or opens in a new tab
  */
-//Begin Tests
 
+//Begin Tests
 casper.test.begin("Clicking on asset links", 5, function suite(test) {
 
     var x = require('casper').selectXPath;
@@ -15,9 +15,9 @@ casper.test.begin("Clicking on asset links", 5, function suite(test) {
     var fileName = 'SampleFiles/PHONE.csv'; // File path directory   
     var system = require('system')
     var currentFile = require('system').args[4];
-    var curFilePath = fs.absolute(currentFile); 
-    var curFilePath = curFilePath.replace(currentFile, '');   
-    fileName=curFilePath+fileName;
+    var curFilePath = fs.absolute(currentFile);
+    var curFilePath = curFilePath.replace(currentFile, '');
+    fileName = curFilePath + fileName;
 
     casper.start(rcloud_url, function () {
         functions.inject_jquery(casper);
@@ -52,7 +52,7 @@ casper.test.begin("Clicking on asset links", 5, function suite(test) {
     });
 
     //File upload
-    casper.then(function () {
+    casper.wait(2000).then(function () {
         this.evaluate(function (fileName) {
             __utils__.findOne('input[type="file"]').setAttribute('value', fileName)
         }, {fileName: fileName});
@@ -60,7 +60,7 @@ casper.test.begin("Clicking on asset links", 5, function suite(test) {
         console.log('Selecting a file');
     });
 
-    casper.then(function () {
+    casper.wait(2000).then(function () {
         this.wait(5000, function () {
             this.click(x(".//*[@id='upload-to-notebook']"));
             console.log("Clicking on Upload to notebook check box");
@@ -69,22 +69,18 @@ casper.test.begin("Clicking on asset links", 5, function suite(test) {
         });
     });
 
-    casper.wait(8000);
-
-    casper.then(function () {
+    casper.wait(10000).then(function () {
         this.waitUntilVisible(x('//*[contains(text(), "added")]'), function then() {
             console.log("File has been uploaded");
         });
         this.test.assertSelectorHasText(x(".//*[@id='asset-list']/li[3]/a/span[1]"), 'PHONE.csv', 'Uploaded file is present in assets');
     });
 
-    casper.wait(8000);
-
-    casper.then(function () {
+    casper.wait(10000).then(function () {
         this.test.assertExists(x(".//*[@id='asset-link']"), 'Link for asset is present');
     });
 
-    casper.then(function () {
+    casper.wait(2000).then(function () {
         this.click(x(".//*[@id='asset-link']"));
         console.log('After clicking on links of an assets, file gets downloaded');
     });

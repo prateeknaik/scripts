@@ -2,8 +2,8 @@
  Author: Prateek
  Description: This is a casperjs automated test script for showing that,Upload a new file in Rcloud with respect to a particular notebook
  */
-//Begin Tests
 
+//Begin Tests
 casper.test.begin("Upload a new File to Notebook", 4, function suite(test) {
 
     var x = require('casper').selectXPath;
@@ -15,10 +15,10 @@ casper.test.begin("Upload a new File to Notebook", 4, function suite(test) {
     var fileName1 = 'SampleFiles/IRIS.csv';
     var system = require('system')
     var currentFile = require('system').args[4];
-    var curFilePath = fs.absolute(currentFile); 
-    var curFilePath = curFilePath.replace(currentFile, '');   
-    fileName=curFilePath+fileName;
-    fileName1=curFilePath+fileName1;
+    var curFilePath = fs.absolute(currentFile);
+    var curFilePath = curFilePath.replace(currentFile, '');
+    fileName = curFilePath + fileName;
+    fileName1 = curFilePath + fileName1;
 
     casper.start(rcloud_url, function () {
         functions.inject_jquery(casper);
@@ -86,10 +86,7 @@ casper.test.begin("Upload a new File to Notebook", 4, function suite(test) {
         });
     });
 
-
-    casper.wait(8000);
-
-    casper.then(function () {
+    casper.wait(8000).then(function () {
         this.waitUntilVisible(x('//*[contains(text(), "added")]'), function then() {
             console.log("File has been uploaded");
         });

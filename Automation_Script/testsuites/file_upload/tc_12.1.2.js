@@ -3,8 +3,8 @@
  Description: This is a casperjs automated test script for showing that,Overwrite an already existing file in Rcloud i.e, 
  some file with the same name is already present in the home directory of the user
  */
-//Begin Tests
 
+//Begin Tests
 casper.test.begin("Upload a new File", 3, function suite(test) {
 
     var x = require('casper').selectXPath;
@@ -12,13 +12,13 @@ casper.test.begin("Upload a new File", 3, function suite(test) {
     var github_password = casper.cli.options.password;
     var rcloud_url = casper.cli.options.url;
     var functions = require(fs.absolute('basicfunctions'));
-    var fileName = 'SampleFiles/PHONE11.csv'; // File path directory    
+    var fileName = 'SampleFiles/sample.csv'; // File path directory
     var URL;
     var system = require('system')
     var currentFile = require('system').args[4];
-    var curFilePath = fs.absolute(currentFile); 
-    var curFilePath = curFilePath.replace(currentFile, '');   
-    fileName=curFilePath+fileName; 
+    var curFilePath = fs.absolute(currentFile);
+    var curFilePath = curFilePath.replace(currentFile, '');
+    fileName = curFilePath + fileName;
 
     casper.start(rcloud_url, function () {
         functions.inject_jquery(casper);
@@ -50,12 +50,12 @@ casper.test.begin("Upload a new File", 3, function suite(test) {
         }
     });
 
-    casper.then(function (){
+    casper.then(function () {
         URL = (this.getCurrentUrl());
         console.log(URL);
     })
 
-    casper.then(function (){
+    casper.then(function () {
         this.thenOpen(URL);
         this.wait(5000);
     })
