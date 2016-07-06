@@ -5,7 +5,7 @@
  */
 
 //Test begins
-casper.test.begin(" Checking cell numbers are visible or not", 6, function suite(test) {
+casper.test.begin(" Checking cell numbers are visible or not", 4, function suite(test) {
 
     var x = require('casper').selectXPath;
     var github_username = casper.cli.options.username;
@@ -32,12 +32,11 @@ casper.test.begin(" Checking cell numbers are visible or not", 6, function suite
     functions.create_notebook(casper);
     
     //add new cell
-    casper.then(function () {
-        functions.addnewcell(casper); 
-        this.waitForSelector("div.edit-code > div:nth-child(3) > div:nth-child(1)", function (){
-            this.echo("Confirmed that the cell is present");
-        })   
+   casper.wait(5000).then(function () {
+        functions.addnewcell(casper);
     });
+    
+    casper.wait(4000);
     
     casper.wait(4000).then(function () {
         this.click("div.cell-control-bar:nth-child(1) > span:nth-child(1) > i:nth-child(1)");  
