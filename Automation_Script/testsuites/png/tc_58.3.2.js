@@ -28,7 +28,7 @@ casper.test.begin("Adding 2 member to the group", 3, function suite(test) {
         functions.validation(casper);
     });
 
-    //functions.create_notebook(casper);
+    functions.create_notebook(casper);
 
     //Function to generate group names 
     casper.then(function () {
@@ -76,7 +76,7 @@ casper.test.begin("Adding 2 member to the group", 3, function suite(test) {
     //    this.wait(4000);       
     });
 
-    casper.then(function (){
+    casper.wait(5000).then(function (){
         this.click(x(".//*[@id='group-tab']/div[3]/div/div/div[1]"));
         this.echo('Clicking memeber field');
         this.sendKeys(x(".//*[@id='group-tab']/div[3]/div/div/div[1]"), 'iPrate');
@@ -92,10 +92,9 @@ casper.test.begin("Adding 2 member to the group", 3, function suite(test) {
             $('span.btn:nth-child(3)').click();
         });
         this.wait(1000);
-        this.echo('Inserted both the memebr to the group');
+        this.echo('Inserted both the member to the group');
     });
 
-    
     casper.run(function () {
         test.done();
     });

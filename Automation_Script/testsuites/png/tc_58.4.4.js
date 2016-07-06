@@ -76,11 +76,9 @@ casper.test.begin("Adding Notebook to other Group (other than existing group)", 
 
     casper.then(function () {
         this.thenOpen(URL);
-        this.wait(5000);
-    })
-
-    casper.wait(5000);
-
+        this.wait(8000);
+    });
+    
     //Click on notebook info icon
     casper.then(function () {
         this.then(function () {
@@ -108,16 +106,13 @@ casper.test.begin("Adding Notebook to other Group (other than existing group)", 
         })
     });
 
-    casper.wait(5999).then(function () {
+    casper.wait(10000).then(function () {
         casper.setFilter("page.prompt", function (msg, currentValue) {
             if (msg === "Are you sure you want to move notebook") {
-
                 return true;
             }
         });
-        var z = this.evaluate(function () {
-            $('span.btn:nth-child(3)').click();
-        });
+        this.click("span.btn:nth-child(3)")
         console.log("Notebook added to the 1st group");
     });
 
@@ -134,7 +129,7 @@ casper.test.begin("Adding Notebook to other Group (other than existing group)", 
         this.waitForSelector(".popover-title", function () {
             before = this.fetchText(".group-link > a:nth-child(1)");
             console.log(before);
-        }); 
+        });
     });
 
     // functions.create_notebook(casper);
@@ -149,9 +144,8 @@ casper.test.begin("Adding Notebook to other Group (other than existing group)", 
 
     casper.then(function () {
         this.thenOpen(URL);
-    })
-
-    casper.wait(8000);
+        this.wait(8000);
+    });
 
     //Click on notebook info icon
     casper.then(function () {
@@ -164,17 +158,13 @@ casper.test.begin("Adding Notebook to other Group (other than existing group)", 
         });
     });
 
-    casper.wait(5000);
-
     //Click on Public/Group link
-    casper.then(function () {
-
+    casper.wait(5000).then(function () {
         this.click(".group-link > a:nth-child(1)");
     });
-    casper.wait(8000);
-    
+
     //select the group and click ok
-    casper.selectOptionByText = function (selector, textToMatch) {
+    casper.wait(8000).selectOptionByText = function (selector, textToMatch) {
         this.evaluate(function (selector, textToMatch) {
             var select = document.querySelector(selector),
                 found = false;
@@ -215,11 +205,10 @@ casper.test.begin("Adding Notebook to other Group (other than existing group)", 
         console.log("Notebook added to the 2nd group");
     });
 
-
     casper.wait(5000);
 
     //Validate the group name
-    casper.then(function () {
+    casper.wait(5000).then(function () {
         this.mouse.move('.jqtree-selected > div:nth-child(1)');
         this.waitUntilVisible('.jqtree-selected > div:nth-child(1) > span:nth-child(2) > span:nth-child(3) > span:nth-child(1) > span:nth-child(1) > i:nth-child(1)', function () {
             this.click('.jqtree-selected > div:nth-child(1) > span:nth-child(2) > span:nth-child(3) > span:nth-child(1) > span:nth-child(1) > i:nth-child(1)');
@@ -227,12 +216,10 @@ casper.test.begin("Adding Notebook to other Group (other than existing group)", 
         });
     });
 
-    casper.wait(2000);
-
-    casper.then(function () {
+    casper.wait(4000).then(function () {
         this.waitForSelector(".popover-title", function () {
             after = this.fetchText(".group-link > a:nth-child(1)");
-            this.test.assertNotEquals(after, before, "Confirmed that Notebook is assigned to new Group:" + after);
+            this.test.assertEquals(after, before, "Confirmed that Notebook is assigned to new Group:" + after);
         });
     });
 

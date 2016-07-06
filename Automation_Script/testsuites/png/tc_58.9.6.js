@@ -1,7 +1,7 @@
 /* 
  Author: Prateek 58.9.6
  Description: Check whether user is able to delete the uploaded binary file to the Notebook which is assigned to group
-*/
+ */
 
 //Begin Tests
 casper.test.begin("Deleting the uploaded asset file from notebook which is assigned to group", 6, function suite(test) {
@@ -12,8 +12,13 @@ casper.test.begin("Deleting the uploaded asset file from notebook which is assig
     var rcloud_url = casper.cli.options.url;
     var functions = require(fs.absolute('basicfunctions'));
     var notebook_name, status, url, notebookid;
-    var fileName = '/home/prateek/FileUpload/PHONE.csv'; // File path directory
     var before, after;
+    var fileName = "SampleFiles/PHONE.csv";
+    var system = require('system');
+    var currentFile = require('system').args[4];
+    var curFilePath = fs.absolute(currentFile);
+    var curFilePath = curFilePath.replace(currentFile, '');
+    fileName = curFilePath + fileName;
 
     casper.start(rcloud_url, function () {
         functions.inject_jquery(casper);
@@ -125,7 +130,7 @@ casper.test.begin("Deleting the uploaded asset file from notebook which is assig
     });
 
     casper.then(function () {
-        var URL =  this.getCurrentUrl();
+        var URL = this.getCurrentUrl();
         this.thenOpen(URL);
     });
 
@@ -171,7 +176,7 @@ casper.test.begin("Deleting the uploaded asset file from notebook which is assig
         this.test.assertSelectorHasText(x(".//*[@id='asset-list']/li[3]/a/span[1]"), 'PHONE.csv', 'Uploaded file is present in assets');
     });
 
-    casper.then( function (){
+    casper.then(function () {
         console.log("Deleting uploaded asset");
         this.click(x(".//*[@id='asset-list']/li[3]/a/span[2]/i"));
         this.wait(3000);

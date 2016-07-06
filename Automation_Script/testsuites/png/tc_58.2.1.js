@@ -38,7 +38,6 @@ casper.test.begin("Creating a new group from Manage group option", 4, function s
         });
     });
 
-
     //Creating a group
     casper.then(function () {
         this.click("li.dropdown > a:nth-child(1)");
@@ -70,7 +69,7 @@ casper.test.begin("Creating a new group from Manage group option", 4, function s
         console.log("renamed the newly created group");
     });
 
-    casper.then(function () {
+    casper.wait(3000).then(function () {
         this.test.assertSelectorDoesntHaveText('select.ng-pristine:nth-child(3)', ID, "Confirmed that group has been renamed:" + ID1);
         this.wait(4000);
     });

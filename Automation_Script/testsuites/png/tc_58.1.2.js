@@ -57,9 +57,9 @@ casper.test.begin("Creating a new group from Notebook info option", 5, function 
     casper.then(function () {
         this.click('.group-link > a:nth-child(1)', "Clicking on 'no group' link");
         this.wait(2000);
-        this.click('#tab2 > a:nth-child(1)',"Clicking on Group tab to create new group");
+        this.click('#tab2 > a:nth-child(1)', "Clicking on Group tab to create new group");
     });
-    
+
     casper.then(function () {
         this.wait(4000);
         casper.setFilter("page.prompt", function (msg, currentValue) {
@@ -69,35 +69,33 @@ casper.test.begin("Creating a new group from Notebook info option", 5, function 
         });
         this.click('span.label:nth-child(1)');
 
-        this.echo('Entered Group name');
-        
+        this.echo('Entered Group name as:' + ID);
+
         this.evaluate(function () {
             $('span.btn:nth-child(3)').click();
         });
         this.wait(5000);
         this.echo('Created a new group');
     });
-    
+
     //Validating whetehr group has created or not
-    casper.then (function () {
-		this.click('li.dropdown > a:nth-child(1)');
-		console.log('Clicking on Advanced drop down');
-		this.evaluate(function () {
+    casper.wait(4000).then(function () {
+        this.click('li.dropdown > a:nth-child(1)');
+        console.log('Clicking on Advanced drop down');
+        this.evaluate(function () {
             $('#manage_groups').click();
         });
 
         this.waitForSelector(x(".//*[@id='group-tab']/div[1]/div[3]/span[2]"), function () {
             this.echo("Confirmed Manage groups option visible")
         })
-	});
-	
-	casper.then(function () {
-        this.wait(4000);
-		this.test.assertSelectorHasText('select.ng-pristine:nth-child(3)', ID, "Confirmed that group has been created with the name:" + ID);
-		
-	});
+    });
 
-    casper.wait(10000);
+    casper.then(function () {
+        this.wait(4000);
+        this.test.assertSelectorHasText('select.ng-pristine:nth-child(3)', ID, "Confirmed that group has been created with the name:" + ID);
+
+    });
 
     casper.run(function () {
         test.done();

@@ -1,7 +1,7 @@
 /* 
  Author: Prateek
  Description:This test describes, Check whether user can add Notebook to group for the existing group
-*/
+ */
 
 //Begin Tests
 casper.test.begin("Adding Notebook to the group", function suite(test) {
@@ -14,7 +14,7 @@ casper.test.begin("Adding Notebook to the group", function suite(test) {
     var GroupName, GroupName1, Title, URL, after, before;
 
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
     casper.wait(10000);
 
@@ -66,20 +66,19 @@ casper.test.begin("Adding Notebook to the group", function suite(test) {
     //Create one notebook
     functions.create_notebook(casper);
 
-    casper.then(function (){
+    casper.then(function () {
         Title = this.fetchText("#notebook-title");
         this.echo("Notebook title is : " + Title);
         console.log(URL = this.getCurrentUrl());
     });
 
-    casper.then(function (){
+    casper.then(function () {
         this.thenOpen(URL);
-    })
-
-    casper.wait(5000);
+        this.wait(8000);
+    });
 
     //Click on notebook info icon
-    casper.then(function () {
+    casper.wait(5000).then(function () {
         this.then(function () {
             this.mouse.move('.jqtree-selected > div:nth-child(1)');
             this.waitUntilVisible('.jqtree-selected > div:nth-child(1) > span:nth-child(2) > span:nth-child(3) > span:nth-child(1) > span:nth-child(1) > i:nth-child(1)', function () {
@@ -89,23 +88,18 @@ casper.test.begin("Adding Notebook to the group", function suite(test) {
         });
     });
 
-    casper.wait(2000);
-
-    
     //Click on Public/Group link
-    casper.then(function () {
+    casper.wait(5000).then(function () {
         this.click(".group-link > a:nth-child(1)");
     });
-    casper.wait(5000);
+
     //Select group radio button
-    casper.then(function () {
+    casper.wait(5000).then(function () {
         this.click('#greenRadio');
     });
 
-    casper.wait(4000);
-
     //select the group and click ok
-    casper.selectOptionByText = function (selector, textToMatch) {
+    casper.wait(5000).selectOptionByText = function (selector, textToMatch) {
         this.evaluate(function (selector, textToMatch) {
             var select = document.querySelector(selector),
                 found = false;
@@ -117,15 +111,12 @@ casper.test.begin("Adding Notebook to the group", function suite(test) {
         }, selector, textToMatch);
     };
 
-    casper.then(function () {
-        this.wait(2999);
+    casper.wait(5000).then(function () {
         this.selectOptionByText("select.ng-pristine:nth-child(2)", GroupName);
         console.log("Selecting 1st " + GroupName + "from the drop down menu");
     });
 
-    casper.wait(9999);
-
-    casper.then(function(){
+    casper.wait(10000).then(function () {
         casper.setFilter("page.prompt", function (msg, currentValue) {
             if (msg === "Are you sure you want to move notebook") {
                 return true;
@@ -134,8 +125,7 @@ casper.test.begin("Adding Notebook to the group", function suite(test) {
         this.click("span.btn:nth-child(3)")
         console.log("Notebook added to the 1st group");
     });
-
-
+    
     casper.wait(5000);
 
     //Validate the group name
@@ -149,15 +139,15 @@ casper.test.begin("Adding Notebook to the group", function suite(test) {
 
     casper.wait(5000);
 
-    casper.then(function (){
+    casper.then(function () {
         before = this.fetchText(".group-link > a:nth-child(1)");
-     });
+    });
     
-
     //Click on notebook info icon
-    casper.then(function (){
+    casper.then(function () {
         this.thenOpen(URL);
-    })
+        this.wait(10000)
+    });
 
     casper.wait(5000);
 
@@ -173,7 +163,7 @@ casper.test.begin("Adding Notebook to the group", function suite(test) {
     });
 
     casper.wait(5000);
-    
+
     //Click on Public/Group link
     casper.then(function () {
         this.click(".group-link > a:nth-child(1)");
@@ -207,7 +197,7 @@ casper.test.begin("Adding Notebook to the group", function suite(test) {
 
     casper.wait(5000);
 
-    casper.then(function(){
+    casper.then(function () {
         casper.setFilter("page.prompt", function (msg, currentValue) {
             if (msg === "Are you sure you want to move notebook") {
                 return true;
@@ -230,8 +220,8 @@ casper.test.begin("Adding Notebook to the group", function suite(test) {
     });
 
     casper.wait(2000);
-    
-    casper.then(function (){
+
+    casper.then(function () {
         before = this.fetchText(".group-link > a:nth-child(1)");
         this.test.assertNotEquals(after, before, "Confirmed that Notebook is assigned to existing group");
     });

@@ -1,10 +1,10 @@
 /* 
  Author: Prateek 58.9.2
  Description: Check whether user is able to upload any file to the notebook which is assigned to Group or not
-*/
+ */
 
 //Begin Tests
-casper.test.begin("Uploading file to the asset after assigning any notebook to the perticular group", 4, function suite(test) {
+casper.test.begin("Uploading file to the asset after assigning any notebook to the perticular group", 5, function suite(test) {
 
     var x = require('casper').selectXPath;
     var github_username = casper.cli.options.username;
@@ -12,8 +12,13 @@ casper.test.begin("Uploading file to the asset after assigning any notebook to t
     var rcloud_url = casper.cli.options.url;
     var functions = require(fs.absolute('basicfunctions'));
     var notebook_name, status, url, notebookid;
-    var fileName = '/home/prateek/FileUpload/PHONE.csv'; // File path directory
     var before, after;
+    var fileName = "SampleFiles/PHONE.csv";
+    var system = require('system');
+    var currentFile = require('system').args[4];
+    var curFilePath = fs.absolute(currentFile);
+    var curFilePath = curFilePath.replace(currentFile, '');
+    fileName = curFilePath + fileName;
 
     casper.start(rcloud_url, function () {
         functions.inject_jquery(casper);
