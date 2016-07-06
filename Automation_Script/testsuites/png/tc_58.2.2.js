@@ -1,5 +1,5 @@
 /**
- * Created by Prateek.Naik 
+ * Created by Prateek.Naik
  */
 //Begin Tests
 casper.test.begin("Creating a new group from Manage group option", 2, function suite(test) {
@@ -77,7 +77,7 @@ casper.test.begin("Creating a new group from Manage group option", 2, function s
 
     casper.wait(5000);
 
-    casper.then(function () {
+    casper.wait(4000).then(function () {
         var ID50 = this.fetchText('select.ng-pristine:nth-child(3) > option:nth-child(1)');
         this.echo('After renaming group ' + ID1 + ' the group names is:' + ID50);
     });
@@ -86,8 +86,6 @@ casper.test.begin("Creating a new group from Manage group option", 2, function s
     //     this.test.assertSelectorHasText('select.ng-pristine:nth-child(3)', ID2, "Renamed Group is visible under dropdown menu");
     //     this.wait(4000);
     // });
-
-    casper.wait(10000);
 
     casper.run(function () {
         test.done();

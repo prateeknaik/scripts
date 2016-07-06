@@ -23,9 +23,9 @@ Leaderart,musigma12,advanced_dropdown_option,FALSE
 ,,notebook_naming,FALSE
 ,,other_functionalities,FALSE
 ,,png,TRUE
-,,png1,TRUE
+,,png1,FALSE
 ,,private,FALSE
-,,python_cells,TRUE
+,,python_cells,FALSE
 ,,r_cells,FALSE
 ,,recent,FALSE
 ,,run_all,FALSE

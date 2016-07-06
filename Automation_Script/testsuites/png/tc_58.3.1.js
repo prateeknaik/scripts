@@ -64,18 +64,18 @@ casper.test.begin("Adding member to the group", 3, function suite(test) {
 
     casper.wait(5000);
 
-    casper.then(function (){
+    casper.wait(3000).then(function (){
         this.click(x(".//*[@id='group-tab']/div[3]/div/div/div[1]"));
         this.echo('Clicking memeber field');
         this.sendKeys(x(".//*[@id='group-tab']/div[3]/div/div/div[1]"), 'sanke');
-        //this.echo('Added memebr');
+        //this.echo('Added member');
         this.wait(3000);
         this.click(x(".//*[@id='group-tab']/div[3]/div/div/div[2]/div/div"), 'sanketd11', {keepFocus: true});
-        this.echo('Clicking the name from the memebr suggested');
+        this.echo('Clicking the name from the memeber suggested');
     //    this.wait(4000);       
     });
 
-    casper.wait(2000).then(function (){
+    casper.wait(4000).then(function (){
         this.evaluate(function () {
             $('span.btn:nth-child(3)').click();
         });

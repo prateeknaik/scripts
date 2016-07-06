@@ -76,7 +76,7 @@ casper.test.begin("Check whether user can create a new group when he click on ca
     });
     
     //Validating whetehr group has created or not
-    casper.then (function () {
+    casper.wait(5000).then (function () {
 		this.click('li.dropdown > a:nth-child(1)');
 		console.log('Clicking on Advanced drop down');
 		this.evaluate(function () {

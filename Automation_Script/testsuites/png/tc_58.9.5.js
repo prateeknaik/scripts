@@ -1,7 +1,7 @@
 /* 
  Author: Prateek 58.9.5
  Description: Check whether user is able to rename the uploaded binary file to the notebook which is assigned to group
-*/
+ */
 
 //Begin Tests
 casper.test.begin("Editing/Modifying the uploaded asset file notebook which is assigned to any group", 6, function suite(test) {
@@ -12,8 +12,13 @@ casper.test.begin("Editing/Modifying the uploaded asset file notebook which is a
     var rcloud_url = casper.cli.options.url;
     var functions = require(fs.absolute('basicfunctions'));
     var notebook_name, status, url, notebookid;
-    var fileName = '/home/prateek/FileUpload/PHONE.csv'; // File path directory
     var before, after, beforeName, afterName;
+    var fileName = "SampleFiles/PHONE.csv";
+    var system = require('system');
+    var currentFile = require('system').args[4];
+    var curFilePath = fs.absolute(currentFile);
+    var curFilePath = curFilePath.replace(currentFile, '');
+    fileName = curFilePath + fileName;
 
     casper.start(rcloud_url, function () {
         functions.inject_jquery(casper);
@@ -166,12 +171,12 @@ casper.test.begin("Editing/Modifying the uploaded asset file notebook which is a
         this.test.assertSelectorHasText(x(".//*[@id='asset-list']/li[3]/a/span[1]"), 'PHONE.csv', 'Uploaded file is present in assets');
     });
 
-    casper.then(function(){
+    casper.then(function () {
         beforeName = this.fetchText('.active > a:nth-child(1) > span:nth-child(1)');
         console.log("before Modifying asset name is:" + beforeName);
     });
 
-    casper.then(function (){
+    casper.then(function () {
         var z = casper.evaluate(function triggerKeyDownEvent() {
             jQuery(".active > a:nth-child(3) > span:nth-child(1)").text("Modified.csv");
             var e = jQuery.Event("keydown");
@@ -184,17 +189,17 @@ casper.test.begin("Editing/Modifying the uploaded asset file notebook which is a
 
     casper.wait(8000);
 
-    casper.then(function (){
+    casper.then(function () {
         this.click(x(".//*[@id='rcloud-navbar-main']/li[4]"));
         console.log("After editing, clicking on Save icon");
     })
-    casper.then(function(){
+    casper.then(function () {
         afterName = this.fetchText('.active > a:nth-child(3) > span:nth-child(1)');
         console.log("before Modifying asset name is:" + afterName);
     });
 
-    casper.then(function(){
-        this.test.assertNotEquals(beforeName, afterName, " Uploaded asset " + beforeName + " gets renamed with " + afterName + " hence assets can be Modified/editable after making notebook private" );
+    casper.then(function () {
+        this.test.assertNotEquals(beforeName, afterName, " Uploaded asset " + beforeName + " gets renamed with " + afterName + " hence assets can be Modified/editable after making notebook private");
     });
 
     casper.run(function () {

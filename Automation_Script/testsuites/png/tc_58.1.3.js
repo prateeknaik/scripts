@@ -61,11 +61,9 @@ casper.test.begin("Creating a new group from Manage group option", 4, function s
         this.wait(5000);
         this.echo('Created a new group');
     });
-
-    casper.wait(5000);
     
     //Validating whetehr group has created or not
-    casper.then (function () {
+    casper.wait(5000).then (function () {
 		this.click('li.dropdown > a:nth-child(1)');
 		console.log('Clicking on Advanced drop down');
 		this.evaluate(function () {

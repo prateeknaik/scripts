@@ -12,7 +12,7 @@ casper.test.begin("Adding 2 member to the group", 3, function suite(test) {
     var rcloud_url = casper.cli.options.url;
     var functions = require(fs.absolute('basicfunctions'));
     var GP = '5ro9';
-    var GroupName,before;
+    var GroupName, before;
 
     casper.start(rcloud_url, function () {
         functions.inject_jquery(casper);
@@ -79,7 +79,7 @@ casper.test.begin("Adding 2 member to the group", 3, function suite(test) {
     });
 
     casper.wait(10000);
-    
+
     casper.then(function () {
         this.click(x(".//*[@id='group-tab']/div[3]/div/div/div[1]"), {keepFocus: true});
         this.page.sendEvent("keypress", casper.page.event.key.Backspace);
@@ -116,17 +116,17 @@ casper.test.begin("Adding 2 member to the group", 3, function suite(test) {
             }, selector, textToMatch);
         };
 
-        casper.then(function () {
+        casper.wait(2000).then(function () {
             this.selectOptionByText("select.ng-pristine:nth-child(3)", GroupName);
-            console.log("Selecting just now created " + GroupName + "from the drop down menu");
+            console.log("Selecting just now created group '" + GroupName + "' from the drop down menu");
         });
     });
 
     casper.wait(5000).then(function () {
         for (var m = 1; m <= 3; m++) {
-            before = this.fetchText(x(".//*[@id='group-tab']/div[3]/div/div/div[1]/div[" +m+ "]"));
+            before = this.fetchText(x(".//*[@id='group-tab']/div[3]/div/div/div[1]/div[" + m + "]"));
         }
-        this.echo(before);
+        // this.echo(before);
     });
 
     casper.wait(5000);
