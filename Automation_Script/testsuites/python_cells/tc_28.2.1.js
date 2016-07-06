@@ -58,9 +58,15 @@ casper.test.begin(" Create an Asset and run a python code", 6, function suite(te
 
     functions.addcontentstocell(casper, input_code);
 
-    casper.wait(4000).then(function(){
-        this.test.assertExists(".r-result-div > pre:nth-child(1) > code:nth-child(1)");
-        console.log("Output is visible, hence we can conclude that asset contents are executed");
+    casper.then(function () {
+        this.reload();
+        this.wait(5000);
+    });
+
+    functoins.runall(casper);
+
+    casper.wait(4000).then(function () {
+        this.test.assertExists(x(".//*[@id='part1.py']/div[3]/div[2]"), "Output is visible, hence we can conclude that asset contents are executed");
     });
 
     casper.run(function () {
