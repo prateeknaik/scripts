@@ -29,7 +29,7 @@ casper.test.begin("Adding 2 member to the group", 3, function suite(test) {
         functions.validation(casper);
     });
 
-    //functions.create_notebook(casper);
+    functions.create_notebook(casper);
 
     //Function to generate group names
     casper.then(function () {

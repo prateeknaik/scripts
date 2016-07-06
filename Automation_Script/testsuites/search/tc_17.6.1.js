@@ -2,7 +2,7 @@
  Author: Prateek
  Description:    This is a casperjs automated test script for showning that For the "Search" option, the text entered in the text box for
  'full-text search' will consist of Numbers and Special Characters like (111), (22), 123@#$ etc. only
-*/
+ */
 
 //Begin Tests
 casper.test.begin(" Numbers and Special Characters Ex: (111) )", 6, function suite(test) {
@@ -74,9 +74,9 @@ casper.test.begin(" Numbers and Special Characters Ex: (111) )", 6, function sui
         {
             counter = counter + 1;
             this.wait(2000);
-        } while (this.visible(x(".//*[@id='search-results']/table["+ counter +"]/tbody/tr/td")));
+        } while (this.visible(x(".//*[@id='search-results']/table[" + counter + "]/tbody/tr/td")));
 
-        counter = counter - 1;
+        // counter = counter - 1;
         this.echo("number of search results:" + counter);
 
         if (counter > 0) {

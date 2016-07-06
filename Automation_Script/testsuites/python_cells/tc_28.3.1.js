@@ -2,10 +2,10 @@
  Author: Prateek
  Description:This is a casperjs automated test script for showing that,Import an external Notebook having python codes written in it. 
  These codes will also run successfully in their respective cells
-*/
+ */
 
 //Begin Tests
-casper.test.begin("Import External Notebooks having python codes", 4, function suite(test) {
+casper.test.begin("Import External Notebooks having python codes", 5, function suite(test) {
 
     var x = require('casper').selectXPath;
     var github_username = casper.cli.options.username;
@@ -43,19 +43,19 @@ casper.test.begin("Import External Notebooks having python codes", 4, function s
             e.keyCode = 13;
             jQuery("#notebook-title").trigger(e);
             return true;
-        }); 
+        });
     });
 
     //change the language from R to Python
-    casper.then(function(){
-        this.mouse.click({ type: 'xpath' , path: ".//*[@id='prompt-area']/div[1]/div/select"});//x path for dropdown menu
+    casper.then(function () {
+        this.mouse.click({type: 'xpath', path: ".//*[@id='prompt-area']/div[1]/div/select"});//x path for dropdown menu
         this.echo('clicking on dropdown menu');
         this.wait(2000);
     });
-    
+
     //selecting Python from the drop down menu
-    casper.then(function(){
-        this.evaluate(function() {
+    casper.then(function () {
+        this.evaluate(function () {
             var form = document.querySelector('.form-control');
             form.selectedIndex = 2;
             $(form).change();
@@ -65,24 +65,27 @@ casper.test.begin("Import External Notebooks having python codes", 4, function s
 
     //create a new cell
     functions.addnewcell(casper);
-    
+
     //adding python code in to the cell
-    casper.then(function(){
-        this.sendKeys({type:'css', path:'.ace_content'}, input);
+    casper.then(function () {
+        this.sendKeys({type: 'css', path: '.ace_content'}, input);
         this.wait(2000);
     });
-    
+
     //to run the code
     functions.runall(casper);
 
     casper.wait(3000);
-    
+
     //Verifying the output for the code
-    casper.then(function(){
-        this.test.assertSelectorHasText({type:'xpath', path:".//*[@id='part1.py']/div[3]/div[2]/span"}, '5', 'Python code has produced expected output');
+    casper.then(function () {
+        this.test.assertSelectorHasText({
+            type: 'xpath',
+            path: ".//*[@id='part1.py']/div[3]/div[2]/span"
+        }, '5', 'Python code has produced expected output');
     });
 
-    casper.then(function (){
+    casper.then(function () {
         URL = this.getCurrentUrl();
         NotebookID = URL.substring(41);
         this.echo(NotebookID);
@@ -91,7 +94,7 @@ casper.test.begin("Import External Notebooks having python codes", 4, function s
     });
 
     functions.create_notebook(casper);
-    
+
     //open the Advanced Dropdown 
     functions.open_advanceddiv(casper);
 
@@ -124,7 +127,7 @@ casper.test.begin("Import External Notebooks having python codes", 4, function s
         }, selector, textToMatch);
     };
 
-    casper.wait(4000).then(function(){
+    casper.wait(4000).then(function () {
         this.selectOptionByText("ul.jqtree_common:nth-child(1) > li:nth-child(1) > ul:nth-child(2) > li:nth-child(1) > ul:nth-child(2) > li:nth-child(1) > div:nth-child(1) > span:nth-child(1)", Title);
         console.log("Successfully imported Notebook which consists python cells in it");
     });
