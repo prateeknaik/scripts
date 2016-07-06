@@ -5,7 +5,7 @@
  */
 
 //Test begins
-casper.test.begin(" Checking cell numbers are visible or not", 8, function suite(test) {
+casper.test.begin(" Checking cell numbers are visible or not", 6, function suite(test) {
 
     var x = require('casper').selectXPath;
     var github_username = casper.cli.options.username;
@@ -59,7 +59,7 @@ casper.test.begin(" Checking cell numbers are visible or not", 8, function suite
         }
         else {
             var z = casper.evaluate(function () {
-                $(' .panel-heading').click();
+                $('#accordion-left > div:nth-child(3) > div:nth-child(1)').click();
             });
             this.echo("Opened Settings div");
         }
@@ -68,7 +68,8 @@ casper.test.begin(" Checking cell numbers are visible or not", 8, function suite
     casper.wait(3000);
 
     casper.then(function(){
-        if(this.test.assertVisible(x(".//*[@id='part3.md']/div[2]/div[1]/span[4]")))
+            
+        if(this.test.assertVisible(x(".//*[@id='part2.R']/div[2]/div[1]/span[4]")))
         {
             console.log('cell numbers are visible so clicking on ckeck box to hide cell numbers');
             this.click(x(".//*[@id='settings-body']/div[3]/label/input"));
@@ -78,17 +79,22 @@ casper.test.begin(" Checking cell numbers are visible or not", 8, function suite
         }
     });
 
-	casper.wait(4000);
-     
-    casper.then(function(){
-		 if(test.assertDoesntExist({type:'xpath', path:"span.left-indicator:nth-child(4)"},'chcking for the cell numbers'))
+	casper.then(function (){
+        this.wait(5000);
+    });     
+    
+    casper.wait(4000).then(function(){
+		 if(test.assertNotVisible("span.left-indicator:nth-child(4)",'checking for the cell numbers'))
 		{
 			console.log('cell numbers are not visible');
 		}else{
 			console.log('cell numbers are visible');
 		}
-		this.click({type:'xpath', path:'/html/body/div[3]/div/div[1]/div[1]/div/div/div[3]/div[2]/div/div/div/div[3]/label/span'});
 	});
+    
+    casper.then(function (){
+        this.click(x(".//*[@id='settings-body']/div[3]/label/input"));
+    });
 		 
 	casper.on("page.error", function(msg, trace) {
 	  this.echo("Error:    " + msg, "ERROR");
@@ -97,14 +103,16 @@ casper.test.begin(" Checking cell numbers are visible or not", 8, function suite
 	  this.echo("function: " + trace[0]["function"], "WARNING");
 	  errors.push(msg);
 	});
+    
+    casper.wait(10000);
 	
-	casper.run(function() {
-	  if (errors.length > 0) {
-		this.echo(errors.length + ' Javascript errors found', "WARNING");
-	  } else {
-		this.echo(errors.length + ' Javascript errors found', "INFO");
-	  }
-	  test.done();
+	casper.run(function(){
+        if (errors.length > 0) {
+		  this.echo(errors.length + ' Javascript errors found', "WARNING");
+	    } else {
+		  this.echo(errors.length + ' Javascript errors found', "INFO");
+	    }
+	    test.done();
 	});
 });
 
