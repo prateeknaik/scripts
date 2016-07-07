@@ -41,7 +41,7 @@ casper.test.begin(" Assigning notebook to other Group as a member of that group 
     //Function to generate group names
     casper.then(function () {
         GroupName = this.evaluate(function () {
-            return Math.random().toString(36).substr(2, 3);
+            return Math.random().toString(36).substr(2, 7);
         });
         console.log('New group name is :' + GroupName);
     });
@@ -122,37 +122,36 @@ casper.test.begin(" Assigning notebook to other Group as a member of that group 
     casper.wait(4000);
 
     //select the group and click ok
-    casper.selectOptionByText = function (selector, textToMatch) {
-        this.evaluate(function (selector, textToMatch) {
-            var select = document.querySelector(selector),
-                found = false;
-            Array.prototype.forEach.call(select.children, function (opt, i) {
-                console.log("Outside if :" +i);
-                if (!found && opt.innerHTML.indexOf(textToMatch) !== -1) {
-                    console.log("Inside if : " + i);
-                    select.selectedIndex = i;
-                }
-            });
-        }, selector, textToMatch);
-    };
-
     casper.then(function () {
-        this.wait(2999);
-        element(by.cssContainingText('select.ng-valid:nth-child(2)', GroupName)).click();
-        // this.selectOptionByText("select.ng-valid:nth-child(2)", GroupName);
-        console.log("Selecting '" + GroupName + "' from the drop down menu");
-    });
+        casper.selectOptionByText = function (selector, textToMatch) {
+            this.evaluate(function (selector, textToMatch) {
+                // this.echo("Inside evaluate");
+                var select = document.querySelector(selector),
+                    found = false;
+                Array.prototype.forEach.call(select.children, function (opt, i) {
+                    if (!found && opt.innerHTML.indexOf(textToMatch) !== -1) {
+                        select.selectedIndex = i;
+                    }
+                });
+            }, selector, textToMatch);
+        };
 
-    casper.wait(5000);
+        this.then(function () {
+            // casper.then(function () {
+            this.wait(2999);
+            this.selectOptionByText("select.ng-pristine:nth-child(2)", GroupName);
+            console.log("Selecting '" + GroupName + "' from the drop down menu");
+        });
+        // });
 
-    casper.then(function () {
+        // casper.then(function () {
         casper.setFilter("page.prompt", function (msg, currentValue) {
             if (msg === "Are you sure you want to move notebook" + title + "to group" + GroupName + "?") {
                 return true;
             }
         });
         this.click("span.btn:nth-child(3)");
-        console.log("Notebook added to the 1st group");
+        console.log("Notebook added to the group");
     });
 
     casper.wait(10000);
@@ -218,7 +217,7 @@ casper.test.begin(" Assigning notebook to other Group as a member of that group 
     casper.wait(8000).then(function () {
         var title1 = functions.notebookname(casper); //this.fetchText({type: 'xpath', path: '//*[@id="notebook-title"]'});
         this.echo("Current loaded Notebbok : " + title1);
-        this.test.assertEquals(title, title1, "Confirmed that Member can also access the Notebbok, which is assigned to the Group");   
+        this.test.assertEquals(title, title1, "Confirmed that Member can also access the Notebbok, which is assigned to the Group");
     });
 
     casper.wait(4000).then(function () {
@@ -229,7 +228,7 @@ casper.test.begin(" Assigning notebook to other Group as a member of that group 
         });
     });
 
-    casper.wait(2000).then(function (){
+    casper.wait(2000).then(function () {
         this.wait(2000);
         temp1 = this.getElementInfo(".group-link").tag;
         this.test.assertNotEquals(temp, temp1, "href link doesnt exists, hence cannot be assigned to any other group");
