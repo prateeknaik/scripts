@@ -7,7 +7,7 @@
 
 //Begin Tests
 
-casper.test.begin("Open Notebook in Github option in Advanced drop-down link", 5, function suite(test) {
+casper.test.begin("Open Notebook in Github option in Advanced drop-down link", 6, function suite(test) {
     var x = require('casper').selectXPath;
     var github_username = casper.cli.options.username;
     var github_password = casper.cli.options.password;
@@ -35,14 +35,14 @@ casper.test.begin("Open Notebook in Github option in Advanced drop-down link", 5
     functions.create_notebook(casper);
 
     //Get notebook title
-    casper.then(function () {
+    casper.wait(2000).then(function () {
         title = functions.notebookname(casper);
         this.echo("New Notebook title : " + title);
         this.wait(3000);
     });
 
     //getting Notebook ID
-    casper.viewport(1024, 768).then(function () {
+    casper.wait(1000).then(function () {
         var temp1 = this.getCurrentUrl();
         notebookid = temp1.substring(41);
         this.echo("The Notebook Id: " + notebookid);
@@ -52,7 +52,7 @@ casper.test.begin("Open Notebook in Github option in Advanced drop-down link", 5
     functions.open_advanceddiv(casper);
 
     //clicking the checkbox to publish notebook
-    casper.viewport(1024, 768).then(function () {
+    casper.wait(1000).then(function () {
 		this.wait(2000);
         var z = casper.evaluate(function () {
             $('.icon-check-empty').click();
@@ -67,14 +67,14 @@ casper.test.begin("Open Notebook in Github option in Advanced drop-down link", 5
     
     casper.wait(1000);
     
-    casper.viewport(1366, 768).then(function () {
+    casper.wait(1000).then(function () {
         this.click("#main-div > p:nth-child(2) > a:nth-child(2)", "Logged out of Github");
         console.log('Logging out of Github');
         this.wait(3000);
     });
 
-    casper.wait(10000);
-    casper.viewport(1366, 768).then(function () {
+    
+    casper.wait(2000).then(function () {
         this.click(".btn");
         console.log('logged out of Github');
         this.wait(7000);
@@ -90,12 +90,10 @@ casper.test.begin("Open Notebook in Github option in Advanced drop-down link", 5
         });
     });
 
-    casper.wait(15000);
-
-    
+       
     //verify that the published notebook has been loaded
-    casper.then(function () {
-        publishedtitle = functions.notebookname(casper);
+    casper.wait(4000).then(function () {
+        publishedtitle =this.fetchText('#notebook-title');
         this.echo("Published Notebook title : " + publishedtitle);
         this.test.assertEquals(publishedtitle, title, "Confirmed that the view.html of published notebook has been loaded");
     });
@@ -124,8 +122,7 @@ casper.test.begin("Open Notebook in Github option in Advanced drop-down link", 5
                 console.log('Notebook could not be opened in github');
             }
         });
-    });
-   
+    });   
 
     casper.run(function () {
         test.done();

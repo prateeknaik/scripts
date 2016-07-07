@@ -28,13 +28,13 @@ casper.test.begin("Import Notebook from wrong file(non-JSON file)", 4, function 
         functions.inject_jquery(casper);
     });
 
-    casper.wait(5000);
+    casper.wait(10000);
 
-    casper.viewport(1024, 768).then(function () {
+    casper.then(function () {
         functions.login(casper, github_username, github_password, rcloud_url);
     });
 
-    casper.viewport(1024, 768).then(function () {
+    casper.wait(4000).then(function () {
         this.wait(3000);
         console.log("validating that the Main page has got loaded properly by detecting\n\
      if some of its elements are visible. Here we are checking for Shareable Link and Logout options");

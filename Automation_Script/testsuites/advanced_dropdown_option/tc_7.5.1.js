@@ -8,7 +8,7 @@
  */
 //Begin Tests
 
-casper.test.begin("Import Notebook from File", 4, function suite(test) {
+casper.test.begin("Import Notebook from File", 5, function suite(test) {
 
     var x = require('casper').selectXPath;
     var github_username = casper.cli.options.username;
@@ -28,13 +28,13 @@ casper.test.begin("Import Notebook from File", 4, function suite(test) {
         functions.inject_jquery(casper);
     });
 
-    casper.wait(5000);
+    casper.wait(10000);
 
     casper.viewport(1024, 768).then(function () {
         functions.login(casper, github_username, github_password, rcloud_url);
     });
 
-    casper.viewport(1024, 768).then(function () {
+    casper.wait(4000).then(function () {
         this.wait(3000);
         console.log("validating that the Main page has got loaded properly by detecting if some of its elements are visible. Here we are checking for Shareable Link and Logout options");
         functions.validation(casper);
@@ -105,20 +105,6 @@ casper.test.begin("Import Notebook from File", 4, function suite(test) {
         else {
             this.test.assertEquals(flag, 0, "Import Notebook from File, Notebook with title " + title + " is ABSENT under Notebooks tree");
         }
-        
-		this.then(function (){
-        	this.thenOpen(URL);
-        	this.wait(2000);
-    	});
-
-        //deleting the notebook
-        this.wait(3000).then(function(){
-            this.wait(3000);
-            this.mouse.move('ul.jqtree_common:nth-child(1) > li:nth-child(1) > ul:nth-child(2) > li:nth-child(1) > ul:nth-child(2) > li:nth-child(' + v + ') > div:nth-child(1)');
-            this.waitUntilVisible('ul.jqtree_common:nth-child(1) > li:nth-child(1) > ul:nth-child(2) > li:nth-child(1) > ul:nth-child(2) > li:nth-child(' + v + ') > div:nth-child(1) > span:nth-child(2) > span:nth-child(3) > span:nth-child(1) > span:nth-child(5) > i:nth-child(1)', function () {
-            	this.click('ul.jqtree_common:nth-child(1) > li:nth-child(1) > ul:nth-child(2) > li:nth-child(1) > ul:nth-child(2) > li:nth-child(' + v + ') > div:nth-child(1) > span:nth-child(2) > span:nth-child(3) > span:nth-child(1) > span:nth-child(5) > i:nth-child(1)');
-        	});
-        });
     });
     
     casper.run(function () {
