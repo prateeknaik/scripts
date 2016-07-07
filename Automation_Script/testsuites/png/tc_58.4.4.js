@@ -4,7 +4,7 @@
  */
 
 //Begin Tests
-casper.test.begin("Adding Notebook to other Group (other than existing group)", 9, function suite(test) {
+casper.test.begin("Adding Notebook to other Group (other than existing group)", 4, function suite(test) {
 
     var x = require('casper').selectXPath;
     var github_username = casper.cli.options.username;

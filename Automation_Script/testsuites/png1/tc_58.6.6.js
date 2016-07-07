@@ -43,7 +43,7 @@ casper.test.begin(" Assigning notebook to other Group as a member of that group 
         GroupName = this.evaluate(function () {
             return Math.random().toString(36).substr(2, 3);
         });
-        console.log('New group name is :' + GroupName);
+        console.log('Group which we are going to create is :' + GroupName);
     });
 
     //Open manage group window
@@ -67,7 +67,7 @@ casper.test.begin(" Assigning notebook to other Group as a member of that group 
             }
         });
         this.click("span.label:nth-child(1)");
-        console.log("Create new group")
+        console.log("Created new group with the name : " + GroupName);
     });
 
     casper.wait(9000);
@@ -123,7 +123,9 @@ casper.test.begin(" Assigning notebook to other Group as a member of that group 
             var select = document.querySelector(selector),
                 found = false;
             Array.prototype.forEach.call(select.children, function (opt, i) {
+                console.log("Outside if :" +i);
                 if (!found && opt.innerHTML.indexOf(textToMatch) !== -1) {
+                    console.log("Inside if : " + i);
                     select.selectedIndex = i;
                 }
             });
@@ -132,17 +134,18 @@ casper.test.begin(" Assigning notebook to other Group as a member of that group 
 
     casper.then(function () {
         this.wait(2999);
-        this.selectOptionByText("select.ng-pristine:nth-child(2)", GroupName);
-        console.log("Selecting 1st '" + GroupName + "' from the drop down menu");
+        this.selectOptionByText(x(".//*[@id='notebook-tab']/div[3]/select"), GroupName);
+        console.log("Selecting '" + GroupName + "' from the drop down menu");
     });
 
     casper.wait(5000);
 
     casper.then(function () {
         casper.setFilter("page.prompt", function (msg, currentValue) {
-            if (msg === "Are you sure you want to move notebook" + title + "to group" + GroupName + "?") {
-                return true;
-            }
+            // if (msg === "Are you sure you want to move notebook" + title + "to group" + GroupName + "?") {
+            //     return true;
+            // }
+            return true
         });
         this.click("span.btn:nth-child(3)");
         console.log("Notebook added to the 1st group");

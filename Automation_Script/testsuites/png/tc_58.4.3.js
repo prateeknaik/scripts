@@ -57,7 +57,7 @@ casper.test.begin("Importing External private notebook", 5, function suite(test)
         });
     });
 
-    casper.then(function () {
+    casper.wait(4000).then(function () {
         this.mouse.move('ul.jqtree_common:nth-child(1) > li:nth-child(1) > ul:nth-child(2) > li:nth-child(1) > ul:nth-child(2) > li:nth-child(1) > div:nth-child(1)');
         this.wait(2000)
         this.click("ul.jqtree_common:nth-child(1) > li:nth-child(1) > ul:nth-child(2) > li:nth-child(1) > ul:nth-child(2) > li:nth-child(1) > div:nth-child(1) > span:nth-child(2) > span:nth-child(3) > span:nth-child(1) > span:nth-child(1) > i:nth-child(1)")

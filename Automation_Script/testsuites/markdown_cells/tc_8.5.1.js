@@ -35,14 +35,11 @@ casper.test.begin("To toggle the display of output div for markdown cell which i
     functions.addnewcell(casper);
 
     //adding contents to the newly created Markdown cells
-    casper.wait(4000)(then(function)
-    {
-        casper.waitForSelector(x(".//*[@id='part1.R']/div[3]/div[1]/div[2]/div/div[2]/div"), function () {
+    casper.wait(4000).then(function () {
+        this.waitForSelector(x(".//*[@id='part1.R']/div[3]/div[1]/div[2]/div/div[2]/div"), function () {
             this.sendKeys(x(".//*[@id='part1.R']/div[3]/div[1]/div[2]/div/div[2]/div"), input_code)
         });
-    }
-    )
-    ;
+    });
 
     //change the language from R to Markdown
     casper.wait(4000).then(function () {
