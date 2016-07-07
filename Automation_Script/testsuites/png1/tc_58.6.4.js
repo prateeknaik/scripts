@@ -167,7 +167,7 @@ casper.test.begin("Accessing Notebook(Which is assigned to Group) as a member ",
 
     casper.wait(2000);
 
-    // functions.Logout(casper);
+    // Logout from RCloud and GitHub
     casper.then(function () {
         this.click("#rcloud-navbar-menu > li:nth-child(7) > a:nth-child(1)");
         console.log('User1 Logging out of RCloud');
@@ -185,11 +185,16 @@ casper.test.begin("Accessing Notebook(Which is assigned to Group) as a member ",
     casper.then(function () {
         this.click(".btn");
         console.log('logged out of Github');
+        this.wait(4000);
+    });
+
+    casper.then(function () {
         this.wait(7000);
         this.echo("The url after logging out of Github : " + this.getCurrentUrl());
         this.test.assertTextExists('GitHub', "Confirmed that successfully logged out of Github");
     });
 
+    //Logging in with another user
     casper.then(function () {
         this.thenOpen('http://127.0.0.1:8080/login.R');
         this.wait(13000);

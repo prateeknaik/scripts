@@ -4,7 +4,7 @@
  */
 
 //Begin Test
-casper.test.begin("deleting the created markdown cell ", 7, function suite(test) {
+casper.test.begin("deleting the created markdown cell ", 6, function suite(test) {
     var x = require('casper').selectXPath;
     var github_username = casper.cli.options.username;
     var github_password = casper.cli.options.password;
