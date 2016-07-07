@@ -54,10 +54,13 @@ casper.test.begin("Normal R Code output will be visible in mini.html page when u
         this.echo("Shared page title is :" + t);        
     });
 
-    casper.then(function (){
-        var y = this.fetchText('#test > code:nth-child(3)');
+    casper.wait(3000).then(function (){
+        this.wait(5000);
+        var y = this.fetchText('#test > pre:nth-child(3) > code:nth-child(1)');
         var u = y.substring(4);
-        this.test.assertMatch(u,/Normal R code output in Mini --->/, "R code has produced output in Mini.html" )
+        this.echo("Inside context output the R code is : " + u);
+        // this.test.assertMatch(u,/Normal R code output in Mini --->/, "R code has produced output in Mini.html" );
+        this.test.assertSelectorHasText("#test > pre:nth-child(3) > code:nth-child(1)", "Normal R code", "R code has produced output in Mini.html");
         this.echo("The output is :" + u);
     });
 

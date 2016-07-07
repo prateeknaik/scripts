@@ -14,7 +14,7 @@ Leaderart,musigma12,advanced_dropdown_option,FALSE
 ,,history,FALSE
 ,,load_notebook,FALSE
 ,,locator,FALSE
-,,login_logout,FALSE
+,,login_logout,TRUE
 ,,logout,FALSE
 ,,markdown_cells,FALSE
 ,,new_shareable_link,FALSE
@@ -22,7 +22,7 @@ Leaderart,musigma12,advanced_dropdown_option,FALSE
 ,,notebook_info,FALSE
 ,,notebook_naming,FALSE
 ,,other_functionalities,FALSE
-,,png,TRUE
+,,png,FALSE
 ,,png1,FALSE
 ,,private,FALSE
 ,,python_cells,FALSE
