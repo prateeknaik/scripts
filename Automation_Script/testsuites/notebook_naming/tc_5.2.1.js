@@ -1,5 +1,5 @@
 /* 
- Author: Arko
+ Author: Prateek
  Description:    This is a casperjs automated test script to enter alphabets only (A-Z, a-z) while changing the title a given notebook
  */
 
@@ -15,7 +15,7 @@ casper.test.begin(" Notebook rename:Alphabets", 4, function suite(test) {
     var title;
 
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
 
     casper.wait(10000);

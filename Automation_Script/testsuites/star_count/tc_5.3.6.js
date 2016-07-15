@@ -3,9 +3,7 @@
  Description:    This is a casperjs automated test script for showing that if a notebook is added in the list of 'All Notebooks' and its
  respective star is selected and count=1, then unstarring that notebook should remove it from the 'Notebooks I Starred' list and
  unstar it in 'People I Starred' list
-
-
- */
+*/
 
 //Begin Tests
 
@@ -19,7 +17,7 @@ casper.test.begin("If a notebook is added in the list of 'All Notebooks' and its
     var title;
 
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
     casper.wait(10000);
 

@@ -15,7 +15,7 @@ casper.test.begin("deleting the created Shell cell ", 8, function suite(test) {
     var temp;// To store the URL address
 
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
     casper.wait(10000);
 
@@ -33,15 +33,15 @@ casper.test.begin("deleting the created Shell cell ", 8, function suite(test) {
     functions.create_notebook(casper);
 
     //change the language from R to Shell
-    casper.then(function(){
-        this.mouse.click({ type: 'xpath' , path: ".//*[@id='prompt-area']/div[1]/div/select"});//x path for dropdown menu
+    casper.then(function () {
+        this.mouse.click({type: 'xpath', path: ".//*[@id='prompt-area']/div[1]/div/select"});//x path for dropdown menu
         this.echo('clicking on dropdown menu');
         this.wait(2000);
     });
 
     //selecting Shell from the drop down menu
-    casper.then(function(){
-        this.evaluate(function() {
+    casper.then(function () {
+        this.evaluate(function () {
             var form = document.querySelector('.form-control');
             form.selectedIndex = 4;
             $(form).change();
@@ -49,7 +49,7 @@ casper.test.begin("deleting the created Shell cell ", 8, function suite(test) {
     });
 
     //create a new cell
-    casper.then(function(){
+    casper.then(function () {
         functions.addnewcell(casper);
         console.log('Shell Language is selected from the drop down menu');
     });
@@ -58,17 +58,17 @@ casper.test.begin("deleting the created Shell cell ", 8, function suite(test) {
     functions.addcontentstocell(casper, input_code);
 
     //verfying the results
-    casper.then(function(){
+    casper.then(function () {
         // functions.runall(casper);
         this.wait(4000);
-        this.test.assertVisible(".r-result-div>pre>code",'Cell gets executed');
+        this.test.assertVisible(".r-result-div>pre>code", 'Cell gets executed');
         console.log('Output is visible after cell gets executed');
     });
 
     //Deleting the created cell
     casper.then(function () {
         this.click(x(".//*[@id='part1.sh']/div[2]/div[1]/span[1]/span/input"));
-        console.log("Selecting check box of the cell")        
+        console.log("Selecting check box of the cell")
         var z = casper.evaluate(function () {
             $('#selection-bar-delete').click();
         });
@@ -78,7 +78,7 @@ casper.test.begin("deleting the created Shell cell ", 8, function suite(test) {
     });
 
 
-    casper.then(function(){
+    casper.then(function () {
         temp = this.getCurrentUrl();// after deleting cell, fetching the URL and storing it in a variable temp
     });
 
@@ -86,18 +86,18 @@ casper.test.begin("deleting the created Shell cell ", 8, function suite(test) {
     functions.create_notebook(casper);
 
     //Switch back to the previous notebook and verify the cell gets deleted or not
-    casper.wait(5000,function(){
+    casper.wait(5000, function () {
         this.thenOpen(temp);
         this.wait(5000);
     });
 
-    casper.then(function(){
+    casper.then(function () {
         this.test.assertNotVisible(".cell-status.nonselectable", 'The deleted cell is not visible after navigating from anothe notebook');
     });
 
 
     //Registering to the page.errors actually not required but still if there are some errors found on the page it will gives us the details
-    casper.on("page.error", function(msg, trace) {
+    casper.on("page.error", function (msg, trace) {
         this.echo("Error:    " + msg, "ERROR");
         this.echo("file:     " + trace[0].file, "WARNING");
         this.echo("line:     " + trace[0].line, "WARNING");
@@ -105,7 +105,7 @@ casper.test.begin("deleting the created Shell cell ", 8, function suite(test) {
         errors.push(msg);
     });
 
-    casper.run(function() {
+    casper.run(function () {
         if (errors.length > 0) {
             this.echo(errors.length + ' Javascript errors found', "WARNING");
         } else {

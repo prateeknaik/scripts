@@ -3,9 +3,7 @@
  Description:    This is a casperjs automated test script for showing that if a notebook is added in the list of 'All Notebooks' and its
  respective star is not selected and count=0, then that notebook is not added to the 'Notebooks I Starred' list. It will be present
  in "People I Starred"
-
-
- */
+*/
 
 //Begin Tests
 
@@ -19,7 +17,7 @@ casper.test.begin("If a notebook is added in the list of 'All Notebooks' and its
     var title;
 
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
     casper.wait(10000);
 

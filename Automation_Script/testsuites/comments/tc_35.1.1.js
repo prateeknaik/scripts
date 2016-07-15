@@ -12,7 +12,8 @@ casper.test.begin("Verifying the username along side the comment", 5, function s
     var github_password = casper.cli.options.password;
     var rcloud_url = casper.cli.options.url;
     var functions = require(fs.absolute('basicfunctions'));
-    var comment="AGENT_COULSON"; // comment to be posted 
+    var comment="AGENT_COULSON"; // comment to be posted
+    
     casper.start(rcloud_url, function () {
         functions.inject_jquery(casper);
     });

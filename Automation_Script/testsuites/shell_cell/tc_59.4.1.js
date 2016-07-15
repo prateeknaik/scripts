@@ -14,7 +14,7 @@ casper.test.begin("Hide/show output", 5, function suite(test) {
     var input = 'pwd';
 
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
     casper.wait(10000);
 

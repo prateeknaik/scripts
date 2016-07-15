@@ -1,9 +1,7 @@
 /*
-
- Author: Arko
+ Author: Prateek
  Description:The name of the Notebook owner should be present infront of the Notebook title in the format <Notebook owner>-[Notebook title]
-
- */
+*/
 
 //Begin Test
 
@@ -17,7 +15,7 @@ casper.test.begin("User name present infront of Notebook title", 4, function sui
     var title;
 
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
 
     casper.wait(10000);

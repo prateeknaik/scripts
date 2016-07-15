@@ -16,7 +16,7 @@ casper.test.begin("Log Back In -> user is not logged-in to the Github account", 
     var functions = require(fs.absolute('basicfunctions'));
 
     casper.start(logout_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);//inject jquery codes
         console.log("Here we will start the test cases using the goodbye.R url instead of login.R. Then, if the user is not logged in to Github, he will be redirected to the Github page")
     });
 

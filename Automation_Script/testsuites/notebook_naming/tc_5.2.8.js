@@ -5,7 +5,6 @@
  */
 
 //Begin Tests
-
 casper.test.begin(" Notebook rename:Whitespace", 4, function suite(test) {
 
     var x = require('casper').selectXPath;
@@ -16,7 +15,7 @@ casper.test.begin(" Notebook rename:Whitespace", 4, function suite(test) {
     var title;
 
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
 
     casper.wait(10000);
@@ -37,7 +36,7 @@ casper.test.begin(" Notebook rename:Whitespace", 4, function suite(test) {
 
     //getting the notebook title and modifying it
     casper.viewport(1024, 768).then(function () {
-		this.wait(3000);
+        this.wait(3000);
         title = functions.notebookname(casper);
         this.echo("Present title of notebook: " + title);
         var z = casper.evaluate(function triggerKeyDownEvent() {
@@ -63,7 +62,7 @@ casper.test.begin(" Notebook rename:Whitespace", 4, function suite(test) {
         this.echo("Modified notebook title: " + newtitle);
         this.test.assertEquals(newtitle, title, "the title has remained unchanged");
     });
-	
+
 
     casper.run(function () {
         test.done();

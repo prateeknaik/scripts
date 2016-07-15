@@ -1,4 +1,4 @@
-Leaderart,musigma12,advanced_dropdown_option,FALSE
+attMuSigma,musigma12,advanced_dropdown_option,FALSE
 ,,anonymous_user,FALSE
 ,,asset,FALSE
 ,,cell_numbers,FALSE
@@ -14,7 +14,7 @@ Leaderart,musigma12,advanced_dropdown_option,FALSE
 ,,history,FALSE
 ,,load_notebook,FALSE
 ,,locator,FALSE
-,,login_logout,TRUE
+,,login_logout,FALSE
 ,,logout,FALSE
 ,,markdown_cells,FALSE
 ,,new_shareable_link,FALSE
@@ -35,7 +35,7 @@ Leaderart,musigma12,advanced_dropdown_option,FALSE
 ,,settings,FALSE
 ,,shareable_link,FALSE
 ,,shell_cell,FALSE
-,,split_coalesce,FALSE
+,,split_coalesce,TRUE
 ,,star_count,FALSE
 ,,stop,FALSE
 ,,verify_output,FALSE

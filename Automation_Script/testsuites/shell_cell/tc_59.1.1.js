@@ -1,6 +1,6 @@
 /*
-Author: Prateek
-Description:To write a code in the Shell cell
+ Author: Prateek
+ Description:To write a code in the Shell cell
  */
 
 //Begin Test
@@ -12,9 +12,9 @@ casper.test.begin("Creating a Shell cell and writing code in it", 4, function su
     var functions = require(fs.absolute('basicfunctions'));
     var errors = [];
     var input = 'pwd';
-    
-casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+
+    casper.start(rcloud_url, function () {
+        functions.inject_jquery(casper);
     });
     casper.wait(10000);
 
@@ -22,25 +22,26 @@ casper.start(rcloud_url, function () {
         functions.login(casper, github_username, github_password, rcloud_url);
     });
 
+
     casper.viewport(1024, 768).then(function () {
         this.wait(9000);
         console.log("validating that the Main page has got loaded properly by detecting if some of its elements are visible. Here we are checking for Shareable Link and Logout options");
         functions.validation(casper);
     });
-    
+
     //create a new notebook
     functions.create_notebook(casper);
-    
+
     //change the language from R to Python
-    casper.then(function(){
-        this.mouse.click({ type: 'xpath' , path: ".//*[@id='prompt-area']/div[1]/div/select"});//x path for dropdown menu
+    casper.then(function () {
+        this.mouse.click({type: 'xpath', path: ".//*[@id='prompt-area']/div[1]/div/select"});//x path for dropdown menu
         this.echo('clicking on dropdown menu');
         this.wait(2000);
     });
-    
+
     //selecting Python from the drop down menu
-    casper.then(function(){
-        this.evaluate(function() {
+    casper.then(function () {
+        this.evaluate(function () {
             var form = document.querySelector('.form-control');
             form.selectedIndex = 4;
             $(form).change();
@@ -48,39 +49,39 @@ casper.start(rcloud_url, function () {
     });
 
     //create a new cell
-    casper.then(function(){
+    casper.then(function () {
         console.log('Shell Language is selected from the drop down menu');
-        functions.addnewcell(casper,"New Python cell is created");      
+        functions.addnewcell(casper, "New Python cell is created");
     });
 
-    casper.then(function(){
-        this.sendKeys({type:'css', path:'.ace_content'}, input);
+    casper.then(function () {
+        this.sendKeys({type: 'css', path: '.ace_content'}, input);
         this.wait(2000);
     });
 
     functions.runall(casper);
 
-    casper.then(function (){
+    casper.then(function () {
         this.exists(x(".//*[@id='part1.sh']/div[3]/div[2]/pre/code"));
         console.log('Shell cell has produced expected Output, so code can be written in Shell cell');
     });
-    
+
     //Registering to the page.errors actually not required but still if there are some errors found on the page it will gives us the details
-    casper.on("page.error", function(msg, trace) {
-      this.echo("Error:    " + msg, "ERROR");
-      this.echo("file:     " + trace[0].file, "WARNING");
-      this.echo("line:     " + trace[0].line, "WARNING");
-      this.echo("function: " + trace[0]["function"], "WARNING");
-      errors.push(msg);
+    casper.on("page.error", function (msg, trace) {
+        this.echo("Error:    " + msg, "ERROR");
+        this.echo("file:     " + trace[0].file, "WARNING");
+        this.echo("line:     " + trace[0].line, "WARNING");
+        this.echo("function: " + trace[0]["function"], "WARNING");
+        errors.push(msg);
     });
-    
-    casper.run(function() {
-      if (errors.length > 0) {
-        this.echo(errors.length + ' Javascript errors found', "WARNING");
-      } else {
-        this.echo(errors.length + ' Javascript errors found', "INFO");
-      }
-      test.done();
+
+    casper.run(function () {
+        if (errors.length > 0) {
+            this.echo(errors.length + ' Javascript errors found', "WARNING");
+        } else {
+            this.echo(errors.length + ' Javascript errors found', "INFO");
+        }
+        test.done();
     });
 });
     

@@ -14,7 +14,7 @@ casper.test.begin("Delete a shell cell", 5, function suite(test) {
     var input = 'pwd';
 
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);
     });
     casper.wait(10000);
 
@@ -67,7 +67,7 @@ casper.test.begin("Delete a shell cell", 5, function suite(test) {
 
     casper.then(function () {
         this.click(x(".//*[@id='part1.sh']/div[2]/div[1]/span[1]/span/input"));
-        console.log("Selecting check box of the cell")        
+        console.log("Selecting check box of the cell")
         var z = casper.evaluate(function () {
             $('#selection-bar-delete').click();
         });

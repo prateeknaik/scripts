@@ -15,7 +15,7 @@ casper.test.begin("Login to Main page (user is not logged-in to the Github accou
     var functions = require(fs.absolute('basicfunctions'));
 
     casper.start(rcloud_url, function () {
-        casper.page.injectJs('jquery-1.10.2.js');
+        functions.inject_jquery(casper);//inject jquery codes
     });
 
     casper.viewport(1024, 768).then(function () {
