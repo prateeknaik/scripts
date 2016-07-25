@@ -14,7 +14,7 @@ casper.test.begin("Notebook info icon", 6, function suite(test) {
     var title;
 
     casper.start(rcloud_url, function () {
-        functions.inject_jquery(casper);
+        casper.page.injectJs('jquery-1.10.2.js');
     });
     casper.wait(10000);
 
@@ -42,11 +42,10 @@ casper.test.begin("Notebook info icon", 6, function suite(test) {
         if (this.test.assertVisible({type: 'css', path: '.jqtree-selected > div:nth-child(1) > span:nth-child(1)'})) {
             console.log('selected notbook found');
             this.mouse.move('.jqtree-selected > div:nth-child(1) > span:nth-child(1)');
-            this.waitUntilVisible('.icon-info-sign', function () {
-                if (this.test.assertVisible({
-                        type: 'css',
-                        path: '.icon-info-sign'
-                    }, 'Checking for notebook info icon')) {
+            this.waitUntilVisible('.icon-info-sign', function () 
+            {
+                if (this.test.assertVisible({type:'css',path:'.icon-info-sign'}, 'Checking for notebook info icon')) 
+                {
                     this.test.pass("Notebook info icon is present");
                 } else {
                     this.test.fail("Notebook info icon is not present");
@@ -57,7 +56,7 @@ casper.test.begin("Notebook info icon", 6, function suite(test) {
             console.log("Notebook not found");
         }
     });
-
+    
     functions.delete_notebooksIstarred(casper);
 
     casper.run(function () {

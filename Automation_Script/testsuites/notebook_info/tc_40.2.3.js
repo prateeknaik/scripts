@@ -2,7 +2,7 @@
  Auther : Prateek
  Description: This is a casperjs automated test script,To verify the disappearance of popover when the 
  * 'notebook info' option for other notebook is clicked
- */
+*/
 
 //Begin test
 casper.test.begin("Verifying the disappearance of popover for other than selected notebook", 8, function suite(test) {
@@ -12,10 +12,12 @@ casper.test.begin("Verifying the disappearance of popover for other than selecte
     var github_password = casper.cli.options.password;
     var rcloud_url = casper.cli.options.url;
     var functions = require(fs.absolute('basicfunctions'));
-    var title, initial_title, v;
+    var title;
+    var initial_title;
+    var v;
 
     casper.start(rcloud_url, function () {
-        functions.inject_jquery(casper);
+        casper.page.injectJs('jquery-1.10.2.js');
     });
     casper.wait(10000);
 
@@ -27,6 +29,7 @@ casper.test.begin("Verifying the disappearance of popover for other than selecte
         this.wait(9000);
         console.log("validating that the Main page has got loaded properly by detecting if some of its elements are visible. Here we are checking for Shareable Link and Logout options");
         functions.validation(casper);
+
     });
 
     //Create a new Notebook.
@@ -40,7 +43,6 @@ casper.test.begin("Verifying the disappearance of popover for other than selecte
     });
 
     functions.checkstarred(casper);
-
     //Creating another New notebook
     functions.create_notebook(casper);
 
@@ -92,10 +94,7 @@ casper.test.begin("Verifying the disappearance of popover for other than selecte
             this.test.fail("Popover content is not present");
         }
         this.click('ul.jqtree_common:nth-child(1) > li:nth-child(1) > ul:nth-child(2) > li:nth-child(1) > ul:nth-child(2) > li:nth-child(' + v + ') > div:nth-child(1) > span:nth-child(2) > span:nth-child(3) > span:nth-child(1) > span:nth-child(1) > i:nth-child(1)');
-        if (this.test.assertExists({
-                type: 'xpath',
-                path: '/html/body/div[4]'
-            }, "verifying for popover after clicking again on notebook info icon")) {
+        if (this.test.assertExists({type: 'xpath', path: '/html/body/div[4]'}, "verifying for popover after clicking again on notebook info icon")) {
             this.test.pass("Popover content hides after clicking on notebook info");
         } else {
             this.test.fail("Popover content is still present");

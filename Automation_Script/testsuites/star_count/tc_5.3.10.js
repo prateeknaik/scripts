@@ -2,6 +2,8 @@
  Author: Arko
  Description:    This is a casperjs automated test script for showing that if the loaded notebook is added in the 'Notebooks I Starred' list, then
  the star present on the top-left corner of the page is selected and count=1
+
+
  */
 
 //Begin Tests
@@ -17,7 +19,7 @@ casper.test.begin(" If the loaded notebook is added in the 'Notebooks I Starred'
     var starcount;
 
     casper.start(rcloud_url, function () {
-        functions.inject_jquery(casper);
+        casper.page.injectJs('jquery-1.10.2.js');
     });
     casper.wait(10000);
 

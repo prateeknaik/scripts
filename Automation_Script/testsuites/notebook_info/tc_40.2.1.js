@@ -12,7 +12,7 @@ casper.test.begin("Check the occurrence of popover when the 'notebook info' opti
     var functions = require(fs.absolute('basicfunctions'));
         
     casper.start(rcloud_url, function () {
-        functions.inject_jquery(casper);
+        casper.page.injectJs('jquery-1.10.2.js');
     });
     
     casper.wait(10000);

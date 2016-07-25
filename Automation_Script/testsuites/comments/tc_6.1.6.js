@@ -4,6 +4,8 @@
  */
 
 //Begin Tests
+
+
 casper.test.begin("Delete comment for a notebook", 5, function suite(test) {
 
     var x = require('casper').selectXPath;

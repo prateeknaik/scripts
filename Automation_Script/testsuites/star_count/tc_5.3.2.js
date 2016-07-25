@@ -3,9 +3,12 @@
  Description:    This is a casperjs automated test script for showing that if a notebook is added in the list of 'All Notebooks' and its
  respective star is selected and count=1, then that notebook is also added to the 'Notebooks I Starred' and 'People I Starred'
  list with star selected and count=1
-*/
+
+
+ */
 
 //Begin Tests
+
 casper.test.begin("If a notebook is added in the list of 'All Notebooks' and its respective star is selected and count=1, then that notebook is also added to the 'Notebooks I Starred' and 'People I Starred' list with star selected and count=1", 6, function suite(test) {
 
     var x = require('casper').selectXPath;
@@ -16,7 +19,7 @@ casper.test.begin("If a notebook is added in the list of 'All Notebooks' and its
     var title;
 
     casper.start(rcloud_url, function () {
-        functions.inject_jquery(casper);
+        casper.page.injectJs('jquery-1.10.2.js');
     });
     casper.wait(10000);
 

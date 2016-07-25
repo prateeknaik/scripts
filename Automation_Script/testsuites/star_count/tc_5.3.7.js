@@ -2,7 +2,9 @@
  Author: Prateek
  Description:    This is a casperjs automated test script for showning that For the "Search" option, the text entered in the text box for
  'full-text search' will consist of Text within double quotes for Search like "storm", "end" etc. only
-*/
+
+
+ */
 
 //Begin Tests
 
@@ -16,7 +18,7 @@ casper.test.begin("If a notebook belonging to another user is loaded it will be 
     var notebookid = '3371fc709d91c67f06a1';//to get the notebook id
 					  
     casper.start(rcloud_url, function () {
-        functions.inject_jquery(casper);
+        casper.page.injectJs('jquery-1.10.2.js');
     });
 
     casper.wait(10000);

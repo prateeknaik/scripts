@@ -15,7 +15,7 @@ casper.test.begin("Redirect to GitHub Page after logging out", 6, function suite
     var functions = require(fs.absolute('basicfunctions'));
 
     casper.start(rcloud_url, function () {
-        functions.inject_jquery(casper);//inject jquery codes
+        casper.page.injectJs('jquery-1.10.2.js');
     });
 
     casper.wait(10000);

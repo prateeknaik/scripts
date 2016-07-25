@@ -1,10 +1,9 @@
 /*
  Author: Sanket (tc_61.1.1.js)
  Description: This is casperJS automated test to check whether locator() gets invoked in the R cell above the R cell having plot
- */
+*/
 
 //Begin
-
 casper.test.begin("Invoke locator function above the cell with plot",8,function suite(test) {
     var x = require('casper').selectcss;
     var github_username = casper.cli.options.username;
@@ -12,7 +11,6 @@ casper.test.begin("Invoke locator function above the cell with plot",8,function 
     var rcloud_url = casper.cli.options.url;
     var functions = require(fs.absolute('basicfunctions'));
     var input_code = "plot(1:10)";
-    
 
     casper.start(rcloud_url, function () {
         functions.inject_jquery(casper);
@@ -28,7 +26,6 @@ casper.test.begin("Invoke locator function above the cell with plot",8,function 
         this.wait(9000);
         console.log("validating that the Main page has got loaded properly by detecting if some of its elements are visible. Here we are checking for Shareable Link and Logout options");
         functions.validation(casper);
-
     });
 
     //Create a new Notebook.
@@ -38,7 +35,6 @@ casper.test.begin("Invoke locator function above the cell with plot",8,function 
     casper.wait(2000).then(function(){
         functions.addnewcell(casper);        
     });
-
 
     //add contents to new cell
     casper.wait(2000).then(function(){
@@ -79,13 +75,10 @@ casper.test.begin("Invoke locator function above the cell with plot",8,function 
                 this.test.fail('Cell is not present to pass the code content');
             }
     });
-
     
     casper.wait(1000).then(function(){
         functions.runall(casper);
     });
-
-
     
     //check for locator() feature to be invoked 
     casper.then(function() {
@@ -100,8 +93,7 @@ casper.test.begin("Invoke locator function above the cell with plot",8,function 
         this.wait(2000)
         this.click('.jqtree-selected > div:nth-child(1) > span:nth-child(2) > span:nth-child(3) > span:nth-child(1) > span:nth-child(5) > i:nth-child(1)')
     });
-
-
+    
     casper.run(function () {
         test.done();
     });

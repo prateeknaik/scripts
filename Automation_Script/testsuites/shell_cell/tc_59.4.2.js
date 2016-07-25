@@ -15,7 +15,7 @@ casper.test.begin("Show/Hide output for un executed cell", 6, function suite(tes
     var input = 'pwd';
 
     casper.start(rcloud_url, function () {
-        functions.inject_jquery(casper);
+        casper.page.injectJs('jquery-1.10.2.js');
     });
     casper.wait(10000);
 
@@ -59,7 +59,7 @@ casper.test.begin("Show/Hide output for un executed cell", 6, function suite(tes
         this.wait(2000);
     });
 
-    casper.then(function () {
+    casper.then(function(){
         this.test.assertNotVisible('.r-result-div>pre>code', "Before execution, output div is not visible");
     });
 

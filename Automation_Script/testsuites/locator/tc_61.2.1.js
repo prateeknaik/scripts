@@ -28,10 +28,9 @@ casper.test.begin("Invoke locator function with plot in view.html", 8, function 
         this.wait(9000);
         console.log("validating that the Main page has got loaded properly by detecting if some of its elements are visible. Here we are checking for Shareable Link and Logout options");
         functions.validation(casper);
-
     });
 
-        //Create a new Notebook.
+    //Create a new Notebook.
     functions.create_notebook(casper);
 
     //add a new cell and execute its contents
@@ -48,8 +47,6 @@ casper.test.begin("Invoke locator function with plot in view.html", 8, function 
     casper.wait(2000).then(function(){
         functions.addnewcell(casper);
     });
-
-
 
     //add contents to new cell
     casper.wait(2000).then(function(){
@@ -94,15 +91,13 @@ casper.test.begin("Invoke locator function with plot in view.html", 8, function 
             });
         });
     });
-
-
+    
     //check for locator feature by checking the crosshair cursor
     casper.wait(3000).then(function() {
         var str = this.getElementsAttribute('.live-plot-container', 'style'); 
         this.test.assertEquals(str,['cursor: crosshair;'], 'Locator function got invoked successfully')
         this.wait(3000)
     });
-
 
     casper.run(function () {
         test.done();

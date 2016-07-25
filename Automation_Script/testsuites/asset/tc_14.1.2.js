@@ -54,18 +54,21 @@ casper.test.begin("Modify contents of an asset", 5, function suite(test) {
 
     //Uploading file
     casper.then(function () {
-        this.evaluate(function (fileName) {
-            __utils__.findOne('input[type="file"]').setAttribute('value', fileName)
-        }, {fileName: fileName});
-        this.page.uploadFile('input[type="file"]', fileName);
+        // this.evaluate(function (fileName) {//#file .//*[@id='file']
+        //     __utils__.findOne('#file').setAttribute('value', fileName)
+        // }, {fileName: fileName});
+        // this.page.uploadFile('#file', fileName);
+        // this.echo("FILE PATH :- " + fileName);
+
+        casper.page.uploadFile("#file", fileName);
         console.log('Selecting a file');
     });
 
     casper.then(function () {
         this.wait(5000, function () {
-            this.click(x(".//*[@id='upload-to-notebook']"));
+            this.click("#upload-to-notebook");
             console.log("Clicking on Upload to notebook check box");
-            this.click(x(".//*[@id='upload-submit']"));
+            this.click("#upload-submit");
             console.log("Clicking on Submit icon");
         });
     });
@@ -77,9 +80,9 @@ casper.test.begin("Modify contents of an asset", 5, function suite(test) {
         });
     });
 
-    casper.then(function (){
-        console.log('Verifying whether the uploaded contentsa are present in Asset div or not');
-        this.test.assertSelectorHasText(x(".//*[@id='asset-list']/li[3]/a/span[1]"), 'PHONE.csv', 'Uploaded file is present in assets');
+    casper.then(function (){//
+        console.log('Verifying whether the uploaded contents are present in Asset div or not');
+        this.test.assertSelectorHasText("#asset-list", 'PHONE.csv', 'Uploaded file is present in assets');
     });
 
     casper.wait(3000);

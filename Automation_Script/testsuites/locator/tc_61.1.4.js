@@ -12,7 +12,6 @@ casper.test.begin("Invoke locator function with plot", 6, function suite(test) {
     var rcloud_url = casper.cli.options.url;
     var functions = require(fs.absolute('basicfunctions'));
     var input_code = "plot(1:10) \n locator(2)";
-    
 
     casper.start(rcloud_url, function () {
         functions.inject_jquery(casper);
@@ -28,7 +27,6 @@ casper.test.begin("Invoke locator function with plot", 6, function suite(test) {
         this.wait(9000);
         console.log("validating that the Main page has got loaded properly by detecting if some of its elements are visible. Here we are checking for Shareable Link and Logout options");
         functions.validation(casper);
-
     });
 
     //Create a new Notebook.
@@ -55,8 +53,7 @@ casper.test.begin("Invoke locator function with plot", 6, function suite(test) {
         this.wait(2000)
         this.click('.jqtree-selected > div:nth-child(1) > span:nth-child(2) > span:nth-child(3) > span:nth-child(1) > span:nth-child(5) > i:nth-child(1)')
     });
-
-
+    
     casper.run(function () {
         test.done();
     });

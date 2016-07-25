@@ -2,9 +2,11 @@
  Author: Arko
  Description:    This is a casperjs automated test script for showing that if a notebook is added in the list of 'All Notebooks' and its respective
  star is not selected and count=0, then selecting the star of that notebook should also add it to the 'Notebooks I Starred' list .
-*/
+
+ */
 
 //Begin Tests
+
 casper.test.begin("If a notebook is added in the list of 'All Notebooks' and its respective star is not selected and count=0, then selecting the star of that notebook should also add it to the 'Notebooks I Starred' list", 7, function suite(test) {
 
     var x = require('casper').selectXPath;
@@ -15,7 +17,7 @@ casper.test.begin("If a notebook is added in the list of 'All Notebooks' and its
     var title;
 
     casper.start(rcloud_url, function () {
-        functions.inject_jquery(casper);
+        casper.page.injectJs('jquery-1.10.2.js');
     });
     casper.wait(10000);
 
