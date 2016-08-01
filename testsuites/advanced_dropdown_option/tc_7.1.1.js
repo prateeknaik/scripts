@@ -2,7 +2,7 @@
  Author: Prateek
  Description:    This is a casperjs automated test script for showing that the gist of notebook belonging to same user can be opened in Github
  by selecting the link for "open in Github" under the Advanced drop-down link present on the top-right corner of the page
- */
+*/
 
 //Begin Tests
 
