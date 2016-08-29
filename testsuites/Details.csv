@@ -1,5 +1,5 @@
 att-MuSigma,musigma12,advanced_dropdown_option,FALSE
-,,anonymous_user,FALSE
+,,anonymous_user,TRUE
 ,,asset,FALSE
 ,,cell_numbers,FALSE
 ,,cell_status,FALSE
@@ -10,7 +10,7 @@ att-MuSigma,musigma12,advanced_dropdown_option,FALSE
 ,,direct_output,FALSE
 ,,enable_disable,FALSE
 ,,fcs,FALSE
-,,file_upload,TRUE
+,,file_upload,FALSE
 ,,history,FALSE
 ,,load_notebook,FALSE
 ,,locator,FALSE
@@ -24,7 +24,7 @@ att-MuSigma,musigma12,advanced_dropdown_option,FALSE
 ,,other_functionalities,FALSE
 ,,private_group,FALSE
 ,,png1,FALSE
-,,private,FALSE
+,,private,TRUE
 ,,python_cells,FALSE
 ,,r_cells,FALSE
 ,,recent,FALSE
