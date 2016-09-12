@@ -3,7 +3,7 @@
  Description:This test describes, Check whether the member of the group can be able to reassign the Notebook to some of his Groups
  */
 //Begin Tests
-casper.test.begin(" Assigning notebook to other Group as a member of that group ", 9, function suite(test) {
+casper.test.begin(" Assigning notebook to other Group as a member of that group ", 8, function suite(test) {
 
     var x = require('casper').selectXPath;
     var github_username = casper.cli.options.username;
@@ -34,7 +34,7 @@ casper.test.begin(" Assigning notebook to other Group as a member of that group 
         URL = this.getCurrentUrl();
         NotebookID = URL.substring(41);
         console.log("New Notebook ID is " + NotebookID);
-        title = this.fetchText({type: 'xpath', path: '//*[@id="notebook-title"]'});
+        title = this.fetchText(".jqtree-selected > div:nth-child(1) > span:nth-child(1)");
         this.echo("New notebook name = " + title);
     });
 
@@ -219,20 +219,7 @@ casper.test.begin(" Assigning notebook to other Group as a member of that group 
         this.echo("Current loaded Noteb0ok : " + title1);
         this.test.assertEquals(title, title1, "Confirmed that Member can also access the Notebbok, which is assigned to the Group");   
     });
-
-    // casper.then(function () {
-    //     this.mouse.move('.jqtree-selected > div:nth-child(1)');
-    //     this.waitUntilVisible('.jqtree-selected > div:nth-child(1) > span:nth-child(2) > span:nth-child(3) > span:nth-child(1) > span:nth-child(1) > i:nth-child(1)', function () {
-    //         this.click('.jqtree-selected > div:nth-child(1) > span:nth-child(2) > span:nth-child(3) > span:nth-child(1) > span:nth-child(1) > i:nth-child(1)');
-    //         console.log('Clicking notebook info');
-    //     });
-    // });
-
-    // casper.wait(2000).then(function (){
-    //     this.wait(2000);
-    //     this.click(".group-link");
-        
-    // });
+    
     //Open manage group window
     casper.then(function () {
         this.click("li.dropdown > a:nth-child(1)");
@@ -245,17 +232,19 @@ casper.test.begin(" Assigning notebook to other Group as a member of that group 
     });
 
     //select the group and click ok
-    casper.selectOptionByText = function (selector, textToMatch) {
-        this.evaluate(function (selector, textToMatch) {
-            var select = document.querySelector(selector),
-                found = false;
-            Array.prototype.forEach.call(select.children, function (opt, i) {
-                if (!found && opt.innerHTML.indexOf(textToMatch) !== -1) {
-                    select.selectedIndex = i;
-                }
-            });
-        }, selector, textToMatch);
-    };
+    casper.wait(5000).then(function (){
+        casper.selectOptionByText = function (selector, textToMatch) {
+            this.evaluate(function (selector, textToMatch) {
+                var select = document.querySelector(selector),
+                    found = false;
+                Array.prototype.forEach.call(select.children, function (opt, i) {
+                    if (!found && opt.innerHTML.indexOf(textToMatch) !== -1) {
+                        select.selectedIndex = i;
+                    }
+                });
+            }, selector, textToMatch);
+        };
+    });
 
     casper.then(function () {
         this.wait(2999);

@@ -34,7 +34,7 @@ casper.test.begin("Assigning single notebook to a group with multiple admin to t
         URL = this.getCurrentUrl();
         NotebookID = URL.substring(41);
         console.log("New Notebook ID is " + NotebookID);
-        title = this.fetchText({type: 'xpath', path: '//*[@id="notebook-title"]'});
+        title = this.fetchText(".jqtree-selected > div:nth-child(1) > span:nth-child(1)");
         this.echo("New notebook name = " + title);
     });
 
@@ -115,20 +115,21 @@ casper.test.begin("Assigning single notebook to a group with multiple admin to t
         this.click('#greenRadio');
     });
 
-    casper.wait(4000);
-
     //select the group and click ok
-    casper.selectOptionByText = function (selector, textToMatch) {
-        this.evaluate(function (selector, textToMatch) {
-            var select = document.querySelector(selector),
-                found = false;
-            Array.prototype.forEach.call(select.children, function (opt, i) {
-                if (!found && opt.innerHTML.indexOf(textToMatch) !== -1) {
-                    select.selectedIndex = i;
-                }
-            });
-        }, selector, textToMatch);
-    };
+    casper.wait(4000).then(function (){
+        casper.selectOptionByText = function (selector, textToMatch) {
+            this.evaluate(function (selector, textToMatch) {
+                var select = document.querySelector(selector),
+                    found = false;
+                Array.prototype.forEach.call(select.children, function (opt, i) {
+                    if (!found && opt.innerHTML.indexOf(textToMatch) !== -1) {
+                        select.selectedIndex = i;
+                    }
+                });
+            }, selector, textToMatch);
+        };
+    })
+    
 
     casper.then(function () {
         this.wait(2999);
@@ -202,10 +203,8 @@ casper.test.begin("Assigning single notebook to a group with multiple admin to t
         this.thenOpen(URL);
     });
 
-    casper.wait(8000);
-
-    casper.then(function () {
-        var title1 = this.fetchText({type: 'xpath', path: '//*[@id="notebook-title"]'});
+    casper.wait(8000).then(function () {
+        var title1 = this.fetchText(".jqtree-selected > div:nth-child(1) > span:nth-child(1)");
         this.echo("Current loaded Notebbok : " + title1);
         this.test.assertEquals(title, title1, "Confirmed that 2nd admin can also access the Notebbok, which is assigned to the Group");   
     });

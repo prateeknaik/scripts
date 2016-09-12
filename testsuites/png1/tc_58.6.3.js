@@ -92,46 +92,41 @@ casper.test.begin("Accessing Notebook(Which is assigned to Group) as a member ",
         this.echo('Inserted both the memebr to the group');
     });
 
-    casper.wait(8000);
-
     //Click on notebook info icon
-    casper.then(function () {
-        this.then(function () {
-            this.mouse.move('.jqtree-selected > div:nth-child(1)');
-            this.waitUntilVisible('.jqtree-selected > div:nth-child(1) > span:nth-child(2) > span:nth-child(3) > span:nth-child(1) > span:nth-child(1) > i:nth-child(1)', function () {
-                this.click('.jqtree-selected > div:nth-child(1) > span:nth-child(2) > span:nth-child(3) > span:nth-child(1) > span:nth-child(1) > i:nth-child(1)');
-                console.log('Clicking notebook info');
-            });
-        });
+    casper.wait(5000).then(function () {
+        this.mouse.move('.jqtree-selected > div:nth-child(1) > span:nth-child(1)');
+        this.waitUntilVisible('.jqtree-selected > div:nth-child(1) > span:nth-child(2) > span:nth-child(3) > span:nth-child(1) > span:nth-child(1) > i:nth-child(1)', function () {
+            this.click('.jqtree-selected > div:nth-child(1) > span:nth-child(2) > span:nth-child(3) > span:nth-child(1) > span:nth-child(1) > i:nth-child(1)');
+            console.log('Clicking notebook info');
+        });   
     });
-    casper.wait(5000);
-
-    casper.then(function () {
+    
+    casper.wait(5000).then(function () {
         this.click(".group-link > a:nth-child(1)");
     });
 
-    casper.wait(4000);
-
     //Select group radio button
-    casper.then(function () {
+    casper.wait(5000).then(function () {
         this.click('#greenRadio');
     });
 
     casper.wait(4000);
 
     //select the group and click ok
-    casper.selectOptionByText = function (selector, textToMatch) {
-        this.evaluate(function (selector, textToMatch) {
-            var select = document.querySelector(selector),
-                found = false;
-            Array.prototype.forEach.call(select.children, function (opt, i) {
-                if (!found && opt.innerHTML.indexOf(textToMatch) !== -1) {
-                    select.selectedIndex = i;
-                }
-            });
-        }, selector, textToMatch);
-    };
-
+    casper.wait(5000).then(function (){
+        casper.selectOptionByText = function (selector, textToMatch) {
+            this.evaluate(function (selector, textToMatch) {
+                var select = document.querySelector(selector),
+                    found = false;
+                Array.prototype.forEach.call(select.children, function (opt, i) {
+                    if (!found && opt.innerHTML.indexOf(textToMatch) !== -1) {
+                        select.selectedIndex = i;
+                    }
+                });
+            }, selector, textToMatch);
+        };
+    })
+    
     casper.then(function () {
         this.wait(2999);
         this.selectOptionByText("select.ng-pristine:nth-child(2)", GroupName);
@@ -210,10 +205,8 @@ casper.test.begin("Accessing Notebook(Which is assigned to Group) as a member ",
         this.thenOpen(URL);
     });
 
-    casper.wait(8000);
-
-    casper.then(function () {
-        var title1 = this.fetchText({type: 'xpath', path: '//*[@id="notebook-title"]'});
+    casper.wait(8000).then(function () {
+        var title1 = this.fetchText(".jqtree-selected > div:nth-child(1) > span:nth-child(1)");
         this.echo("Current loaded Notebbok : " + title1);
         this.test.assertEquals(title, title1, "Confirmed that Member can aslo access the Notebbok");
     });

@@ -34,16 +34,21 @@ casper.test.begin(" Assigning notebook to other Group as a member of that group 
         URL = this.getCurrentUrl();
         NotebookID = URL.substring(41);
         console.log("New Notebook ID is " + NotebookID);
-        title = this.fetchText({type: 'xpath', path: '//*[@id="notebook-title"]'});
+        title = this.fetchText(".jqtree-selected > div:nth-child(1) > span:nth-child(1)");
         this.echo("New notebook name = " + title);
     });
 
     //Function to generate group names
     casper.then(function () {
         GroupName = this.evaluate(function () {
-            return Math.random().toString(36).substr(2, 3);
+            return Math.random().toString(36).substr(2, 4);
         });
-        console.log('Group which we are going to create is :' + GroupName);
+        console.log('New group name is :' + GroupName);
+    });
+
+    casper.then(function () {
+        this.thenOpen(URL);
+        this.wait(8000);
     });
 
     //Open manage group window
@@ -67,13 +72,10 @@ casper.test.begin(" Assigning notebook to other Group as a member of that group 
             }
         });
         this.click("span.label:nth-child(1)");
-        console.log("Created new group with the name : " + GroupName);
+        console.log("Create new group")
     });
 
-    casper.wait(9000);
-
-    casper.then(function () {
-        casper.wait(9000);
+    casper.wait(5000).then(function () {
         this.click(x(".//*[@id='group-tab']/div[3]/div/div/div[1]"));
         this.echo('Clicking memeber field');
         this.sendKeys(x(".//*[@id='group-tab']/div[3]/div/div/div[1]"), 'attMusigma');
@@ -90,56 +92,49 @@ casper.test.begin(" Assigning notebook to other Group as a member of that group 
         this.echo('Inserted both the memebr to the group');
     });
 
-    casper.wait(4000);
+    casper.then(function () {
+        this.thenOpen(URL);
+        this.wait(8000);
+    });
 
     //Click on notebook info icon
     casper.then(function () {
-        this.then(function () {
-            this.mouse.move('.jqtree-selected > div:nth-child(1)');
-            this.waitUntilVisible('.jqtree-selected > div:nth-child(1) > span:nth-child(2) > span:nth-child(3) > span:nth-child(1) > span:nth-child(1) > i:nth-child(1)', function () {
-                this.click('.jqtree-selected > div:nth-child(1) > span:nth-child(2) > span:nth-child(3) > span:nth-child(1) > span:nth-child(1) > i:nth-child(1)');
-                console.log('Clicking notebook info');
-            });
+        this.mouse.move('.jqtree-selected > div:nth-child(1)');
+        this.waitUntilVisible('.jqtree-selected > div:nth-child(1) > span:nth-child(2) > span:nth-child(3) > span:nth-child(1) > span:nth-child(1) > i:nth-child(1)', function () {
+            this.click('.jqtree-selected > div:nth-child(1) > span:nth-child(2) > span:nth-child(3) > span:nth-child(1) > span:nth-child(1) > i:nth-child(1)');
+            console.log('Clicking notebook info');
         });
     });
-    casper.wait(5000);
 
-    casper.then(function () {
+    casper.wait(5000).then(function () {
         this.click(".group-link > a:nth-child(1)");
     });
 
-    casper.wait(4000);
-
     //Select group radio button
-    casper.then(function () {
+    casper.wait(4000).then(function () {
         this.click('#greenRadio');
     });
 
-    casper.wait(4000);
-
     //select the group and click ok
-    casper.selectOptionByText = function (selector, textToMatch) {
-        this.evaluate(function (selector, textToMatch) {
-            var select = document.querySelector(selector),
-                found = false;
-            Array.prototype.forEach.call(select.children, function (opt, i) {
-                console.log("Outside if :" +i);
-                if (!found && opt.innerHTML.indexOf(textToMatch) !== -1) {
-                    console.log("Inside if : " + i);
-                    select.selectedIndex = i;
-                }
-            });
-        }, selector, textToMatch);
-    };
-
-    casper.then(function () {
-        this.wait(2999);
-        this.selectOptionByText(x(".//*[@id='notebook-tab']/div[3]/select"), GroupName);
-        console.log("Selecting '" + GroupName + "' from the drop down menu");
+    casper.wait(4000).then(function () {
+        casper.selectOptionByText = function (selector, textToMatch) {
+            this.evaluate(function (selector, textToMatch) {
+                var select = document.querySelector(selector),
+                    found = false;
+                Array.prototype.forEach.call(select.children, function (opt, i) {
+                    if (!found && opt.innerHTML.indexOf(textToMatch) !== -1) {
+                        select.selectedIndex = i;
+                    }
+                });
+            }, selector, textToMatch);
+        };
     });
 
-    casper.wait(5000);
-
+    casper.wait(4000).then(function () {
+        this.selectOptionByText("select.ng-pristine:nth-child(2)", GroupName);
+        console.log("Selecting 1st '" + GroupName + "' from the drop down menu");
+    });
+    
     casper.then(function () {
         casper.setFilter("page.prompt", function (msg, currentValue) {
             // if (msg === "Are you sure you want to move notebook" + title + "to group" + GroupName + "?") {

@@ -34,14 +34,14 @@ casper.test.begin(" Assigning notebook to other Group as a member of that group 
         URL = this.getCurrentUrl();
         NotebookID = URL.substring(41);
         console.log("New Notebook ID is " + NotebookID);
-        title = this.fetchText({type: 'xpath', path: '//*[@id="notebook-title"]'});
+        title = this.fetchText(".jqtree-selected > div:nth-child(1) > span:nth-child(1)");
         this.echo("New notebook name = " + title);
     });
 
     //Function to generate group names
     casper.then(function () {
         GroupName = this.evaluate(function () {
-            return Math.random().toString(36).substr(2, 7);
+            return Math.random().toString(36).substr(2, 4);
         });
         console.log('New group name is :' + GroupName);
     });
@@ -98,34 +98,27 @@ casper.test.begin(" Assigning notebook to other Group as a member of that group 
     });
 
     //Click on notebook info icon
-    casper.wait(4000).then(function () {
-        this.then(function () {
-            this.mouse.move('.jqtree-selected > div:nth-child(1)');
-            this.waitUntilVisible('.jqtree-selected > div:nth-child(1) > span:nth-child(2) > span:nth-child(3) > span:nth-child(1) > span:nth-child(1) > i:nth-child(1)', function () {
-                this.click('.jqtree-selected > div:nth-child(1) > span:nth-child(2) > span:nth-child(3) > span:nth-child(1) > span:nth-child(1) > i:nth-child(1)');
-                console.log('Clicking notebook info');
-            });
+    casper.then(function () {
+        this.mouse.move('.jqtree-selected > div:nth-child(1)');
+        this.waitUntilVisible('.jqtree-selected > div:nth-child(1) > span:nth-child(2) > span:nth-child(3) > span:nth-child(1) > span:nth-child(1) > i:nth-child(1)', function () {
+            this.click('.jqtree-selected > div:nth-child(1) > span:nth-child(2) > span:nth-child(3) > span:nth-child(1) > span:nth-child(1) > i:nth-child(1)');
+            console.log('Clicking notebook info');
         });
     });
 
-    casper.wait(2000).then(function () {
+    casper.wait(5000).then(function () {
         this.click(".group-link > a:nth-child(1)");
     });
 
-    casper.wait(4000);
-
     //Select group radio button
-    casper.then(function () {
+    casper.wait(4000).then(function () {
         this.click('#greenRadio');
     });
 
-    casper.wait(4000);
-
     //select the group and click ok
-    casper.then(function () {
+    casper.wait(4000).then(function () {
         casper.selectOptionByText = function (selector, textToMatch) {
             this.evaluate(function (selector, textToMatch) {
-                // this.echo("Inside evaluate");
                 var select = document.querySelector(selector),
                     found = false;
                 Array.prototype.forEach.call(select.children, function (opt, i) {
@@ -135,28 +128,24 @@ casper.test.begin(" Assigning notebook to other Group as a member of that group 
                 });
             }, selector, textToMatch);
         };
+    });
 
-        this.then(function () {
-            // casper.then(function () {
-            this.wait(2999);
-            this.selectOptionByText("select.ng-pristine:nth-child(2)", GroupName);
-            console.log("Selecting '" + GroupName + "' from the drop down menu");
-        });
-        // });
+    casper.wait(4000).then(function () {
+        this.selectOptionByText("select.ng-pristine:nth-child(2)", GroupName);
+        console.log("Selecting 1st '" + GroupName + "' from the drop down menu");
+    });
 
-        // casper.then(function () {
+    casper.wait(4000).then(function () {
         casper.setFilter("page.prompt", function (msg, currentValue) {
             if (msg === "Are you sure you want to move notebook" + title + "to group" + GroupName + "?") {
                 return true;
             }
         });
         this.click("span.btn:nth-child(3)");
-        console.log("Notebook added to the group");
+        console.log("Notebook added to the 1st group");
     });
 
-    casper.wait(10000);
-
-    casper.wait(5000).then(function () {
+    casper.wait(2000).then(function () {
         this.mouse.move('.jqtree-selected > div:nth-child(1)');
         this.waitUntilVisible('.jqtree-selected > div:nth-child(1) > span:nth-child(2) > span:nth-child(3) > span:nth-child(1) > span:nth-child(1) > i:nth-child(1)', function () {
             this.click('.jqtree-selected > div:nth-child(1) > span:nth-child(2) > span:nth-child(3) > span:nth-child(1) > span:nth-child(1) > i:nth-child(1)');
@@ -171,7 +160,7 @@ casper.test.begin(" Assigning notebook to other Group as a member of that group 
 
     casper.wait(2000);
 
-    // Logout from RCloud and GitHub
+// Logout from RCloud and GitHub
     casper.then(function () {
         this.click("#rcloud-navbar-menu > li:nth-child(7) > a:nth-child(1)");
         console.log('User1 Logging out of RCloud');
@@ -215,7 +204,7 @@ casper.test.begin(" Assigning notebook to other Group as a member of that group 
     });
 
     casper.wait(8000).then(function () {
-        var title1 = functions.notebookname(casper); //this.fetchText({type: 'xpath', path: '//*[@id="notebook-title"]'});
+        var title1 = this.fetchText(".jqtree-selected > div:nth-child(1) > span:nth-child(1)");
         this.echo("Current loaded Notebbok : " + title1);
         this.test.assertEquals(title, title1, "Confirmed that Member can also access the Notebbok, which is assigned to the Group");
     });
